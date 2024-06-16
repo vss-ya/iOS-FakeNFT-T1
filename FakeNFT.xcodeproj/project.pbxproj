@@ -41,6 +41,7 @@
 		3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C38A29D242E90081F015 /* ProductDetailsTableViewCell.swift */; };
 		3FC8C39129D2453B0081F015 /* ExampleRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39029D2453B0081F015 /* ExampleRequest.swift */; };
 		3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */; };
+		57D66F4F2C1EB48800B73B18 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D66F4E2C1EB48800B73B18 /* Strings.swift */; };
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
 		E1CD40DC2A96BECC00BE7FE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1CD40DB2A96BECC00BE7FE8 /* Localizable.strings */; };
@@ -100,6 +101,7 @@
 		3FC8C38A29D242E90081F015 /* ProductDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsTableViewCell.swift; sourceTree = "<group>"; };
 		3FC8C39029D2453B0081F015 /* ExampleRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleRequest.swift; sourceTree = "<group>"; };
 		3FC8C39229D246BA0081F015 /* DateFormatters+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatters+Presets.swift"; sourceTree = "<group>"; };
+		57D66F4E2C1EB48800B73B18 /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		E1CD40D92A96BE7D00BE7FE8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 			children = (
 				3F68069629CBBAF100B4F915 /* AppDelegate.swift */,
 				3F68069829CBBAF100B4F915 /* SceneDelegate.swift */,
+				57D66F4C2C1EAC0000B73B18 /* Enums */,
 				E1CD40DA2A96BE9B00BE7FE8 /* Resources */,
 				3F478ECD29DB473000F6D39E /* DesignSystem */,
 				3F6806CE29CBBD1B00B4F915 /* Foundation */,
@@ -327,6 +330,14 @@
 			path = Requests;
 			sourceTree = "<group>";
 		};
+		57D66F4C2C1EAC0000B73B18 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				57D66F4E2C1EB48800B73B18 /* Strings.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -362,6 +373,7 @@
 			buildConfigurationList = 3F6806BD29CBBAF200B4F915 /* Build configuration list for PBXNativeTarget "FakeNFT" */;
 			buildPhases = (
 				3FC8C39529D24CDB0081F015 /* Swiftlint */,
+				57D66F4D2C1EAEE400B73B18 /* Swiftgen */,
 				3F68068F29CBBAF100B4F915 /* Sources */,
 				3F68069029CBBAF100B4F915 /* Frameworks */,
 				3F68069129CBBAF100B4F915 /* Resources */,
@@ -509,6 +521,24 @@
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint --fix && swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
+		57D66F4D2C1EAEE400B73B18 /* Swiftgen */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Swiftgen;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ${PROJECT_DIR}/Swiftgen \n./swiftgen config run --config swiftgen.yml\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -527,6 +557,7 @@
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
+				57D66F4F2C1EB48800B73B18 /* Strings.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* NftService.swift in Sources */,
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
@@ -713,6 +744,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -740,6 +772,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
