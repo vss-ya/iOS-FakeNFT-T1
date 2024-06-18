@@ -9,10 +9,42 @@ import Foundation
 
 final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
     let profiles: [StatisticsProfile] = [
-        StatisticsProfile(name: "Alex", avatar: "", description: "Описание Алекса", website: "https://ya.ru", nfts: [], likes: [], id: "1"),
-        StatisticsProfile(name: "Bill", avatar: "", description: "Описание Била", website: "https://yandex.ru", nfts: [], likes: [], id: "2"),
-        StatisticsProfile(name: "Alla", avatar: "", description: "Описание Аллы", website: "https://figma.com", nfts: [], likes: [], id: "3"),
-        StatisticsProfile(name: "Mads", avatar: "", description: "Описание Мэда", website: "https://practicum.yandex.ru/", nfts: [], likes: [], id: "4")
+        StatisticsProfile(
+            name: "Alex",
+            avatar: "",
+            description: "Дизайнер из Казани, люблю цифровое искусство  и бейглы. В моей коллекции уже 100+ NFT,  и еще больше — на моём сайте. Открыт  к коллаборациям.", 
+            website: "https://ya.ru",
+            nfts: ["", "", ""],
+            likes: [],
+            id: "1"
+        ),
+        StatisticsProfile(
+            name: "Bill",
+            avatar: "",
+            description: "Описание Била",
+            website: "https://yandex.ru",
+            nfts: ["", "", "", "", "", ""],
+            likes: [],
+            id: "2"
+        ),
+        StatisticsProfile(
+            name: "Alla",
+            avatar: "",
+            description: "Описание Аллы",
+            website: "https://figma.com",
+            nfts: ["", "", "", "", ""],
+            likes: [],
+            id: "3"
+        ),
+        StatisticsProfile(
+            name: "Mads",
+            avatar: "",
+            description: "Описание Мэда",
+            website: "https://practicum.yandex.ru/",
+            nfts: ["", "", "", ""],
+            likes: [],
+            id: "4"
+        )
     ]
     
     var updateData: Binding<Bool>?

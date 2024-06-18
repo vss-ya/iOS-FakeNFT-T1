@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class StatisticsProfileViewController: UIViewController {
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
+        button.tintColor = .ypBlack
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         return button
     }()
@@ -36,8 +38,9 @@ final class StatisticsProfileViewController: UIViewController {
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypBlack
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textAlignment = .left
+        label.numberOfLines = 0
         return label
     }()
     private lazy var userWebsiteButton: UIButton = {
@@ -64,13 +67,14 @@ final class StatisticsProfileViewController: UIViewController {
     private lazy var nftsCollectionLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypBlack
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.textAlignment = .left
         return label
     }()
     private lazy var nftsCollectionButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "chevron.forward"), for: .normal)
+        button.tintColor = .ypBlack
         button.addTarget(self, action: #selector(didTapNftsCollectionButton), for: .touchUpInside)
         return button
     }()
@@ -78,6 +82,20 @@ final class StatisticsProfileViewController: UIViewController {
     var profile: StatisticsProfile? {
         didSet {
             guard let profile else { return }
+            if let url = URL(string: profile.avatar) {
+                let processor = RoundCornerImageProcessor(cornerRadius: 14)
+                avatarImageView.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(systemName: "person.crop.circle.fill"),
+                    options: [.processor(processor)]
+                )
+            } else {
+                avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
+            }
+            nameLabel.text = profile.name
+            descriptionLabel.text = profile.description
+            let nftsCollectionTitle = NSLocalizedString("Statistics.statisticsProfile.nftsCollectionButton", comment: "")
+            nftsCollectionLabel.text = nftsCollectionTitle + " (\(profile.nfts.count))"
         }
     }
     
@@ -101,8 +119,8 @@ final class StatisticsProfileViewController: UIViewController {
             view.addSubview(subview)
         }
         [avatarImageView, nameLabel].forEach { subview in
-            avatarStackView.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(subview)
+            subview.translatesAutoresizingMaskIntoConstraints = false
+            avatarStackView.addSubview(subview)
         }
         [nftsCollectionLabel, nftsCollectionButton].forEach { subview in
             subview.translatesAutoresizingMaskIntoConstraints = false
@@ -124,7 +142,7 @@ final class StatisticsProfileViewController: UIViewController {
             avatarImageView.heightAnchor.constraint(equalToConstant: 70)
         ])
         NSLayoutConstraint.activate([
-            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor, constant: 16),
+            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
             nameLabel.trailingAnchor.constraint(equalTo: avatarStackView.trailingAnchor),
             nameLabel.centerYAnchor.constraint(equalTo: avatarStackView.centerYAnchor)
         ])
@@ -135,6 +153,7 @@ final class StatisticsProfileViewController: UIViewController {
         ])
         NSLayoutConstraint.activate([
             userWebsiteButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 28),
+            userWebsiteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             userWebsiteButton.widthAnchor.constraint(equalToConstant: 343),
             userWebsiteButton.heightAnchor.constraint(equalToConstant: 40)
         ])
@@ -151,16 +170,16 @@ final class StatisticsProfileViewController: UIViewController {
         ])
         NSLayoutConstraint.activate([
             nftsCollectionButton.trailingAnchor.constraint(equalTo: nftsStackView.trailingAnchor),
-            nftsCollectionLabel.centerYAnchor.constraint(equalTo: nftsCollectionButton.centerYAnchor),
-            nftsCollectionLabel.widthAnchor.constraint(equalToConstant: 16),
-            nftsCollectionLabel.heightAnchor.constraint(equalToConstant: 16)
+            nftsCollectionButton.centerYAnchor.constraint(equalTo: nftsStackView.centerYAnchor),
+            nftsCollectionButton.widthAnchor.constraint(equalToConstant: 16),
+            nftsCollectionButton.heightAnchor.constraint(equalToConstant: 16)
         ])
     }
     
     // MARK: - Actions
     
     @objc private func didTapBackButton() {
-        
+        dismiss(animated: true)
     }
     
     @objc private func didTapUserWebsiteButton() {

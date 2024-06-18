@@ -112,7 +112,14 @@ extension StatisticsViewController: UITableViewDataSource {
 
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let model = viewModel?.model(at: indexPath) as? StatisticsProfile else { return }
+        let statisticsProfileViewController = StatisticsProfileViewController()
+        statisticsProfileViewController.profile = model
         
+        let statisticsProfileNavigationController = UINavigationController(rootViewController: statisticsProfileViewController)
+        statisticsProfileNavigationController.modalPresentationStyle = .overCurrentContext
+        
+        self.present(statisticsProfileNavigationController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
