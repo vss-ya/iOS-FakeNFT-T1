@@ -183,7 +183,8 @@ final class StatisticsProfileViewController: UIViewController {
     }
     
     @objc private func didTapUserWebsiteButton() {
-        
+        let statisticsWebViewViewController = StatisticsWebViewViewController()
+        self.present(statisticsWebViewViewController, animated: true)
     }
     
     @objc private func didTapNftsCollectionButton() {
