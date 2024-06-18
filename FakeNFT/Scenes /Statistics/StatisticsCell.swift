@@ -49,7 +49,6 @@ final class StatisticsCell: UITableViewCell {
         didSet {
             guard let profile else { return }
             ratingLabel.text = "1"
-            let processor = RoundCornerImageProcessor(cornerRadius: 14)
             if let url = URL(string: profile.avatar) {
                 let processor = RoundCornerImageProcessor(cornerRadius: 14)
                 avatarImageView.kf.setImage(
@@ -57,12 +56,6 @@ final class StatisticsCell: UITableViewCell {
                     placeholder: UIImage(systemName: "person.crop.circle.fill"),
                     options: [.processor(processor)]
                 )
-            } else {
-                avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
-            }
-            
-            if profile.avatar.isEmpty {
-                avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
             } else {
                 avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
             }
