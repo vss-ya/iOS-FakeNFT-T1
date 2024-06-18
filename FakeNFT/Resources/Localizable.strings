@@ -12,3 +12,5 @@
 "Statistics.statisticsSort.byName" = "По имени";
 "Statistics.statisticsSort.byRating" = "По рейтингу";
 "Statistics.statisticsSort.close" = "Закрыть";
+"Statistics.statisticsProfile.userWebsiteButton" = "Перейти на сайт пользователя";
+"Statistics.statisticsProfile.nftsCollectionButton" = "Коллекция NFT";
