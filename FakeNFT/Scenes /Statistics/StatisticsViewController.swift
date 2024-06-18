@@ -1,0 +1,125 @@
+//
+//  StatisticsViewController.swift
+//  FakeNFT
+//
+//  Created by Владимир Горбачев on 18.06.2024.
+//
+
+import UIKit
+
+final class StatisticsViewController: UIViewController {
+    private lazy var sortButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(named: "sort"), for: .normal)
+        button.addTarget(self, action: #selector(didTapSortButton), for: .touchUpInside)
+        return button
+    }()
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView.init(frame: .zero, style: .plain)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        tableView.allowsMultipleSelection = false
+        tableView.register(StatisticsCell.self, forCellReuseIdentifier: StatisticsCell.reuseIdentifier)
+        return tableView
+    }()
+    
+    
+    private var viewModel: StatisticsCollectionsViewModelProtocol?
+    
+    // MARK: - Lifecycle
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        bind()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func applyViewModel(_ newViewModel: StatisticsCollectionsViewModelProtocol) {
+        viewModel = newViewModel
+        viewModel?.initialize()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupViewController()
+        tableView.reloadData()
+    }
+    
+    private func setupViewController() {
+        view.backgroundColor = .ypWhite
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: sortButton)
+        addSubViews()
+        applyConstraints()
+    }
+    
+    private func addSubViews() {
+        [sortButton, tableView].forEach { subview in
+            subview.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(subview)
+        }
+    }
+
+    private func applyConstraints() {
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+    }
+    
+    private func bind() {
+        viewModel?.updateData = { [weak self] update in
+            guard let self else { return }
+            self.tableView.reloadData()
+        }
+    }
+    // MARK: - Actions
+    
+    @objc private func didTapSortButton() {
+
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension StatisticsViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return viewModel?.numberOfSections ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel?.numberOfRowsInSection(section) ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: StatisticsCell.reuseIdentifier, for: indexPath)
+        guard let cell = cell as? StatisticsCell, let model = viewModel?.model(at: indexPath) as? StatisticsProfile else {
+            return UITableViewCell()
+        }
+        cell.profile = model
+        return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension StatisticsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 88
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
+}
