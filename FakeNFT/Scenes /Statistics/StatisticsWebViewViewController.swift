@@ -13,8 +13,18 @@ final class StatisticsWebViewViewController: UIViewController {
         let webView = WKWebView()
         return webView
     }()
+    private lazy var progressView: UIProgressView = {
+        let progressView = UIProgressView()
+        progressView.progressViewStyle = .default
+        progressView.tintColor = .ypGreenUniversal
+        progressView.progressTintColor = .ypGreenUniversal
+        progressView.backgroundColor = .none
+        return progressView
+    }()
     
     private var viewModel: StatisticsWebViewViewModelProtocol?
+    
+    private var estimatedProgressObservation: NSKeyValueObservation?
     
     // MARK: - Lifecycle
     
@@ -27,6 +37,14 @@ final class StatisticsWebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+            options: [],
+            changeHandler: { [weak self] _, _ in
+                guard let self else { return }
+                self.viewModel?.didUpdateProgressValue(self.webView.estimatedProgress)
+            }
+        )
     }
     
     func load(request: URLRequest) {
@@ -39,11 +57,18 @@ final class StatisticsWebViewViewController: UIViewController {
     }
     
     private func addSubViews() {
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(webView)
+        [webView, progressView].forEach { subview in
+            subview.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(subview)
+        }
     }
 
     private func applyConstraints() {
+        NSLayoutConstraint.activate([
+            progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            progressView.topAnchor.constraint(equalTo: view.topAnchor)
+        ])
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -60,7 +85,12 @@ final class StatisticsWebViewViewController: UIViewController {
         
         viewModel?.updateProgressValue = { [weak self] progress in
             guard let self else { return }
-           
+            self.progressView.setProgress(progress, animated: true)
+        }
+        
+        viewModel?.hideProgress = { [weak self] hiden in
+            guard let self else { return }
+            self.progressView.isHidden = hiden
         }
     }
 }
