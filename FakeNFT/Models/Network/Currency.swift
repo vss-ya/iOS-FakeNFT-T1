@@ -1,8 +1,8 @@
-//
-//  Currency.swift
-//  FakeNFT
-//
-//  Created by Mariya on 19.06.2024.
-//
-
 import Foundation
+
+struct Currency: Decodable {
+    let id: String
+    let title: String
+    let name: String
+    let image: String
+}

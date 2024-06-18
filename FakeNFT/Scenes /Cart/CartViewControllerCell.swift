@@ -1,8 +1,6 @@
-//
-//  CartViewControllerCell.swift
-//  FakeNFT
-//
-//  Created by Mariya on 19.06.2024.
-//
-
 import Foundation
+import UIKit
+
+final class CartViewControllerCell: UITableViewCell {
+    
+}

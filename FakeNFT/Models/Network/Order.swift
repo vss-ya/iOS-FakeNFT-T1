@@ -1,8 +1,6 @@
-//
-//  Order.swift
-//  FakeNFT
-//
-//  Created by Mariya on 19.06.2024.
-//
-
 import Foundation
+
+struct Order: Decodable {
+    let id: String
+    let nfts: [Nft]
+}
