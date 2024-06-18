@@ -92,10 +92,10 @@ extension StatisticsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: StatisticsCell.reuseIdentifier, for: indexPath)
-        guard let cell = cell as? StatisticsCell, let model = viewModel?.model(at: indexPath) as? StatisticsProfile else {
+        guard let cell = cell as? StatisticsCell, let model = viewModel?.model(at: indexPath) as? StatisticsUser else {
             return UITableViewCell()
         }
-        cell.profile = model
+        cell.user = model
         return cell
     }
 }
@@ -104,14 +104,14 @@ extension StatisticsViewController: UITableViewDataSource {
 
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let model = viewModel?.model(at: indexPath) as? StatisticsProfile else { return }
-        let statisticsProfileViewController = StatisticsProfileViewController()
-        statisticsProfileViewController.profile = model
+        guard let model = viewModel?.model(at: indexPath) as? StatisticsUser else { return }
+        let statisticsUserViewController = StatisticsUserViewController()
+        statisticsUserViewController.user = model
         
-        let statisticsProfileNavigationController = UINavigationController(rootViewController: statisticsProfileViewController)
-        statisticsProfileNavigationController.modalPresentationStyle = .overCurrentContext
+        let statisticsUserNavigationController = UINavigationController(rootViewController: statisticsUserViewController)
+        statisticsUserNavigationController.modalPresentationStyle = .overCurrentContext
         
-        self.present(statisticsProfileNavigationController, animated: true)
+        self.present(statisticsUserNavigationController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

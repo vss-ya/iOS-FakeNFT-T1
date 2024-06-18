@@ -8,41 +8,41 @@
 import Foundation
 
 final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
-    let profiles: [StatisticsProfile] = [
-        StatisticsProfile(
+    let profiles: [StatisticsUser] = [
+        StatisticsUser(
             name: "Alex",
             avatar: "https://code.s3.yandex.net/landings-v2-ios-developer/space.PNG",
             description: "Дизайнер из Казани, люблю цифровое искусство  и бейглы. В моей коллекции уже 100+ NFT,  и еще больше — на моём сайте. Открыт  к коллаборациям.",
             website: "https://practicum.yandex.ru/ios-developer",
             nfts: ["", "", ""],
-            likes: [],
+            rating: "1",
             id: "1"
         ),
-        StatisticsProfile(
+        StatisticsUser(
             name: "Bill",
             avatar: "https://code.s3.yandex.net/landings-v2-ios-developer/space.PNG",
             description: "Описание Била",
             website: "https://yandex.ru",
             nfts: ["", "", "", "", "", ""],
-            likes: [],
+            rating: "2",
             id: "2"
         ),
-        StatisticsProfile(
+        StatisticsUser(
             name: "Alla",
             avatar: "",
             description: "Описание Аллы",
             website: "https://figma.com",
             nfts: ["", "", "", "", ""],
-            likes: [],
+            rating: "3",
             id: "3"
         ),
-        StatisticsProfile(
+        StatisticsUser(
             name: "Mads",
             avatar: "https://code.s3.yandex.net/landings-v2-ios-developer/space.PNG",
             description: "Описание Мэда",
             website: "https://practicum.yandex.ru/",
             nfts: ["", "", "", ""],
-            likes: [],
+            rating: "4",
             id: "4"
         )
     ]

@@ -45,11 +45,11 @@ final class StatisticsCell: UITableViewCell {
         return label
     }()
     
-    var profile: StatisticsProfile? {
+    var user: StatisticsUser? {
         didSet {
-            guard let profile else { return }
-            ratingLabel.text = "1"
-            if let url = URL(string: profile.avatar) {
+            guard let user else { return }
+            ratingLabel.text = user.rating
+            if let url = URL(string: user.avatar) {
                 let processor = RoundCornerImageProcessor(cornerRadius: 14)
                 avatarImageView.kf.setImage(
                     with: url,
@@ -59,8 +59,8 @@ final class StatisticsCell: UITableViewCell {
             } else {
                 avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
             }
-            nameLabel.text = profile.name
-            nftsLabel.text = String(profile.nfts.count)
+            nameLabel.text = user.name
+            nftsLabel.text = String(user.nfts.count)
         }
     }
     

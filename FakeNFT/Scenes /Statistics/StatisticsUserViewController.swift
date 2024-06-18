@@ -1,5 +1,5 @@
 //
-//  StatisticsProfileViewController.swift
+//  StatisticsUserViewController.swift
 //  FakeNFT
 //
 //  Created by Владимир Горбачев on 18.06.2024.
@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-final class StatisticsProfileViewController: UIViewController {
+final class StatisticsUserViewController: UIViewController {
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
@@ -79,10 +79,10 @@ final class StatisticsProfileViewController: UIViewController {
         return button
     }()
     
-    var profile: StatisticsProfile? {
+    var user: StatisticsUser? {
         didSet {
-            guard let profile else { return }
-            if let url = URL(string: profile.avatar) {
+            guard let user else { return }
+            if let url = URL(string: user.avatar) {
                 let processor = RoundCornerImageProcessor(cornerRadius: 14)
                 avatarImageView.kf.setImage(
                     with: url,
@@ -92,10 +92,10 @@ final class StatisticsProfileViewController: UIViewController {
             } else {
                 avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
             }
-            nameLabel.text = profile.name
-            descriptionLabel.text = profile.description
+            nameLabel.text = user.name
+            descriptionLabel.text = user.description
             let nftsCollectionTitle = NSLocalizedString("Statistics.statisticsProfile.nftsCollectionButton", comment: "")
-            nftsCollectionLabel.text = nftsCollectionTitle + " (\(profile.nfts.count))"
+            nftsCollectionLabel.text = nftsCollectionTitle + " (\(user.nfts.count))"
         }
     }
     
@@ -184,7 +184,7 @@ final class StatisticsProfileViewController: UIViewController {
     
     @objc private func didTapUserWebsiteButton() {
         let statisticsWebViewViewController = StatisticsWebViewViewController()
-        statisticsWebViewViewController.applyViewModel(StatisticsWebViewViewModel(website: profile?.website ?? ""))
+        statisticsWebViewViewController.applyViewModel(StatisticsWebViewViewModel(website: user?.website ?? ""))
         self.present(statisticsWebViewViewController, animated: true)
     }
     
