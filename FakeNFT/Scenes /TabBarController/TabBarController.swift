@@ -40,7 +40,7 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let profileController = TestCatalogViewController(servicesAssembly: servicesAssembly)
+        let profileController = initProfileTabBarViewController(servicesAssembly)
         let catalogController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         let cartController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         let statisticsController = TestCatalogViewController(servicesAssembly: servicesAssembly)
@@ -54,4 +54,11 @@ final class TabBarController: UITabBarController {
 
         view.backgroundColor = .systemBackground
     }
+    
+    private func initProfileTabBarViewController(_ servicesAssembly: ServicesAssembly) -> UIViewController {
+        let vc = ProfileViewController(servicesAssembly: servicesAssembly)
+        let navVc = UINavigationController(rootViewController: vc)
+        return navVc
+    }
+    
 }
