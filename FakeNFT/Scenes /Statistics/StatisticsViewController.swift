@@ -47,7 +47,6 @@ final class StatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
-        tableView.reloadData()
     }
     
     private func setupViewController() {
@@ -82,7 +81,9 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func didTapSortButton() {
-
+        AlertPresenter.statisticsSort(delegate: self) { byName in
+            
+        }
     }
 }
 

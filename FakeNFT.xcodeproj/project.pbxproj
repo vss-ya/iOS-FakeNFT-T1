@@ -51,6 +51,7 @@
 		E784D3762C218C1F002BEA2A /* StatisticsProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D3752C218C1F002BEA2A /* StatisticsProfile.swift */; };
 		E784D3782C219186002BEA2A /* DefinableTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D3772C219186002BEA2A /* DefinableTypes.swift */; };
 		E784D37A2C2199DE002BEA2A /* StatisticsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D3792C2199DE002BEA2A /* StatisticsCell.swift */; };
+		E784D37C2C21B840002BEA2A /* AllertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D37B2C21B840002BEA2A /* AllertPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +119,7 @@
 		E784D3752C218C1F002BEA2A /* StatisticsProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsProfile.swift; sourceTree = "<group>"; };
 		E784D3772C219186002BEA2A /* DefinableTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefinableTypes.swift; sourceTree = "<group>"; };
 		E784D3792C2199DE002BEA2A /* StatisticsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCell.swift; sourceTree = "<group>"; };
+		E784D37B2C21B840002BEA2A /* AllertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllertPresenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -270,6 +272,7 @@
 				3FC8C38F29D245250081F015 /* Requests */,
 				0C79EE6B2A76DE2E00EE90EA /* ServicesAssemly.swift */,
 				0CFCB73F2A78002A0009A829 /* NftService.swift */,
+				E784D37B2C21B840002BEA2A /* AllertPresenter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				E784D3722C218667002BEA2A /* StatisticsCollectionsViewModelProtocol.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
+				E784D37C2C21B840002BEA2A /* AllertPresenter.swift in Sources */,
 				57D66F4F2C1EB48800B73B18 /* Strings.swift in Sources */,
 				E784D3762C218C1F002BEA2A /* StatisticsProfile.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* NftService.swift in Sources */,
