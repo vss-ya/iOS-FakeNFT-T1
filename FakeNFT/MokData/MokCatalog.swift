@@ -15,7 +15,7 @@ final class MokCatalog {
         Catalog(
             createdAt: "2023-11-21T15:21:36.683Z[GMT]",
             name: "singulis epicuri",
-            cover: "Brown",
+            cover: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Brown.png",
             nfts: ["c14cf3bc-7470-4eec-8a42-5eaa65f4053c",
                    "d6a02bd1-1255-46cd-815b-656174c1d9c0",
                    "f380f245-0264-4b42-8e7e-c4486e237504"],
@@ -25,7 +25,7 @@ final class MokCatalog {
         Catalog(
             createdAt: "2023-11-21T15:21:36.691Z[GMT]",
             name: "unum reque",
-            cover: "White",
+            cover: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/White.png",
             nfts: ["82570704-14ac-4679-9436-050f4a32a8a0",
                    "e33e18d5-4fc2-466d-b651-028f78d771b8"],
             description: "dictas singulis placerat interdum maximus referrentur partiendo explicari verear molestiae",
@@ -34,7 +34,7 @@ final class MokCatalog {
         Catalog(
             createdAt: "2023-11-21T15:21:36.692Z[GMT]",
             name: "quem varius",
-            cover: "Pink",
+            cover: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки_коллекций/Pink.png",
             nfts: ["9810d484-c3fc-49e8-bc73-f5e602c36b40",
                    "e8c1f0b6-5caf-4f65-8e5b-12f4bcb29efb"],
             description: "delectus atqui metus sit posuere vocibus urbanitas partiendo definitionem tempus meliore conclusionemque",

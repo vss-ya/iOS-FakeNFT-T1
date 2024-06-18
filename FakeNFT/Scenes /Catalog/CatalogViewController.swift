@@ -51,6 +51,7 @@ private extension CatalogViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorColor = .clear
+        tableView.register(CatalogTableViewCell.self, forCellReuseIdentifier: CatalogTableViewCell.reuseIdentifier)
     }
 }
 
@@ -60,7 +61,13 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CatalogTableViewCell.reuseIdentifier) as? CatalogTableViewCell
+        else {
+            return UITableViewCell()
+        }
+        let collections = viewModel.getCollections()
+        cell.configCell(collections, indexPath)
+        return cell
     }
     
     

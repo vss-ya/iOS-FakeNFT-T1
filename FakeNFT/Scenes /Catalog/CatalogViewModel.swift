@@ -9,6 +9,7 @@ import Foundation
 
 protocol CatalogViewModelProtocol {
     func getCollectionsNumber() -> Int
+    func getCollections() -> [Catalog]
     
 }
 
@@ -18,6 +19,10 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     
     func getCollectionsNumber() -> Int {
         mokCatalog.collections.count
+    }
+    
+    func getCollections() -> [Catalog] {
+        mokCatalog.collections
     }
     
     
