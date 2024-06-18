@@ -20,7 +20,6 @@ final class StatisticsViewController: UIViewController {
         tableView.delegate = self
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         tableView.allowsMultipleSelection = false
         tableView.register(StatisticsCell.self, forCellReuseIdentifier: StatisticsCell.reuseIdentifier)
         return tableView
@@ -67,8 +66,8 @@ final class StatisticsViewController: UIViewController {
 
     private func applyConstraints() {
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])

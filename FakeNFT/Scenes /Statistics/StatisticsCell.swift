@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class StatisticsCell: UITableViewCell {
     private lazy var ratingLabel: UILabel = {
@@ -24,9 +25,9 @@ final class StatisticsCell: UITableViewCell {
     }()
     private lazy var avatarImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = 28
+        imageView.layer.cornerRadius = 14
         imageView.layer.masksToBounds = true
-        imageView.image = UIImage(named: "person.crop.circle.fill")
+        imageView.tintColor = .ypGrayUniversal
         return imageView
     }()
     private lazy var nameLabel: UILabel = {
@@ -46,7 +47,27 @@ final class StatisticsCell: UITableViewCell {
     
     var profile: StatisticsProfile? {
         didSet {
+            guard let profile else { return }
+            ratingLabel.text = "1"
+            let processor = RoundCornerImageProcessor(cornerRadius: 14)
+            if let url = URL(string: profile.avatar) {
+                let processor = RoundCornerImageProcessor(cornerRadius: 14)
+                avatarImageView.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(systemName: "person.crop.circle.fill"),
+                    options: [.processor(processor)]
+                )
+            } else {
+                avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
+            }
             
+            if profile.avatar.isEmpty {
+                avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
+            } else {
+                avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
+            }
+            nameLabel.text = profile.name
+            nftsLabel.text = String(profile.nfts.count)
         }
     }
     
@@ -106,9 +127,8 @@ final class StatisticsCell: UITableViewCell {
             nameLabel.trailingAnchor.constraint(equalTo: nftsLabel.leadingAnchor, constant: -8),
         ])
         NSLayoutConstraint.activate([
-            nftsLabel.trailingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: -16),
+            nftsLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -16),
             nftsLabel.centerYAnchor.constraint(equalTo: backgroundLabel.centerYAnchor),
-            nftsLabel.widthAnchor.constraint(equalToConstant: 25),
             nftsLabel.heightAnchor.constraint(equalToConstant: 28)
         ])
     }
