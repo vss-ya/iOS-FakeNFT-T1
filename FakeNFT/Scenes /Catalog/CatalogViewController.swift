@@ -70,5 +70,18 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let catalog = viewModel.getCollections()
+        let collection = CollectionSettings(
+            collectionCover: catalog[indexPath.row].cover,
+            collectionName: catalog[indexPath.row].name,
+            collectionAuthor: catalog[indexPath.row].author,
+            collectionDescription: catalog[indexPath.row].description)
+        let viewController = CollectionViewController(collectionSettings: collection, viewModel: CollectionViewModel())
+        viewController.modalPresentationStyle = .fullScreen
+        present(viewController, animated: true)
+    }
+    
     
 }
