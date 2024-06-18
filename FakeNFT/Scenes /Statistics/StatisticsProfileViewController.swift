@@ -184,6 +184,7 @@ final class StatisticsProfileViewController: UIViewController {
     
     @objc private func didTapUserWebsiteButton() {
         let statisticsWebViewViewController = StatisticsWebViewViewController()
+        statisticsWebViewViewController.applyViewModel(StatisticsWebViewViewModel(website: profile?.website ?? ""))
         self.present(statisticsWebViewViewController, animated: true)
     }
     

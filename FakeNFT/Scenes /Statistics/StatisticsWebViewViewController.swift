@@ -14,7 +14,13 @@ final class StatisticsWebViewViewController: UIViewController {
         return webView
     }()
     
+    private var viewModel: StatisticsWebViewViewModelProtocol?
+    
     // MARK: - Lifecycle
+    
+    func applyViewModel(_ newViewModel: StatisticsWebViewViewModelProtocol) {
+        viewModel = newViewModel
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,3 +50,4 @@ final class StatisticsWebViewViewController: UIViewController {
         ])
     }
 }
+

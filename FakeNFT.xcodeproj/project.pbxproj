@@ -54,6 +54,8 @@
 		E784D37C2C21B840002BEA2A /* AllertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D37B2C21B840002BEA2A /* AllertPresenter.swift */; };
 		E784D37E2C21BCD4002BEA2A /* StatisticsProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D37D2C21BCD4002BEA2A /* StatisticsProfileViewController.swift */; };
 		E784D3802C21E1F5002BEA2A /* StatisticsWebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D37F2C21E1F5002BEA2A /* StatisticsWebViewViewController.swift */; };
+		E784D3822C21E5FC002BEA2A /* StatisticsWebViewViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D3812C21E5FC002BEA2A /* StatisticsWebViewViewModelProtocol.swift */; };
+		E784D3842C21E6CE002BEA2A /* StatisticsWebViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D3832C21E6CE002BEA2A /* StatisticsWebViewViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +126,8 @@
 		E784D37B2C21B840002BEA2A /* AllertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllertPresenter.swift; sourceTree = "<group>"; };
 		E784D37D2C21BCD4002BEA2A /* StatisticsProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsProfileViewController.swift; sourceTree = "<group>"; };
 		E784D37F2C21E1F5002BEA2A /* StatisticsWebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsWebViewViewController.swift; sourceTree = "<group>"; };
+		E784D3812C21E5FC002BEA2A /* StatisticsWebViewViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsWebViewViewModelProtocol.swift; sourceTree = "<group>"; };
+		E784D3832C21E6CE002BEA2A /* StatisticsWebViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsWebViewViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -403,7 +407,9 @@
 			isa = PBXGroup;
 			children = (
 				E784D36F2C218485002BEA2A /* StatisticsViewModel.swift */,
+				E784D3832C21E6CE002BEA2A /* StatisticsWebViewViewModel.swift */,
 				E784D3712C218667002BEA2A /* StatisticsCollectionsViewModelProtocol.swift */,
+				E784D3812C21E5FC002BEA2A /* StatisticsWebViewViewModelProtocol.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -586,6 +592,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E784D3822C21E5FC002BEA2A /* StatisticsWebViewViewModelProtocol.swift in Sources */,
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
@@ -625,6 +632,7 @@
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
+				E784D3842C21E6CE002BEA2A /* StatisticsWebViewViewModel.swift in Sources */,
 				0C79EE632A76DD1900EE90EA /* RequestConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

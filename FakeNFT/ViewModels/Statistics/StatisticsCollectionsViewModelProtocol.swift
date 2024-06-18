@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol StatisticsCollectionsViewModelProtocol{
+protocol StatisticsCollectionsViewModelProtocol {
     var updateData: Binding<Bool>? { get set }
     var numberOfSections: Int { get }
     
