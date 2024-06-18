@@ -70,6 +70,7 @@ final class StatisticsViewController: UIViewController {
             self.tableView.reloadData()
         }
     }
+    
     // MARK: - Actions
     
     @objc private func didTapSortButton() {
@@ -104,9 +105,8 @@ extension StatisticsViewController: UITableViewDataSource {
 
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let model = viewModel?.model(at: indexPath) as? StatisticsUser else { return }
         let statisticsUserViewController = StatisticsUserViewController()
-        statisticsUserViewController.user = model
+        statisticsUserViewController.applyViewModel(StatisticsUserViewModel(at: indexPath))
         
         let statisticsUserNavigationController = UINavigationController(rootViewController: statisticsUserViewController)
         statisticsUserNavigationController.modalPresentationStyle = .overCurrentContext

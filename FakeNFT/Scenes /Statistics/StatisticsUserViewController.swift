@@ -79,7 +79,9 @@ final class StatisticsUserViewController: UIViewController {
         return button
     }()
     
-    var user: StatisticsUser? {
+    private var viewModel: StatisticsUserViewModel?
+    
+    private var user: StatisticsUser? {
         didSet {
             guard let user else { return }
             if let url = URL(string: user.avatar) {
@@ -101,9 +103,14 @@ final class StatisticsUserViewController: UIViewController {
     
     // MARK: - Lifecycle
     
+    func applyViewModel(_ newViewModel: StatisticsUserViewModel) {
+        viewModel = newViewModel
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
+        user = viewModel?.getUser()
     }
     
     private func setupViewController() {

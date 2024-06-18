@@ -8,7 +8,7 @@
 import Foundation
 
 final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
-    let dataStore = StatisticsDataStore.shared
+    private let dataStore = StatisticsDataStore.shared
     
     var updateData: Binding<Bool>?
     
