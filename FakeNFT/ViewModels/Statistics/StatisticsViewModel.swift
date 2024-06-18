@@ -11,16 +11,16 @@ final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
     let profiles: [StatisticsProfile] = [
         StatisticsProfile(
             name: "Alex",
-            avatar: "",
-            description: "Дизайнер из Казани, люблю цифровое искусство  и бейглы. В моей коллекции уже 100+ NFT,  и еще больше — на моём сайте. Открыт  к коллаборациям.", 
-            website: "https://ya.ru",
+            avatar: "https://code.s3.yandex.net/landings-v2-ios-developer/space.PNG",
+            description: "Дизайнер из Казани, люблю цифровое искусство  и бейглы. В моей коллекции уже 100+ NFT,  и еще больше — на моём сайте. Открыт  к коллаборациям.",
+            website: "https://practicum.yandex.ru/ios-developer",
             nfts: ["", "", ""],
             likes: [],
             id: "1"
         ),
         StatisticsProfile(
             name: "Bill",
-            avatar: "",
+            avatar: "https://code.s3.yandex.net/landings-v2-ios-developer/space.PNG",
             description: "Описание Била",
             website: "https://yandex.ru",
             nfts: ["", "", "", "", "", ""],
@@ -38,7 +38,7 @@ final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
         ),
         StatisticsProfile(
             name: "Mads",
-            avatar: "",
+            avatar: "https://code.s3.yandex.net/landings-v2-ios-developer/space.PNG",
             description: "Описание Мэда",
             website: "https://practicum.yandex.ru/",
             nfts: ["", "", "", ""],
