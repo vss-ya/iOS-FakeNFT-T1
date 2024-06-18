@@ -9,6 +9,7 @@ import Foundation
 
 protocol CollectionViewModelProtocol: AnyObject {
     func getNftNumber() -> Int
+    func getNfts() -> [Nft]
     
 }
 
@@ -17,6 +18,10 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     
     func getNftNumber() -> Int {
         nft.nft.count
+    }
+    
+    func getNfts() -> [Nft] {
+        nft.nft
     }
     
     

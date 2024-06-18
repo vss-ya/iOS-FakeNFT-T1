@@ -93,10 +93,10 @@ private extension CollectionViewController {
         scrollView.addSubview(contentView)
         
         [collectionImage,
-        collectionNameLabel,
-        collectionAuthorLabel,
-        collectionDescriptionLabel,
-        collectionView].forEach {
+         collectionNameLabel,
+         collectionAuthorLabel,
+         collectionDescriptionLabel,
+         collectionView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -172,7 +172,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.isScrollEnabled = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(CatalogCollectionViewCell.self, forCellWithReuseIdentifier: CatalogCollectionViewCell.cellReuseIdentifier)
     }
     
     private func heightOfCollectionView() -> CGFloat {
@@ -190,6 +190,24 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         return CGFloat(hight)
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cellsPerRow = params.cellCount
+        let availableWidth = collectionView.frame.width - params.paddingWidth
+        let cellWidth = availableWidth / CGFloat(cellsPerRow)
+        return CGSize(width: cellWidth , height: 192)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        UIEdgeInsets(top: 0, left: params.leftInset, bottom: 0, right: params.rightInset)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return CGFloat(0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        params.cellSpacing
+    }
     
 }
 
@@ -199,7 +217,11 @@ extension CollectionViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as UICollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CatalogCollectionViewCell.cellReuseIdentifier, for: indexPath) as? CatalogCollectionViewCell else {
+            preconditionFailure("Failed to cast UICollectionViewCell as CatalogCollectionViewCell")
+        }
+        let nfts = viewModel.getNfts()
+        cell.configCell(nfts, indexPath)
         return cell
         
     }
