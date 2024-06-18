@@ -20,6 +20,8 @@ final class StatisticsWebViewViewController: UIViewController {
     
     func applyViewModel(_ newViewModel: StatisticsWebViewViewModelProtocol) {
         viewModel = newViewModel
+        bind()
+        viewModel?.initialize()
     }
     
     override func viewDidLoad() {
@@ -48,6 +50,18 @@ final class StatisticsWebViewViewController: UIViewController {
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+    
+    private func bind() {
+        viewModel?.updateData = { [weak self] request in
+            guard let self else { return }
+            self.webView.load(request)
+        }
+        
+        viewModel?.updateProgressValue = { [weak self] progress in
+            guard let self else { return }
+           
+        }
     }
 }
 

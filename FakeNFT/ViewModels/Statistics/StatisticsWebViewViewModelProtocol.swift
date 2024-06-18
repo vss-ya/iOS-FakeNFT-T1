@@ -8,6 +8,9 @@
 import Foundation
 
 protocol StatisticsWebViewViewModelProtocol {
+    var updateData: Binding<URLRequest>? { get set }
+    var updateProgressValue: Binding<Double>? { get set }
+    
     init(website: String)
-    func updateProgressValue(_ newValue: Double)
+    func initialize()
 }
