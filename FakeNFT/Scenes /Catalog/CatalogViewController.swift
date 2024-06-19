@@ -30,7 +30,7 @@ final class CatalogViewController: UIViewController {
 
 private extension CatalogViewController {
     func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         addTableView()
         configTableView()
     }
@@ -47,7 +47,8 @@ private extension CatalogViewController {
     }
     
     func configTableView() {
-        tableView.rowHeight = 186
+        tableView.rowHeight = CGFloat(CatalogConstants.catalogTableRowHeight)
+        tableView.backgroundColor = .systemBackground
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorColor = .clear

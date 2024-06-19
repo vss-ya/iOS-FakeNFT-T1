@@ -10,7 +10,6 @@ import Foundation
 protocol CatalogViewModelProtocol {
     func getCollectionsNumber() -> Int
     func getCollections() -> [Catalog]
-    
 }
 
 

@@ -33,6 +33,8 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
     private lazy var nftNameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 2
         label.font = .bodyBold
         return label
     }()
@@ -67,6 +69,7 @@ private extension CatalogCollectionViewCell {
         addSubView()
         addLayout()
         addTarget()
+        contentView.backgroundColor = .systemBackground
     }
     
     func addSubView() {

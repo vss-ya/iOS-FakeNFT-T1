@@ -42,7 +42,7 @@ final class CatalogTableViewCell: UITableViewCell {
 private extension CatalogTableViewCell {
     
     func setupCell() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         addLayout()
     }
     
@@ -57,7 +57,7 @@ private extension CatalogTableViewCell {
             collectionImage.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             collectionImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionImage.heightAnchor.constraint(equalToConstant: 140),
+            collectionImage.heightAnchor.constraint(equalToConstant: CGFloat(CatalogConstants.catalogCoverHeight)),
             
             collectionLabel.topAnchor.constraint(equalTo: collectionImage.bottomAnchor, constant: 4),
             collectionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
@@ -69,7 +69,7 @@ extension CatalogTableViewCell {
     func configCell(_ catalog: [Catalog], _ indexPath: IndexPath) {
         let collectionCoverURL = URL(string: catalog[indexPath.row].cover)
         let processor = ResizingImageProcessor(
-            referenceSize: CGSize(width: contentView.frame.width, height: 140),
+            referenceSize: CGSize(width: contentView.frame.width, height: Double(CatalogConstants.catalogCoverHeight)),
             mode: .aspectFill)
         collectionImage.kf.setImage(with: collectionCoverURL, options: [.processor(processor)])
         

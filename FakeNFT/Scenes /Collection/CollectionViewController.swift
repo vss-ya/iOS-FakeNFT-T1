@@ -17,7 +17,7 @@ final class CollectionViewController: UIViewController {
     
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = .white
+        scrollView.backgroundColor = .systemBackground
         scrollView.frame = view.bounds
         scrollView.contentSize = contentSize
         scrollView.showsHorizontalScrollIndicator = false
@@ -26,7 +26,7 @@ final class CollectionViewController: UIViewController {
     
     private lazy var contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         view.frame.size = contentSize
         return view
     }()
@@ -43,17 +43,20 @@ final class CollectionViewController: UIViewController {
     private lazy var collectionNameLabel: UILabel = {
         let label = UILabel()
         label.font = .headline3
+        label.backgroundColor = .systemBackground
         return label
     }()
     
     private lazy var collectionAuthorLabel: UILabel = {
         let label = UILabel()
         label.font = .caption2
+        label.backgroundColor = .systemBackground
         return label
     }()
     
     private lazy var collectionDescriptionLabel: UILabel = {
         let label = UILabel()
+        label.backgroundColor = .systemBackground
         label.font = .caption2
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
@@ -89,6 +92,7 @@ final class CollectionViewController: UIViewController {
 private extension CollectionViewController {
     
     func addSubViews() {
+        view.backgroundColor = .systemBackground
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
@@ -127,7 +131,7 @@ private extension CollectionViewController {
             collectionImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             collectionImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionImage.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionImage.heightAnchor.constraint(equalToConstant: 310),
+            collectionImage.heightAnchor.constraint(equalToConstant: CGFloat(CatalogConstants.catalogCollectionCoverHeight)),
             
             collectionNameLabel.topAnchor.constraint(equalTo: collectionImage.bottomAnchor, constant: 16),
             collectionNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -157,12 +161,12 @@ private extension CollectionViewController {
         
         let coverURL = URL(string: cover)
         let processor = ResizingImageProcessor(
-            referenceSize: CGSize(width: contentView.frame.width, height: 310),
+            referenceSize: CGSize(width: contentView.frame.width, height: Double(CatalogConstants.catalogCollectionCoverHeight)),
             mode: .aspectFill)
         collectionImage.kf.setImage(with: coverURL, options: [.processor(processor)])
         
         collectionNameLabel.text = name
-        collectionAuthorLabel.text = "Автор коллекции: \(author)"
+        collectionAuthorLabel.text = CatalogLocalization.catalogCollectionAuthor + author
         collectionDescriptionLabel.text = description
     }
 }
@@ -186,7 +190,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
             numbersOfRows = (numberOfNft / params.cellCount) + 1
         }
         }
-        let hight = numbersOfRows * 192
+        let hight = numbersOfRows * CatalogConstants.catalogCollectionCellHeight
         return CGFloat(hight)
     }
     
@@ -194,7 +198,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
         let cellsPerRow = params.cellCount
         let availableWidth = collectionView.frame.width - params.paddingWidth
         let cellWidth = availableWidth / CGFloat(cellsPerRow)
-        return CGSize(width: cellWidth , height: 192)
+        return CGSize(width: cellWidth , height: Double(CatalogConstants.catalogCollectionCellHeight))
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
