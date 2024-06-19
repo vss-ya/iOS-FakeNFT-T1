@@ -7,9 +7,10 @@ final class CartViewController: UIViewController {
     
     private var order: Order = MockData().mockOrder
     
-    lazy var orderTableView: UITableView = {
+    private lazy var orderTableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(CartViewControllerCell.self, forCellReuseIdentifier: "cell")
+        tableView.separatorStyle = .none
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return tableView
         
@@ -28,8 +29,8 @@ final class CartViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        self.addElements()
-        self.setConstraints()
+        addElements()
+        setConstraints()
         orderTableView.dataSource = self
         orderTableView.delegate = self
     }
@@ -45,8 +46,8 @@ final class CartViewController: UIViewController {
         NSLayoutConstraint.activate([
             orderTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
             orderTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -70),
-            orderTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            orderTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            orderTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
+            orderTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
 }
@@ -57,15 +58,18 @@ extension CartViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = orderTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = order.nfts[indexPath.row].id
+        guard let cell = orderTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CartViewControllerCell else {
+            return UITableViewCell()
+        }
+        let nft = order.nfts[indexPath.row]
+        cell.configure(nft: nft)
         return cell
     }
 }
 
 extension CartViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(40*order.nfts.count)
+        return 140
     }
 }
 
