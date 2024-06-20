@@ -9,7 +9,7 @@ final class MockData {
                 name: "Luna",
                 images: [URL(string: "https://img.freepik.com/free-photo/beautiful-kitten-with-colorful-clouds_23-2150752964.jpg?size=626&ext=jpg&ga=GA1.1.1788614524.1718668800&semt=ais_user")!],
                 rating: 0,
-                price: 14.5),
+                price: 14.53),
             Nft(
                 id: "2",
                 name: "Sun",

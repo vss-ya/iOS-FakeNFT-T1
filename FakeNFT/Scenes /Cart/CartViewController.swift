@@ -14,8 +14,45 @@ final class CartViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return tableView
-        
     }()
+    
+    private lazy var totalContainerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .yaLightGrayLight
+        view.layer.cornerRadius = 12
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMinYCorner]
+        return view
+    }()
+    
+    private lazy var nftCountLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .yaLightGrayLight
+        label.textColor = .textPrimary
+        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.text = "3 NFT"
+        return label
+    }()
+    
+    private lazy var orderAmountLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .yaLightGrayLight
+        label.textColor = .yaGreenUniversal
+        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.text = "5,34 ETH"
+        return label
+    }()
+    
+    private lazy var paymentButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .yaBlackLight
+        button.setTitle("К оплате", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        button.setTitleColor(.primary, for: .normal)
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = true
+        return button
+    }()
+    
 
     init(servicesAssembly: ServicesAssembly) {
         self.servicesAssembly = servicesAssembly
@@ -30,6 +67,7 @@ final class CartViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        calculateTotal()
         addElements()
         setConstraints()
         createNavigationBar()
@@ -37,10 +75,23 @@ final class CartViewController: UIViewController {
         orderTableView.delegate = self
     }
     
+    private func calculateTotal() {
+        let count = order.nfts.count
+        let sum = order.nfts.reduce(0) { (result, nft) in
+            result + nft.price
+        }
+        nftCountLabel.text = "\(count) NFT"
+        orderAmountLabel.text = "\(sum) ETH"
+    }
+    
     private func addElements() {
-        [orderTableView].forEach {
+        [orderTableView, totalContainerView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
+        }
+        [nftCountLabel, orderAmountLabel, paymentButton].forEach {
+            totalContainerView.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
         }
     }
     
@@ -49,7 +100,27 @@ final class CartViewController: UIViewController {
             orderTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 108),
             orderTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -70),
             orderTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
-            orderTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            orderTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            totalContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -83),
+            totalContainerView.heightAnchor.constraint(equalToConstant: 76),
+            totalContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            totalContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            nftCountLabel.topAnchor.constraint(equalTo: totalContainerView.topAnchor, constant: 16),
+            nftCountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
+            nftCountLabel.heightAnchor.constraint(equalToConstant: 22),
+            nftCountLabel.widthAnchor.constraint(equalToConstant: 79),
+            
+            orderAmountLabel.bottomAnchor.constraint(equalTo: totalContainerView.bottomAnchor, constant: -16),
+            orderAmountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
+            orderAmountLabel.heightAnchor.constraint(equalToConstant: 20),
+            orderAmountLabel.widthAnchor.constraint(equalToConstant: 95),
+            
+            paymentButton.topAnchor.constraint(equalTo: totalContainerView.topAnchor, constant: 16),
+            paymentButton.bottomAnchor.constraint(equalTo: totalContainerView.bottomAnchor, constant: -16),
+            paymentButton.leadingAnchor.constraint(equalTo: orderAmountLabel.trailingAnchor,constant: 24),
+            paymentButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
     }
     
