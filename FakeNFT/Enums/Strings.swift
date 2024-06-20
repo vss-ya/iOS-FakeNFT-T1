@@ -27,10 +27,19 @@ internal enum L10n {
   internal enum Profile {
     /// О разработчике
     internal static let aboutDeveloper = L10n.tr("Localizable", "Profile.aboutDeveloper", fallback: "О разработчике")
+    /// Сменить
+    /// фото
+    internal static let changePhoto = L10n.tr("Localizable", "Profile.changePhoto", fallback: "Сменить\nфото")
+    /// Описание
+    internal static let descriptionLabelText = L10n.tr("Localizable", "Profile.descriptionLabelText", fallback: "Описание")
     /// Избранные NFT
     internal static let favoritesNft = L10n.tr("Localizable", "Profile.favoritesNft", fallback: "Избранные NFT")
+    /// Сайт
+    internal static let linkLabelText = L10n.tr("Localizable", "Profile.linkLabelText", fallback: "Сайт")
     /// Мои NFT
     internal static let myNft = L10n.tr("Localizable", "Profile.myNft", fallback: "Мои NFT")
+    /// Имя
+    internal static let nameLabelText = L10n.tr("Localizable", "Profile.nameLabelText", fallback: "Имя")
   }
   internal enum Tab {
     /// Корзина

@@ -94,6 +94,8 @@ private extension ProfileViewController {
         
         tableView.dataSource = self
         tableView.delegate = self
+        
+        editButton.addTarget(self, action: #selector(editAction), for: .touchUpInside)
     }
     
     func setupConstraints() {
@@ -118,6 +120,21 @@ private extension ProfileViewController {
         ])
     }
     
+}
+
+// MARK: - Actions
+extension ProfileViewController {
+
+    @objc private func editAction() {
+        let vc = ProfileEditViewController(servicesAssembly: servicesAssembly) { [weak self]() in
+            guard let self else {
+                return
+            }
+            dismiss(animated: true)
+        }
+        present(vc, animated: true, completion: nil)
+    }
+
 }
 
 // MARK: - UITableViewDelegate
