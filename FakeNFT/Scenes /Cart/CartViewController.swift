@@ -6,6 +6,7 @@ final class CartViewController: UIViewController {
     let servicesAssembly: ServicesAssembly
     
     private var order: Order = MockData().mockOrder
+    private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     
     private lazy var orderTableView: UITableView = {
         let tableView = UITableView()
@@ -31,6 +32,7 @@ final class CartViewController: UIViewController {
         view.backgroundColor = .systemBackground
         addElements()
         setConstraints()
+        createNavigationBar()
         orderTableView.dataSource = self
         orderTableView.delegate = self
     }
@@ -44,11 +46,38 @@ final class CartViewController: UIViewController {
     
     private func setConstraints() {
         NSLayoutConstraint.activate([
-            orderTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
+            orderTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 108),
             orderTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -70),
             orderTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             orderTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
+    }
+    
+    private func createNavigationBar() {
+        navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 46, width: view.frame.width - 10, height: 42))
+        
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.backgroundColor = .primary
+        navBarAppearance.shadowColor = .clear
+        navigationBar.standardAppearance = navBarAppearance
+
+        let navItem = UINavigationItem()
+        let sortedButton = UIBarButtonItem(
+            image: UIImage(named: "sort"),
+            style: .plain,
+            target: self,
+            action: #selector(self.sortedButtonTapped)
+        )
+        sortedButton.tintColor = .textPrimary
+        navItem.rightBarButtonItem = sortedButton
+       
+        
+        navigationBar.setItems([navItem], animated: false)
+        view.addSubview(navigationBar)
+    }
+    
+    @objc private func sortedButtonTapped() {
+        print("Нажата кнопка сортировки")
     }
 }
 
