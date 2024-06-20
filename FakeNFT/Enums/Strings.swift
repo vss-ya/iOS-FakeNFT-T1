@@ -36,10 +36,14 @@ internal enum L10n {
     internal static let favoritesNft = L10n.tr("Localizable", "Profile.favoritesNft", fallback: "Избранные NFT")
     /// Сайт
     internal static let linkLabelText = L10n.tr("Localizable", "Profile.linkLabelText", fallback: "Сайт")
+    /// Загрузить изображение
+    internal static let loadImage = L10n.tr("Localizable", "Profile.loadImage", fallback: "Загрузить изображение")
     /// Мои NFT
     internal static let myNft = L10n.tr("Localizable", "Profile.myNft", fallback: "Мои NFT")
     /// Имя
     internal static let nameLabelText = L10n.tr("Localizable", "Profile.nameLabelText", fallback: "Имя")
+    /// Вставьте ссылку на изображение
+    internal static let pasteLinkToImage = L10n.tr("Localizable", "Profile.pasteLinkToImage", fallback: "Вставьте ссылку на изображение")
   }
   internal enum Tab {
     /// Корзина

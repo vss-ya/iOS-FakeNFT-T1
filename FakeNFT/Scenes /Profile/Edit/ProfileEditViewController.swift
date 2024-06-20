@@ -95,6 +95,7 @@ private extension ProfileEditViewController {
         }
         
         closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
+        avatarButton.addTarget(self, action: #selector(avatarAction), for: .touchUpInside)
     }
     
     func setupConstraints() {
@@ -140,6 +141,33 @@ private extension ProfileEditViewController {
     
     @objc private func closeAction() {
         onCloseCallback?()
+    }
+    
+    @objc private func avatarAction() {
+        let alert = UIAlertController(
+            title: L10n.Profile.loadImage,
+            message: L10n.Profile.pasteLinkToImage,
+            preferredStyle: .alert
+        )
+
+        alert.addTextField { _ in
+            
+        }
+        
+        let action = UIAlertAction(
+            title: "ОK",
+            style: .default)
+        { [weak self] _ in
+            let textField = alert.textFields?[0]
+            let urlString = textField?.text
+            guard let self, let textField, let urlString else {
+                return
+            }
+            alert.dismiss(animated: true)
+        }
+        
+        alert.addAction(action)
+        present(alert, animated: true)
     }
     
 }

@@ -134,6 +134,21 @@ extension ProfileViewController {
         }
         present(vc, animated: true, completion: nil)
     }
+    
+    private func openMyNft() {
+        let vc = MyNftViewController(servicesAssembly: servicesAssembly)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func openFavoritesNft() {
+        let vc = FavoritesNftViewController(servicesAssembly: servicesAssembly)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func openAboutDeveloper() {
+        let vc = AboutDeveloperViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 
 }
 
@@ -146,6 +161,16 @@ extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
+        switch indexPath.row {
+        case 0:
+            openMyNft()
+        case 1:
+            openFavoritesNft()
+        case 2:
+            openAboutDeveloper()
+        default:
+            break
+        }
     }
     
 }
