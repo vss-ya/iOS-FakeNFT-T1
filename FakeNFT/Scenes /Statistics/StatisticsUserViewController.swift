@@ -79,33 +79,31 @@ final class StatisticsUserViewController: UIViewController {
         return button
     }()
     
-    private var viewModel: StatisticsUserViewModelProtocol
+    private let viewModel: StatisticsUserViewModelProtocol
     
-    private var user: StatisticsUser? {
-        didSet {
-            guard let user else { return }
-            if let url = URL(string: user.avatar) {
-                let processor = RoundCornerImageProcessor(cornerRadius: 14)
-                avatarImageView.kf.setImage(
-                    with: url,
-                    placeholder: UIImage(systemName: "person.crop.circle.fill"),
-                    options: [.processor(processor)]
-                )
-            } else {
-                avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
-            }
-            nameLabel.text = user.name
-            descriptionLabel.text = user.description
-            let nftsCollectionTitle = NSLocalizedString("Statistics.statisticsProfile.nftsCollectionButton", comment: "")
-            nftsCollectionLabel.text = nftsCollectionTitle + " (\(user.nfts.count))"
-        }
-    }
+    private let website: String
     
     // MARK: - Lifecycle
     
     init(viewModel: StatisticsUserViewModelProtocol) {
         self.viewModel = viewModel
+        let user = self.viewModel.getUser()
+        self.website = user.website
         super.init(nibName: nil, bundle: nil)
+        if let url = URL(string: user.avatar) {
+            let processor = RoundCornerImageProcessor(cornerRadius: 14)
+            avatarImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(systemName: "person.crop.circle.fill"),
+                options: [.processor(processor)]
+            )
+        } else {
+            avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
+        }
+        nameLabel.text = user.name
+        descriptionLabel.text = user.description
+        let nftsCollectionTitle = NSLocalizedString("Statistics.statisticsProfile.nftsCollectionButton", comment: "")
+        nftsCollectionLabel.text = nftsCollectionTitle + " (\(user.nfts.count))"
     }
     
     required init?(coder: NSCoder) {
@@ -115,7 +113,6 @@ final class StatisticsUserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
-        user = viewModel.getUser()
     }
     
     private func setupViewController() {
@@ -195,7 +192,7 @@ final class StatisticsUserViewController: UIViewController {
     }
     
     @objc private func didTapUserWebsiteButton() {
-        let statisticsWebViewViewController = StatisticsWebViewViewController(viewModel: StatisticsWebViewViewModel(website: user?.website ?? ""))
+        let statisticsWebViewViewController = StatisticsWebViewViewController(viewModel: StatisticsWebViewViewModel(website: website))
         self.present(statisticsWebViewViewController, animated: true)
     }
     
