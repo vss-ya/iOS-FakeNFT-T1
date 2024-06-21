@@ -150,7 +150,7 @@ extension ProfileViewController {
     
     private func openAboutDeveloper() {
         let vc = AboutDeveloperViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        present(vc, animated: true)
     }
 
 }
