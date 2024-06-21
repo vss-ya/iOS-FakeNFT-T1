@@ -79,7 +79,7 @@ final class StatisticsUserViewController: UIViewController {
         return button
     }()
     
-    private var viewModel: StatisticsUserViewModel?
+    private var viewModel: StatisticsUserViewModelProtocol
     
     private var user: StatisticsUser? {
         didSet {
@@ -103,14 +103,19 @@ final class StatisticsUserViewController: UIViewController {
     
     // MARK: - Lifecycle
     
-    func applyViewModel(_ newViewModel: StatisticsUserViewModel) {
-        viewModel = newViewModel
+    init(viewModel: StatisticsUserViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
-        user = viewModel?.getUser()
+        user = viewModel.getUser()
     }
     
     private func setupViewController() {

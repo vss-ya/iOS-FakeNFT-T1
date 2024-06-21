@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class StatisticsUserViewModel {
+final class StatisticsUserViewModel: StatisticsUserViewModelProtocol {
     private let dataStore = StatisticsDataStore.shared
     private let user: StatisticsUser
     

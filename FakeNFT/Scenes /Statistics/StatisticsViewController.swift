@@ -107,8 +107,7 @@ extension StatisticsViewController: UITableViewDataSource {
 
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let statisticsUserViewController = StatisticsUserViewController()
-        statisticsUserViewController.applyViewModel(StatisticsUserViewModel(at: indexPath))
+        let statisticsUserViewController = StatisticsUserViewController(viewModel: StatisticsUserViewModel(at: indexPath))
         
         let statisticsUserNavigationController = UINavigationController(rootViewController: statisticsUserViewController)
         statisticsUserNavigationController.modalPresentationStyle = .overCurrentContext
