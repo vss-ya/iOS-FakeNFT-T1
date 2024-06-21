@@ -1,6 +1,6 @@
 import Foundation
 
-struct Nft_default: Decodable {
+struct NftDefault: Decodable {
     let id: String
     let images: [URL]
 }

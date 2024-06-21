@@ -12,7 +12,7 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
     
     private lazy var likeButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "favourites_default"), for: .normal)
+        button.setImage(UIImage(named: CatalogImages.favorites), for: .normal)
         return button
     }()
     
@@ -24,10 +24,12 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    private lazy var ratingImage: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "0star")
-        return imageView
+    private lazy var ratingStack: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 0
+        stackView.backgroundColor = .systemBackground
+        stackView.axis = .horizontal
+        return stackView
     }()
     
     private lazy var nftNameLabel: UILabel = {
@@ -48,7 +50,7 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
     
     private lazy var cartButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "cart_add"), for: .normal)
+        button.setImage(UIImage(named: CatalogImages.addToCart), for: .normal)
         return button
     }()
     
@@ -74,7 +76,7 @@ private extension CatalogCollectionViewCell {
     
     func addSubView() {
         [nftImage,
-         ratingImage,
+         ratingStack,
          nftNameLabel,
          nftPriceLabel,
          likeButton,
@@ -86,7 +88,7 @@ private extension CatalogCollectionViewCell {
     
     func addLayout() {
         [nftImage,
-         ratingImage,
+         ratingStack,
          nftNameLabel,
          nftPriceLabel,
          likeButton,
@@ -103,10 +105,10 @@ private extension CatalogCollectionViewCell {
             likeButton.topAnchor.constraint(equalTo: nftImage.topAnchor),
             likeButton.trailingAnchor.constraint(equalTo: nftImage.trailingAnchor),
             
-            ratingImage.topAnchor.constraint(equalTo: nftImage.bottomAnchor, constant: 8),
-            ratingImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            ratingStack.topAnchor.constraint(equalTo: nftImage.bottomAnchor, constant: 8),
+            ratingStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             
-            nftNameLabel.topAnchor.constraint(equalTo: ratingImage.bottomAnchor, constant: 5),
+            nftNameLabel.topAnchor.constraint(equalTo: ratingStack.bottomAnchor, constant: 5),
             nftNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nftNameLabel.widthAnchor.constraint(equalToConstant: 68),
             
@@ -127,12 +129,12 @@ private extension CatalogCollectionViewCell {
     
     @objc
     func setLike() {
-        likeButton.setImage(UIImage(named: "favourites_pressed"), for: .normal)
+        likeButton.setImage(UIImage(named: CatalogImages.favouritesPressed), for: .normal)
     }
     
     @objc
     func addToCart() {
-        cartButton.setImage(UIImage(named: "cart_delete"), for: .normal)
+        cartButton.setImage(UIImage(named: CatalogImages.delFromCart), for: .normal)
     }
     
 }
@@ -145,18 +147,27 @@ extension CatalogCollectionViewCell {
             mode: .aspectFill)
         nftImage.kf.setImage(with: nftImageURL, options: [.processor(processor)])
         
-        switch nfts[indexPath.row].rating {
-        case 0: ratingImage.image = UIImage(named: "0star")
-        case 1: ratingImage.image = UIImage(named: "1star")
-        case 2: ratingImage.image = UIImage(named: "2stars")
-        case 3: ratingImage.image = UIImage(named: "3stars")
-        case 4: ratingImage.image = UIImage(named: "4stars")
-        case 5: ratingImage.image = UIImage(named: "5stars")
-        default: ratingImage.image = UIImage(named: "0star")
-        }
+        let rating = nfts[indexPath.row].rating
+        setRating(rating)
+        
         nftNameLabel.text = nfts[indexPath.row].name
         let price = String(nfts[indexPath.row].price)
         nftPriceLabel.text = "\(price) ETH"
+    }
+    
+    func setRating(_ rating: Int) {
+        let maxRating = CatalogConstants.maxRating
+        let curentRating = rating
+        
+        for number in 0..<maxRating {
+            var ratingImage = UIImageView()
+            ratingStack.addArrangedSubview(ratingImage)
+            switch number > curentRating-1 {
+            case true: ratingImage.image = UIImage(named: CatalogImages.starNoActive)
+            case false: ratingImage.image = UIImage(named: CatalogImages.starActive)
+            }
+        }
+        
     }
 }
 

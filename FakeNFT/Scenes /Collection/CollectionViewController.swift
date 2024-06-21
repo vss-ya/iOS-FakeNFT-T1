@@ -20,6 +20,7 @@ final class CollectionViewController: UIViewController {
         scrollView.backgroundColor = .systemBackground
         scrollView.frame = view.bounds
         scrollView.contentSize = contentSize
+        scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.showsHorizontalScrollIndicator = false
         return scrollView
     }()
@@ -206,7 +207,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return CGFloat(0)
+        return CGFloat(8)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
