@@ -5,7 +5,10 @@ final class CartViewController: UIViewController {
     
     let servicesAssembly: ServicesAssembly
     
-    private var order: Order = MockData().mockOrder
+    private var viewModel: CartViewModel
+    private var order: Order {
+        return viewModel.order!
+    }
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     
     private lazy var orderTableView: UITableView = {
@@ -54,8 +57,9 @@ final class CartViewController: UIViewController {
     }()
     
 
-    init(servicesAssembly: ServicesAssembly) {
+    init(servicesAssembly: ServicesAssembly, viewModel: CartViewModel) {
         self.servicesAssembly = servicesAssembly
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -66,6 +70,11 @@ final class CartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewModel.orderBinding = { [weak self] _ in
+            guard let self = self else { return }
+            self.calculateTotal()
+            self.orderTableView.reloadData()
+        }
         view.backgroundColor = .systemBackground
         calculateTotal()
         addElements()
