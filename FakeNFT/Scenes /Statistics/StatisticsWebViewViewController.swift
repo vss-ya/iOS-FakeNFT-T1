@@ -22,16 +22,19 @@ final class StatisticsWebViewViewController: UIViewController {
         return progressView
     }()
     
-    private var viewModel: StatisticsWebViewViewModelProtocol?
-    
+    private var viewModel: StatisticsWebViewViewModelProtocol
     private var estimatedProgressObservation: NSKeyValueObservation?
     
     // MARK: - Lifecycle
     
-    func applyViewModel(_ newViewModel: StatisticsWebViewViewModelProtocol) {
-        viewModel = newViewModel
+    init(viewModel: StatisticsWebViewViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
         bind()
-        viewModel?.initialize()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -42,13 +45,10 @@ final class StatisticsWebViewViewController: UIViewController {
             options: [],
             changeHandler: { [weak self] _, _ in
                 guard let self else { return }
-                self.viewModel?.didUpdateProgressValue(self.webView.estimatedProgress)
+                self.viewModel.didUpdateProgressValue(self.webView.estimatedProgress)
             }
         )
-    }
-    
-    func load(request: URLRequest) {
-        webView.load(request)
+        viewModel.getData()
     }
     
     private func setupViewController() {
@@ -78,19 +78,16 @@ final class StatisticsWebViewViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel?.updateData = { [weak self] request in
-            guard let self else { return }
-            self.webView.load(request)
+        viewModel.updateData = { [weak self] request in
+            self?.webView.load(request)
         }
         
-        viewModel?.updateProgressValue = { [weak self] progress in
-            guard let self else { return }
-            self.progressView.setProgress(progress, animated: true)
+        viewModel.updateProgressValue = { [weak self] progress in
+            self?.progressView.setProgress(progress, animated: true)
         }
         
-        viewModel?.hideProgress = { [weak self] hiden in
-            guard let self else { return }
-            self.progressView.isHidden = hiden
+        viewModel.hideProgress = { [weak self] hiden in
+            self?.progressView.isHidden = hiden
         }
     }
 }

@@ -13,6 +13,6 @@ protocol StatisticsWebViewViewModelProtocol {
     var hideProgress: Binding<Bool>? { get set }
     
     init(website: String)
-    func initialize()
+    func getData()
     func didUpdateProgressValue(_ newValue: Double)
 }

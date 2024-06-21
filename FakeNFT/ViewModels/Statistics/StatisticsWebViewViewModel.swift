@@ -18,7 +18,7 @@ final class StatisticsWebViewViewModel: StatisticsWebViewViewModelProtocol {
         self.website = website
     }
     
-    func initialize() {
+    func getData() {
         guard let url = URL(string: website) else { return }
         updateData?(URLRequest(url: url))
     }
