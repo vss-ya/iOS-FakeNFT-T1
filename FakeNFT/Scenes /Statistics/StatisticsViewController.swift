@@ -25,15 +25,17 @@ final class StatisticsViewController: UIViewController {
         return tableView
     }()
     
-    
-    private var viewModel: StatisticsCollectionsViewModelProtocol?
+    private var viewModel: StatisticsCollectionsViewModelProtocol
     
     // MARK: - Lifecycle
     
-    func applyViewModel(_ newViewModel: StatisticsCollectionsViewModelProtocol) {
-        viewModel = newViewModel
+    init(viewModel: StatisticsCollectionsViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
         bind()
-        viewModel?.initialize()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -65,7 +67,7 @@ final class StatisticsViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel?.updateData = { [weak self] update in
+        viewModel.updateData = { [weak self] update in
             guard let self else { return }
             self.tableView.reloadData()
         }
@@ -84,16 +86,16 @@ final class StatisticsViewController: UIViewController {
 
 extension StatisticsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel?.numberOfSections ?? 0
+        return viewModel.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.numberOfRowsInSection(section) ?? 0
+        return viewModel.numberOfRowsInSection(section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: StatisticsCell.reuseIdentifier, for: indexPath)
-        guard let cell = cell as? StatisticsCell, let model = viewModel?.model(at: indexPath) as? StatisticsUser else {
+        guard let cell = cell as? StatisticsCell, let model = viewModel.model(at: indexPath) as? StatisticsUser else {
             return UITableViewCell()
         }
         cell.user = model
