@@ -83,6 +83,8 @@ final class StatisticsUserViewController: UIViewController {
     
     private let website: String
     
+    var dismissClosure: (() -> Void)?
+    
     // MARK: - Lifecycle
     
     init(viewModel: StatisticsUserViewModelProtocol) {
@@ -188,7 +190,8 @@ final class StatisticsUserViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func didTapBackButton() {
-        dismiss(animated: true)
+        dismiss(animated: false)
+        dismissClosure?()
     }
     
     @objc private func didTapUserWebsiteButton() {

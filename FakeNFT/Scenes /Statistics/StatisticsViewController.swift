@@ -108,11 +108,15 @@ extension StatisticsViewController: UITableViewDataSource {
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let statisticsUserViewController = StatisticsUserViewController(viewModel: StatisticsUserViewModel(at: indexPath))
+        statisticsUserViewController.dismissClosure = { [weak self] in
+            self?.tabBarController?.tabBar.isHidden = false
+        }
         
         let statisticsUserNavigationController = UINavigationController(rootViewController: statisticsUserViewController)
         statisticsUserNavigationController.modalPresentationStyle = .overCurrentContext
         
         self.present(statisticsUserNavigationController, animated: true)
+        tabBarController?.tabBar.isHidden = true
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
