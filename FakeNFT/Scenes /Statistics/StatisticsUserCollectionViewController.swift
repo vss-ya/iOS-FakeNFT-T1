@@ -34,7 +34,19 @@ final class StatisticsUserCollectionViewController: UIViewController {
         return collectionView
     }()
     
+    private var viewModel: StatisticsCollectionsViewModelProtocol
+    
     // MARK: - Lifecycle
+    
+    init(viewModel: StatisticsCollectionsViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        bind()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +77,13 @@ final class StatisticsUserCollectionViewController: UIViewController {
         ])
     }
     
+    private func bind() {
+        viewModel.updateData = { [weak self] update in
+            guard let self else { return }
+            self.collectionView.reloadData()
+        }
+    }
+    
     // MARK: - Actions
     
     @objc private func didTapBackButton() {
@@ -76,11 +95,11 @@ final class StatisticsUserCollectionViewController: UIViewController {
 
 extension StatisticsUserCollectionViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return viewModel.numberOfSections
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return viewModel.numberOfRowsInSection(section)
     }
     
     func collectionView(

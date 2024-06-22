@@ -204,7 +204,7 @@ final class StatisticsUserViewController: UIViewController {
     }
     
     @objc private func didTapNftsCollectionButton() {
-        let statisticsUserCollectionViewController = StatisticsUserCollectionViewController()
+        let statisticsUserCollectionViewController = StatisticsUserCollectionViewController(viewModel: StatisticsCollectionViewModel())
 
         let statisticsUserCollectionNavigationController = UINavigationController(rootViewController: statisticsUserCollectionViewController)
         statisticsUserCollectionNavigationController.modalPresentationStyle = .overCurrentContext
