@@ -50,7 +50,7 @@ final class StatisticsUserViewController: UIViewController {
             NSLocalizedString("Statistics.statisticsProfile.userWebsiteButton", comment: ""),
             for: .normal
         )
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.ypBlack, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
@@ -110,6 +110,10 @@ final class StatisticsUserViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        userWebsiteButton.layer.borderColor = UIColor.ypBlack.cgColor
     }
     
     override func viewDidLoad() {
