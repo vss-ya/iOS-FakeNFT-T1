@@ -84,6 +84,35 @@ final class StatisticsCollectionCell: UICollectionViewCell {
         return button
     }()
     
+    var nft: StatisticsNft? {
+        didSet {
+            guard let nft else { return }
+            let processor = RoundCornerImageProcessor(cornerRadius: 12)
+            nftImageView.kf.setImage(
+                with: URL(string: nft.images[0]),
+                placeholder: UIImage(systemName: "xmark.icloud"),
+                options: [.processor(processor)]
+            )
+            nameLabel.text = nft.name
+            priceLabel.text = "\(nft.price) ETH"
+            if nft.rating > 0 {
+                rating1ImageView.image = .starActive
+            }
+            if nft.rating > 1 {
+                rating2ImageView.image = .starActive
+            }
+            if nft.rating > 2 {
+                rating3ImageView.image = .starActive
+            }
+            if nft.rating > 3 {
+                rating4ImageView.image = .starActive
+            }
+            if nft.rating > 4 {
+                rating5ImageView.image = .starActive
+            }
+        }
+    }
+    
     static let reuseIdentifier = "statisticsCollectionCell"
     
     // MARK: - Lifecycle
@@ -91,15 +120,6 @@ final class StatisticsCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
-        
-        let processor = RoundCornerImageProcessor(cornerRadius: 12)
-        nftImageView.kf.setImage(
-            with: URL(string: ""),
-            placeholder: UIImage(systemName: "xmark.icloud"),
-            options: [.processor(processor)]
-        )
-        nameLabel.text = "Toast"
-        priceLabel.text = "1,78 ETH"
     }
     
     required init?(coder: NSCoder) {

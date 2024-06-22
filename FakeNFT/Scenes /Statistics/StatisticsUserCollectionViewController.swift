@@ -107,12 +107,10 @@ extension StatisticsUserCollectionViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StatisticsCollectionCell.reuseIdentifier, for: indexPath)
-        guard let cell = cell as? StatisticsCollectionCell else {
+        guard let cell = cell as? StatisticsCollectionCell, let model = viewModel.model(at: indexPath) as? StatisticsNft else {
             return UICollectionViewCell()
         }
-        //cell.viewModel = viewModel
-        //cell.indexPath = indexPath
-        //cell.tracker = viewModel.model(at: indexPath)
+        cell.nft = model
         return cell
     }
 }
