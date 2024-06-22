@@ -35,6 +35,7 @@ final class StatisticsCell: UITableViewCell {
         label.textColor = .ypBlack
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         label.textAlignment = .left
+        label.numberOfLines = 0
         return label
     }()
     private lazy var nftsLabel: UILabel = {
