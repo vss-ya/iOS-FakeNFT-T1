@@ -15,6 +15,14 @@ final class StatisticsUserCollectionViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         return button
     }()
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .ypBlack
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.textAlignment = .center
+        label.text = NSLocalizedString("Statistics.statisticsUserCollection.title", comment: "")
+        return label
+    }()
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = .clear
@@ -36,12 +44,13 @@ final class StatisticsUserCollectionViewController: UIViewController {
     private func setupViewController() {
         view.backgroundColor = .ypWhite
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.titleView = titleLabel
         addSubViews()
         applyConstraints()
     }
     
     private func addSubViews() {
-        [backButton, collectionView].forEach { subview in
+        [backButton, titleLabel, collectionView].forEach { subview in
             subview.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(subview)
         }
