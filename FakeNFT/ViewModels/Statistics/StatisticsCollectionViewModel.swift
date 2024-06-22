@@ -17,10 +17,10 @@ final class StatisticsCollectionViewModel: StatisticsCollectionsViewModelProtoco
     }
     
     func numberOfItemsInSection(_ section: Int) -> Int {
-        return 7
+        return dataStore.nfts.count
     }
     
     func model(at indexPath: IndexPath) -> any Decodable {
-        return dataStore.users[indexPath.row]
+        return dataStore.nfts[indexPath.row]
     }
 }

@@ -49,5 +49,58 @@ final class StatisticsDataStore {
         )
     ]
     
+    let nfts: [StatisticsNft] = [
+        StatisticsNft(
+            createdAt: "2023-04-20T02:22:27Z",
+            name: "Archie",
+            images: [""],
+            rating: 2,
+            description: "Описание NFT",
+            price: 1.78,
+            author: "author",
+            id: "1"
+        ),
+        StatisticsNft(
+            createdAt: "2023-04-20T02:22:27Z",
+            name: "Emma",
+            images: [""],
+            rating: 4,
+            description: "Описание NFT",
+            price: 1.25,
+            author: "author",
+            id: "2"
+        ),
+        StatisticsNft(
+            createdAt: "2023-04-20T02:22:27Z",
+            name: "Stella",
+            images: [""],
+            rating: 5,
+            description: "Описание NFT",
+            price: 1.82,
+            author: "author",
+            id: "3"
+        ),
+        StatisticsNft(
+            createdAt: "2023-04-20T02:22:27Z",
+            name: "Toasr",
+            images: [""],
+            rating: 3,
+            description: "Описание NFT",
+            price: 1.78,
+            author: "author",
+            id: "4"
+        ),
+        StatisticsNft(
+            createdAt: "2023-04-20T02:22:27Z",
+            name: "Zeus",
+            images: [""],
+            rating: 1,
+            description: "Описание NFT",
+            price: 1.13,
+            author: "author",
+            id: "5"
+        )
+    ]
+    
     private init() {}
 }

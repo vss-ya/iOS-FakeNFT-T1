@@ -62,6 +62,7 @@
 		E784D3882C220541002BEA2A /* StatisticsUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D3872C220541002BEA2A /* StatisticsUserViewModel.swift */; };
 		E7A4AC672C25B91800B421D5 /* StatisticsUserViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A4AC662C25B91800B421D5 /* StatisticsUserViewModelProtocol.swift */; };
 		E7FEF38C2C26DE0C00DBD9BE /* StatisticsCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FEF38B2C26DE0C00DBD9BE /* StatisticsCollectionViewModel.swift */; };
+		E7FEF38E2C26E23F00DBD9BE /* StatisticsNft.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FEF38D2C26E23F00DBD9BE /* StatisticsNft.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +141,7 @@
 		E784D3872C220541002BEA2A /* StatisticsUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserViewModel.swift; sourceTree = "<group>"; };
 		E7A4AC662C25B91800B421D5 /* StatisticsUserViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUserViewModelProtocol.swift; sourceTree = "<group>"; };
 		E7FEF38B2C26DE0C00DBD9BE /* StatisticsCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCollectionViewModel.swift; sourceTree = "<group>"; };
+		E7FEF38D2C26E23F00DBD9BE /* StatisticsNft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsNft.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -444,6 +446,7 @@
 			isa = PBXGroup;
 			children = (
 				E784D3752C218C1F002BEA2A /* StatisticsUser.swift */,
+				E7FEF38D2C26E23F00DBD9BE /* StatisticsNft.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -611,6 +614,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E784D3822C21E5FC002BEA2A /* StatisticsWebViewViewModelProtocol.swift in Sources */,
+				E7FEF38E2C26E23F00DBD9BE /* StatisticsNft.swift in Sources */,
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
