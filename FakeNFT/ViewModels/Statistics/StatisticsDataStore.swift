@@ -10,44 +10,9 @@ import Foundation
 final class StatisticsDataStore {
     static let shared = StatisticsDataStore()
     
-    let users: [StatisticsUser] = [
-        StatisticsUser(
-            name: "Alex",
-            avatar: "https://code.s3.yandex.net/landings-v2-ios-developer/space.PNG",
-            description: "Дизайнер из Казани, люблю цифровое искусство  и бейглы. В моей коллекции уже 100+ NFT,  и еще больше — на моём сайте. Открыт  к коллаборациям.",
-            website: "https://practicum.yandex.ru/ios-developer",
-            nfts: ["", "", ""],
-            rating: "1",
-            id: "1"
-        ),
-        StatisticsUser(
-            name: "Bill",
-            avatar: "https://code.s3.yandex.net/landings-v2-ios-developer/space.PNG",
-            description: "Описание Била",
-            website: "https://yandex.ru",
-            nfts: ["", "", "", "", "", ""],
-            rating: "2",
-            id: "2"
-        ),
-        StatisticsUser(
-            name: "Alla",
-            avatar: "",
-            description: "Описание Аллы",
-            website: "https://figma.com",
-            nfts: ["", "", "", "", ""],
-            rating: "3",
-            id: "3"
-        ),
-        StatisticsUser(
-            name: "Mads",
-            avatar: "https://code.s3.yandex.net/landings-v2-ios-developer/space.PNG",
-            description: "Описание Мэда",
-            website: "https://practicum.yandex.ru/",
-            nfts: ["", "", "", ""],
-            rating: "4",
-            id: "4"
-        )
-    ]
+    private var taskUsers: NetworkTask?
+    
+    var users: [StatisticsUser] = []
     
     let nfts: [StatisticsNft] = [
         StatisticsNft(createdAt: "2023-10-08T07:43:22.944Z[GMT]",
@@ -123,4 +88,20 @@ final class StatisticsDataStore {
     ]
     
     private init() {}
+    
+    func getUsers(completion: @escaping (Bool) -> Void) {
+        if taskUsers != nil { return }
+        let networkClient = DefaultNetworkClient()
+        users = []
+        var task = networkClient.send(request: StatisticsUsersRequest(), type: [StatisticsUser].self) { [weak self] result in
+            switch result {
+            case .success(let users):
+                self?.users = users
+                completion(true)
+            case .failure(_):
+                completion(false)
+            }
+            self?.taskUsers = nil
+        }
+    }
 }

@@ -16,6 +16,10 @@ final class StatisticsUserCollectionViewModel: StatisticsCollectionsViewModelPro
         return 1
     }
     
+    func getData() {
+        
+    }
+    
     func numberOfItemsInSection(_ section: Int) -> Int {
         return dataStore.nfts.count
     }

@@ -16,6 +16,12 @@ final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
         return 1
     }
     
+    func getData() {
+        dataStore.getUsers() { [weak self] result in
+            self?.updateData?(result)
+        }
+    }
+    
     func numberOfItemsInSection(_ section: Int) -> Int {
         return dataStore.users.count
     }

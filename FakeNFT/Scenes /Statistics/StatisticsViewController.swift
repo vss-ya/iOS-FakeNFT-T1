@@ -43,6 +43,11 @@ final class StatisticsViewController: UIViewController {
         setupViewController()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.getData()
+    }
+    
     private func setupViewController() {
         view.backgroundColor = .ypWhite
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: sortButton)
