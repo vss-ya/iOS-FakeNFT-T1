@@ -81,8 +81,8 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func didTapSortButton() {
-        AlertPresenter.statisticsSort(delegate: self) { [weak self] byName in
-            self?.viewModel.getData(sortField: byName ? .byName : .byRating)
+        AlertPresenter.statisticsSort(delegate: self) { [weak self] sortField in
+            self?.viewModel.getData(sortField: sortField)
         }
     }
 }

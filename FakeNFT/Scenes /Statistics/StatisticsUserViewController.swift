@@ -33,6 +33,7 @@ final class StatisticsUserViewController: UIViewController {
         label.textColor = .ypBlack
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         label.textAlignment = .left
+        label.numberOfLines = 0
         return label
     }()
     private lazy var descriptionLabel: UILabel = {

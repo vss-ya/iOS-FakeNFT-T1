@@ -118,7 +118,7 @@ final class StatisticsCell: UITableViewCell {
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 8),
             nameLabel.centerYAnchor.constraint(equalTo: backgroundLabel.centerYAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: nftsLabel.leadingAnchor, constant: -8),
+            nameLabel.trailingAnchor.constraint(equalTo: nftsLabel.leadingAnchor, constant: -16),
         ])
         NSLayoutConstraint.activate([
             nftsLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -16),
