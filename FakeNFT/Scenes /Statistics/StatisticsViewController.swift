@@ -45,7 +45,7 @@ final class StatisticsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.getData()
+        viewModel.getData(sortField: .byRating)
     }
     
     private func setupViewController() {
@@ -81,8 +81,8 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func didTapSortButton() {
-        AlertPresenter.statisticsSort(delegate: self) { byName in
-            
+        AlertPresenter.statisticsSort(delegate: self) { [weak self] byName in
+            self?.viewModel.getData(sortField: byName ? .byName : .byRating)
         }
     }
 }

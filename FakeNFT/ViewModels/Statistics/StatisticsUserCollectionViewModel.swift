@@ -16,8 +16,8 @@ final class StatisticsUserCollectionViewModel: StatisticsCollectionsViewModelPro
         return 1
     }
     
-    func getData() {
-        
+    func getData(sortField: StatisticsSortFields) {
+    
     }
     
     func numberOfItemsInSection(_ section: Int) -> Int {

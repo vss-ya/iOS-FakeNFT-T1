@@ -7,11 +7,15 @@
 
 import Foundation
 
+enum StatisticsSortFields {
+    case byName, byRating
+}
+
 protocol StatisticsCollectionsViewModelProtocol {
     var updateData: Binding<Bool>? { get set }
     var numberOfSections: Int { get }
     
-    func getData()
+    func getData(sortField: StatisticsSortFields)
     func numberOfItemsInSection(_ section: Int) -> Int
     func model(at indexPath: IndexPath) -> Decodable
 }

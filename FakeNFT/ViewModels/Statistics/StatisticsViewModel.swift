@@ -16,8 +16,8 @@ final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
         return 1
     }
     
-    func getData() {
-        dataStore.getUsers() { [weak self] result in
+    func getData(sortField: StatisticsSortFields) {
+        dataStore.getUsers(sortField: sortField) { [weak self] result in
             self?.updateData?(result)
         }
     }

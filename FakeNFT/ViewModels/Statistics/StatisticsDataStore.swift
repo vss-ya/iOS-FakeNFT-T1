@@ -89,16 +89,18 @@ final class StatisticsDataStore {
     
     private init() {}
     
-    func getUsers(completion: @escaping (Bool) -> Void) {
+    func getUsers(sortField: StatisticsSortFields, completion: @escaping (Bool) -> Void) {
         if taskUsers != nil { return }
         let networkClient = DefaultNetworkClient()
+        let request = StatisticsUsersRequest(sortField: sortField)
         users = []
-        var task = networkClient.send(request: StatisticsUsersRequest(), type: [StatisticsUser].self) { [weak self] result in
+        taskUsers = networkClient.send(request: request, type: [StatisticsUser].self) { [weak self] result in
             switch result {
             case .success(let users):
                 self?.users = users
                 completion(true)
-            case .failure(_):
+            case .failure(let error):
+                print(error.localizedDescription)
                 completion(false)
             }
             self?.taskUsers = nil

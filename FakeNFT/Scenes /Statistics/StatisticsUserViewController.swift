@@ -90,9 +90,9 @@ final class StatisticsUserViewController: UIViewController {
     init(viewModel: StatisticsUserViewModelProtocol) {
         self.viewModel = viewModel
         let user = self.viewModel.getUser()
-        self.website = user.website
+        self.website = user.website ?? ""
         super.init(nibName: nil, bundle: nil)
-        if let url = URL(string: user.avatar) {
+        if let url = URL(string: user.avatar ?? "") {
             let processor = RoundCornerImageProcessor(cornerRadius: 14)
             avatarImageView.kf.setImage(
                 with: url,

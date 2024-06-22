@@ -50,7 +50,7 @@ final class StatisticsCell: UITableViewCell {
         didSet {
             guard let user else { return }
             ratingLabel.text = user.rating
-            if let url = URL(string: user.avatar) {
+            if let url = URL(string: user.avatar ?? "") {
                 let processor = RoundCornerImageProcessor(cornerRadius: 14)
                 avatarImageView.kf.setImage(
                     with: url,
