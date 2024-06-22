@@ -16,15 +16,11 @@ final class StatisticsCollectionViewModel: StatisticsCollectionsViewModelProtoco
         return 1
     }
     
-    func numberOfRowsInSection(_ section: Int) -> Int {
+    func numberOfItemsInSection(_ section: Int) -> Int {
         return 7
     }
     
     func model(at indexPath: IndexPath) -> any Decodable {
         return dataStore.users[indexPath.row]
-    }
-    
-    func initialize() {
-        updateData?(true)
     }
 }

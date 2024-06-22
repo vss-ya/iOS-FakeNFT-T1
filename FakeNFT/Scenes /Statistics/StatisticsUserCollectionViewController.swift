@@ -99,7 +99,7 @@ extension StatisticsUserCollectionViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.numberOfRowsInSection(section)
+        return viewModel.numberOfItemsInSection(section)
     }
     
     func collectionView(

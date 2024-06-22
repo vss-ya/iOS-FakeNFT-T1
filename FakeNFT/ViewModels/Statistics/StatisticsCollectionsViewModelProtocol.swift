@@ -11,7 +11,6 @@ protocol StatisticsCollectionsViewModelProtocol {
     var updateData: Binding<Bool>? { get set }
     var numberOfSections: Int { get }
     
-    func initialize()
-    func numberOfRowsInSection(_ section: Int) -> Int
+    func numberOfItemsInSection(_ section: Int) -> Int
     func model(at indexPath: IndexPath) -> Decodable
 }
