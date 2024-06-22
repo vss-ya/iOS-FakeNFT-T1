@@ -86,6 +86,7 @@ final class CollectionViewController: UIViewController {
         addLayout()
         configView()
         addCollectionView()
+        addNavBar()
     }
     
 }
@@ -169,6 +170,33 @@ private extension CollectionViewController {
         collectionNameLabel.text = name
         collectionAuthorLabel.text = CatalogLocalization.catalogCollectionAuthor + author
         collectionDescriptionLabel.text = description
+    }
+    
+    func addNavBar() {
+        navigationItem.leftBarButtonItem = addBackButton()
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+    }
+    
+    func addBackButton() -> UIBarButtonItem {
+        let button = UIButton()
+        button.setImage(UIImage(named: CatalogImages.catalogBackButton), for: .normal)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 24),
+            button.heightAnchor.constraint(equalToConstant: 24)
+        ])
+        
+        let backButton = UIBarButtonItem(customView: button)
+        return backButton
+    }
+    
+    @objc
+    func backButtonTapped() {
+        dismiss(animated: true)
     }
 }
 

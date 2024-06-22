@@ -33,6 +33,7 @@ private extension CatalogViewController {
         view.backgroundColor = .systemBackground
         addTableView()
         configTableView()
+        addNavBar()
     }
     
     func addTableView() {
@@ -53,6 +54,41 @@ private extension CatalogViewController {
         tableView.dataSource = self
         tableView.separatorColor = .clear
         tableView.register(CatalogTableViewCell.self, forCellReuseIdentifier: CatalogTableViewCell.reuseIdentifier)
+    }
+    
+    func addNavBar() {
+        navigationItem.rightBarButtonItem = addSortButton()
+        navigationController?.navigationBar.backgroundColor = .systemBackground
+    }
+    
+    func addSortButton() -> UIBarButtonItem {
+        let button = UIButton()
+        button.setImage(UIImage(named: CatalogImages.catalogSortButton), for: .normal)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 42),
+            button.heightAnchor.constraint(equalToConstant: 42)
+        ])
+        
+        let sortButton = UIBarButtonItem(customView: button)
+        return sortButton
+    }
+    
+    @objc
+    func sortButtonTapped() {
+        let alert = UIAlertController(
+            title: "",
+            message: CatalogLocalization.catalogSortMessage,
+            preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortByName, style: .default))
+        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortByNftCount, style: .default))
+        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortCancel, style: .cancel))
+        
+        self.present(alert, animated: true)
     }
 }
 
@@ -80,8 +116,9 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
             collectionAuthor: catalog[indexPath.row].author,
             collectionDescription: catalog[indexPath.row].description)
         let viewController = CollectionViewController(collectionSettings: collection, viewModel: CollectionViewModel())
-        viewController.modalPresentationStyle = .fullScreen
-        present(viewController, animated: true)
+        let navigationViewController = UINavigationController(rootViewController: viewController)
+        navigationViewController.modalPresentationStyle = .fullScreen
+        present(navigationViewController, animated: true)
     }
     
     

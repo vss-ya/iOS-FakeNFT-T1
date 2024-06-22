@@ -160,7 +160,7 @@ extension CatalogCollectionViewCell {
         let curentRating = rating
         
         for number in 0..<maxRating {
-            var ratingImage = UIImageView()
+            let ratingImage = UIImageView()
             ratingStack.addArrangedSubview(ratingImage)
             switch number > curentRating-1 {
             case true: ratingImage.image = UIImage(named: CatalogImages.starNoActive)

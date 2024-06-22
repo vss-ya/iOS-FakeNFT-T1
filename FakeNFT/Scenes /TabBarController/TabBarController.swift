@@ -41,7 +41,7 @@ final class TabBarController: UITabBarController {
         super.viewDidLoad()
 
         let profileController = TestCatalogViewController(servicesAssembly: servicesAssembly)
-        let catalogController = CatalogViewController(viewModel: CatalogViewModel())
+        let catalogController = UINavigationController(rootViewController: CatalogViewController(viewModel: CatalogViewModel()))
         let cartController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         let statisticsController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         

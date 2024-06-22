@@ -24,12 +24,25 @@ enum CatalogConstants {
 }
 
 enum CatalogLocalization {
+    //MARK: - CatalogViewController
+    static let catalogSortMessage = NSLocalizedString("Catalog.sortMessage", comment: "")
+    static let catalogSortByName = NSLocalizedString("Catalog.sortByName", comment: "")
+    static let catalogSortByNftCount = NSLocalizedString("Catalog.sortByNftCount", comment: "")
+    static let catalogSortCancel = NSLocalizedString("Catalog.sortCancel", comment: "")
+    
     //MARK: - CollectionViewController
     static let catalogCollectionAuthor = NSLocalizedString("Catalog.collectionAuthor", comment: "")
     
 }
 
 enum CatalogImages {
+    //MARK: - CatalogViewController
+    static let catalogSortButton = "sort"
+    
+    //MARK: - CollectionViewController
+    static let catalogBackButton = "back"
+    
+    
     //MARK: - CatalogCollectionViewCell
     static let delFromCart = "cart_delete"
     static let addToCart = "cart_add"
