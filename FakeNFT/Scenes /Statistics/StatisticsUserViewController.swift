@@ -33,6 +33,7 @@ final class StatisticsUserViewController: UIViewController {
         label.textColor = .ypBlack
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         label.textAlignment = .left
+        label.numberOfLines = 0
         return label
     }()
     private lazy var descriptionLabel: UILabel = {
@@ -50,7 +51,7 @@ final class StatisticsUserViewController: UIViewController {
             NSLocalizedString("Statistics.statisticsProfile.userWebsiteButton", comment: ""),
             for: .normal
         )
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.ypBlack, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
@@ -90,9 +91,9 @@ final class StatisticsUserViewController: UIViewController {
     init(viewModel: StatisticsUserViewModelProtocol) {
         self.viewModel = viewModel
         let user = self.viewModel.getUser()
-        self.website = user.website
+        self.website = user.website ?? ""
         super.init(nibName: nil, bundle: nil)
-        if let url = URL(string: user.avatar) {
+        if let url = URL(string: user.avatar ?? "") {
             let processor = RoundCornerImageProcessor(cornerRadius: 14)
             avatarImageView.kf.setImage(
                 with: url,
@@ -110,6 +111,10 @@ final class StatisticsUserViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        userWebsiteButton.layer.borderColor = UIColor.ypBlack.cgColor
     }
     
     override func viewDidLoad() {
@@ -200,6 +205,11 @@ final class StatisticsUserViewController: UIViewController {
     }
     
     @objc private func didTapNftsCollectionButton() {
+        let statisticsUserCollectionViewController = StatisticsUserCollectionViewController(viewModel: StatisticsUserCollectionViewModel())
+
+        let statisticsUserCollectionNavigationController = UINavigationController(rootViewController: statisticsUserCollectionViewController)
+        statisticsUserCollectionNavigationController.modalPresentationStyle = .overCurrentContext
         
+        self.present(statisticsUserCollectionNavigationController, animated: true)
     }
 }

@@ -35,6 +35,7 @@ final class StatisticsCell: UITableViewCell {
         label.textColor = .ypBlack
         label.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         label.textAlignment = .left
+        label.numberOfLines = 0
         return label
     }()
     private lazy var nftsLabel: UILabel = {
@@ -49,7 +50,7 @@ final class StatisticsCell: UITableViewCell {
         didSet {
             guard let user else { return }
             ratingLabel.text = user.rating
-            if let url = URL(string: user.avatar) {
+            if let url = URL(string: user.avatar ?? "") {
                 let processor = RoundCornerImageProcessor(cornerRadius: 14)
                 avatarImageView.kf.setImage(
                     with: url,
@@ -117,7 +118,7 @@ final class StatisticsCell: UITableViewCell {
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 8),
             nameLabel.centerYAnchor.constraint(equalTo: backgroundLabel.centerYAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: nftsLabel.leadingAnchor, constant: -8),
+            nameLabel.trailingAnchor.constraint(equalTo: nftsLabel.leadingAnchor, constant: -16),
         ])
         NSLayoutConstraint.activate([
             nftsLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -16),

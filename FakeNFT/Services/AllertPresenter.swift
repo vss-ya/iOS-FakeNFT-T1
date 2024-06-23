@@ -8,7 +8,7 @@
 import UIKit
 
 final class AlertPresenter {
-    static func statisticsSort(delegate: UIViewController?, deleteCompletion: @escaping (_ byName: Bool) -> Void) {
+    static func statisticsSort(delegate: UIViewController?, deleteCompletion: @escaping (_ sortField: StatisticsSortFields) -> Void) {
         let alert = UIAlertController(
             title: NSLocalizedString("Statistics.statisticsSort.title", comment: ""),
             message: "",
@@ -19,7 +19,7 @@ final class AlertPresenter {
                 title: NSLocalizedString("Statistics.statisticsSort.byName", comment: ""),
                 style: .default
             ) { _ in
-                deleteCompletion(true)
+                deleteCompletion(.byName)
             }
         )
         alert.addAction(
@@ -27,7 +27,7 @@ final class AlertPresenter {
                 title: NSLocalizedString("Statistics.statisticsSort.byRating", comment: ""),
                 style: .default
             ) { _ in
-                deleteCompletion(false)
+                deleteCompletion(.byRating)
             }
         )
         alert.addAction(

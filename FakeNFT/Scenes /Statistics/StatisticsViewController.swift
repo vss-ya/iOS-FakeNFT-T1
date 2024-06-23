@@ -43,6 +43,11 @@ final class StatisticsViewController: UIViewController {
         setupViewController()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.getData(sortField: .byRating)
+    }
+    
     private func setupViewController() {
         view.backgroundColor = .ypWhite
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: sortButton)
@@ -76,8 +81,8 @@ final class StatisticsViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func didTapSortButton() {
-        AlertPresenter.statisticsSort(delegate: self) { byName in
-            
+        AlertPresenter.statisticsSort(delegate: self) { [weak self] sortField in
+            self?.viewModel.getData(sortField: sortField)
         }
     }
 }
@@ -90,7 +95,7 @@ extension StatisticsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfRowsInSection(section)
+        return viewModel.numberOfItemsInSection(section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
