@@ -65,15 +65,18 @@ final class StatisticsUserViewController: UIViewController {
         stackView.axis = .horizontal
         return stackView
     }()
-    private lazy var nftsCollectionLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .ypBlack
-        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        label.textAlignment = .left
-        return label
+    private lazy var nftsCollectionTextButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = .clear
+        button.setTitleColor(.ypBlack, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        button.contentHorizontalAlignment = .left
+        button.addTarget(self, action: #selector(didTapNftsCollectionButton), for: .touchUpInside)
+        return button
     }()
     private lazy var nftsCollectionButton: UIButton = {
         let button = UIButton(type: .custom)
+        button.backgroundColor = .clear
         button.setImage(UIImage(systemName: "chevron.forward"), for: .normal)
         button.tintColor = .ypBlack
         button.addTarget(self, action: #selector(didTapNftsCollectionButton), for: .touchUpInside)
@@ -106,7 +109,10 @@ final class StatisticsUserViewController: UIViewController {
         nameLabel.text = user.name
         descriptionLabel.text = user.description
         let nftsCollectionTitle = NSLocalizedString("Statistics.statisticsProfile.nftsCollectionButton", comment: "")
-        nftsCollectionLabel.text = nftsCollectionTitle + " (\(user.nfts.count))"
+        nftsCollectionTextButton.setTitle(
+            nftsCollectionTitle + " (\(user.nfts.count))",
+            for: .normal
+        )
     }
     
     required init?(coder: NSCoder) {
@@ -138,7 +144,7 @@ final class StatisticsUserViewController: UIViewController {
             subview.translatesAutoresizingMaskIntoConstraints = false
             avatarStackView.addSubview(subview)
         }
-        [nftsCollectionLabel, nftsCollectionButton].forEach { subview in
+        [nftsCollectionTextButton, nftsCollectionButton].forEach { subview in
             subview.translatesAutoresizingMaskIntoConstraints = false
             nftsStackView.addSubview(subview)
         }
@@ -180,9 +186,9 @@ final class StatisticsUserViewController: UIViewController {
             nftsStackView.heightAnchor.constraint(equalToConstant: 54)
         ])
         NSLayoutConstraint.activate([
-            nftsCollectionLabel.leadingAnchor.constraint(equalTo: nftsStackView.leadingAnchor),
-            nftsCollectionLabel.trailingAnchor.constraint(equalTo: nftsCollectionButton.leadingAnchor, constant: -16),
-            nftsCollectionLabel.centerYAnchor.constraint(equalTo: nftsCollectionButton.centerYAnchor)
+            nftsCollectionTextButton.leadingAnchor.constraint(equalTo: nftsStackView.leadingAnchor),
+            nftsCollectionTextButton.trailingAnchor.constraint(equalTo: nftsCollectionButton.leadingAnchor, constant: -16),
+            nftsCollectionTextButton.centerYAnchor.constraint(equalTo: nftsCollectionButton.centerYAnchor)
         ])
         NSLayoutConstraint.activate([
             nftsCollectionButton.trailingAnchor.constraint(equalTo: nftsStackView.trailingAnchor),
