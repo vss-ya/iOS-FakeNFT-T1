@@ -15,6 +15,7 @@ enum CatalogConstants {
     //MARK: - CollectionViewController
     static let catalogCollectionCoverHeight = 310
     static let catalogCollectionCellHeight = 192
+    static let catalogAuthorLink = "https://ru.wikipedia.org/wiki/Пушкин,_Александр_Сергеевич"
     
     //MARK: - CatalogCollectionViewCell
     static let maxRating = 5

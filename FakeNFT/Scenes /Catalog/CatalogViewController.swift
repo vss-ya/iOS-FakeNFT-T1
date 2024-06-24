@@ -52,6 +52,7 @@ private extension CatalogViewController {
         tableView.backgroundColor = .systemBackground
         tableView.delegate = self
         tableView.dataSource = self
+        
         tableView.separatorColor = .clear
         tableView.register(CatalogTableViewCell.self, forCellReuseIdentifier: CatalogTableViewCell.reuseIdentifier)
     }
@@ -84,8 +85,19 @@ private extension CatalogViewController {
             message: CatalogLocalization.catalogSortMessage,
             preferredStyle: .actionSheet)
         
-        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortByName, style: .default))
-        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortByNftCount, style: .default))
+        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortByName, style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.viewModel.sortByName()
+            self.tableView.reloadData()
+            
+        }))
+        
+        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortByNftCount, style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.viewModel.sortByNftCount()
+            self.tableView.reloadData()
+        }))
+        
         alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortCancel, style: .cancel))
         
         self.present(alert, animated: true)

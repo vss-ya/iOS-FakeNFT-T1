@@ -48,11 +48,35 @@ final class CollectionViewController: UIViewController {
         return label
     }()
     
+    private lazy var authorStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 4
+        stackView.backgroundColor = .systemBackground
+        stackView.axis = .horizontal
+        return stackView
+    }()
+    
     private lazy var collectionAuthorLabel: UILabel = {
         let label = UILabel()
         label.font = .caption2
+        label.text = CatalogLocalization.catalogCollectionAuthor
         label.backgroundColor = .systemBackground
         return label
+    }()
+    
+    private lazy var collectionAuthorLink: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .systemBackground
+        button.titleLabel?.font = .caption2
+        button.setTitleColor(UIColor(named: "YP Blue Universal"), for: .normal)
+        button.addTarget(self, action: #selector(didTapAuthorName), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var borderView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        return view
     }()
     
     private lazy var collectionDescriptionLabel: UILabel = {
@@ -98,9 +122,15 @@ private extension CollectionViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
+        [collectionAuthorLabel,
+         collectionAuthorLink,
+         borderView].forEach {
+            authorStackView.addArrangedSubview($0)
+        }
+        
         [collectionImage,
          collectionNameLabel,
-         collectionAuthorLabel,
+         authorStackView,
          collectionDescriptionLabel,
          collectionView].forEach {
             contentView.addSubview($0)
@@ -112,7 +142,7 @@ private extension CollectionViewController {
          contentView,
          collectionImage,
          collectionNameLabel,
-         collectionAuthorLabel,
+         authorStackView,
          collectionDescriptionLabel,
          collectionView,
         ].forEach {
@@ -139,11 +169,15 @@ private extension CollectionViewController {
             collectionNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            collectionAuthorLabel.topAnchor.constraint(equalTo: collectionNameLabel.bottomAnchor, constant: 8),
-            collectionAuthorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            collectionAuthorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            authorStackView.topAnchor.constraint(equalTo: collectionNameLabel.bottomAnchor, constant: 8),
+            authorStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            authorStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            authorStackView.heightAnchor.constraint(equalToConstant: 28),
             
-            collectionDescriptionLabel.topAnchor.constraint(equalTo: collectionAuthorLabel.bottomAnchor, constant: 5),
+            collectionAuthorLabel.widthAnchor.constraint(equalToConstant: widthOfString(font: .caption2, text: collectionAuthorLabel.text)),
+            collectionAuthorLink.widthAnchor.constraint(equalToConstant: widthOfString(font: .caption2, text: collectionSettings?.collectionAuthor)),
+
+            collectionDescriptionLabel.topAnchor.constraint(equalTo: authorStackView.bottomAnchor, constant: 5),
             collectionDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
@@ -168,7 +202,7 @@ private extension CollectionViewController {
         collectionImage.kf.setImage(with: coverURL, options: [.processor(processor)])
         
         collectionNameLabel.text = name
-        collectionAuthorLabel.text = CatalogLocalization.catalogCollectionAuthor + author
+        collectionAuthorLink.setTitle(author, for: .normal)
         collectionDescriptionLabel.text = description
     }
     
@@ -198,6 +232,23 @@ private extension CollectionViewController {
     func backButtonTapped() {
         dismiss(animated: true)
     }
+    
+    @objc
+    func didTapAuthorName() {
+        let url = URL(string: CatalogConstants.catalogAuthorLink)
+        let viewController = WebViewController(url: url)
+        let navigationViewController = UINavigationController(rootViewController: viewController)
+        navigationViewController.modalPresentationStyle = .fullScreen
+        present(navigationViewController, animated: true)
+    }
+    
+    func widthOfString(font: UIFont, text: String?) -> CGFloat {
+        guard let text = text else { return 0 }
+        let attributes = [NSAttributedString.Key.font: font]
+        let size = (text as NSString).size(withAttributes: attributes)
+        return size.width
+    }
+    
 }
 
 extension CollectionViewController: UICollectionViewDelegateFlowLayout {
