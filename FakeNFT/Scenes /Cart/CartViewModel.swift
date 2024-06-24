@@ -14,6 +14,7 @@ final class CartViewModel {
         }
     }
     var orderedNftsBinding: Binding<[Nft]>?
+    var isLoadingBinding: Binding<Bool>?
     
     init() {
         nftService = NftServiceImpl(networkClient: networkClient, storage: storage)
@@ -23,6 +24,7 @@ final class CartViewModel {
     // MARK: - Function
     
     private func getOrder() {
+        isLoadingBinding?(true)
         let getOrderRequest = GetOrderRequest()
         networkClient.send(request: getOrderRequest, type: Order.self) { result in
             switch result {
@@ -36,7 +38,10 @@ final class CartViewModel {
     }
     
     private func getOrderedNfts() {
-        guard let order = order else { return }
+        guard let order = order else {
+            isLoadingBinding?(false)
+            return
+        }
         var nfts: [Nft] = []
         let dispatchGroup = DispatchGroup()
         
@@ -55,6 +60,7 @@ final class CartViewModel {
         
         dispatchGroup.notify(queue: .main) {
             self.orderedNfts = nfts
+            self.isLoadingBinding?(false)
         }
     }
 }

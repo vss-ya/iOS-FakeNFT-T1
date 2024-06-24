@@ -1,12 +1,13 @@
 import Foundation
 import UIKit
 
-final class CartViewController: UIViewController {
+final class CartViewController: UIViewController, LoadingView {
     
     let servicesAssembly: ServicesAssembly
     
     private var viewModel: CartViewModel
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    internal lazy var activityIndicator = UIActivityIndicatorView()
     
     private lazy var orderTableView: UITableView = {
         let tableView = UITableView()
@@ -84,6 +85,11 @@ final class CartViewController: UIViewController {
             self.calculateTotal()
             self.orderTableView.reloadData()
         }
+        viewModel.isLoadingBinding = { [weak self] isLoading in
+            guard let self = self else { return }
+            isLoading ? self.showLoading() : self.hideLoading()
+        }
+        
     }
     
     private func calculateTotal() {
