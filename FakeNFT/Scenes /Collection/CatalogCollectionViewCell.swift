@@ -50,7 +50,6 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
     
     private lazy var cartButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: CatalogImages.addToCart), for: .normal)
         return button
     }()
     
@@ -80,7 +79,7 @@ private extension CatalogCollectionViewCell {
          nftNameLabel,
          nftPriceLabel,
          likeButton,
-         cartButton
+         cartButton,
         ].forEach {
             contentView.addSubview($0)
         }
@@ -141,18 +140,23 @@ private extension CatalogCollectionViewCell {
 
 extension CatalogCollectionViewCell {
     func configCell(_ nfts: [Nft], _ indexPath: IndexPath) {
+        UIBlockingProgressHUD.show()
         let nftImageURL = URL(string: nfts[indexPath.row].images[0])
         let processor = ResizingImageProcessor(
             referenceSize: CGSize(width: 108, height: 108),
             mode: .aspectFill)
-        nftImage.kf.setImage(with: nftImageURL, options: [.processor(processor)])
-        
         let rating = nfts[indexPath.row].rating
-        setRating(rating)
-        
-        nftNameLabel.text = nfts[indexPath.row].name
         let price = String(nfts[indexPath.row].price)
-        nftPriceLabel.text = "\(price) ETH"
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+            UIBlockingProgressHUD.dismiss()
+            self.nftImage.kf.setImage(with: nftImageURL, options: [.processor(processor)])
+            self.setRating(rating)
+            self.cartButton.setImage(UIImage(named: CatalogImages.addToCart), for: .normal)
+            self.nftNameLabel.text = nfts[indexPath.row].name
+            self.nftPriceLabel.text = "\(price) ETH"
+        })
+        
     }
     
     func setRating(_ rating: Int) {

@@ -17,6 +17,12 @@ final class WebViewController: UIViewController {
         return webView
     }()
     
+    private lazy var progressView: UIProgressView = {
+        let progressView = UIProgressView()
+        progressView.progressViewStyle = .bar
+        return progressView
+    }()
+    
     init(url: URL? = nil) {
         super.init(nibName: nil, bundle: nil)
         self.url = url
@@ -32,6 +38,7 @@ final class WebViewController: UIViewController {
         configWebView()
         configNavBar()
         loadRequest()
+        showProgress()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -52,7 +59,7 @@ final class WebViewController: UIViewController {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(WKWebView.estimatedProgress) {
-
+showProgress()
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
@@ -61,11 +68,18 @@ final class WebViewController: UIViewController {
 
 private extension WebViewController {
     func configWebView() {
-        view.addSubview(webView)
-        webView.translatesAutoresizingMaskIntoConstraints = false
+        [progressView,
+         webView].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            webView.topAnchor.constraint(equalTo: progressView.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -100,9 +114,14 @@ private extension WebViewController {
     }
     
     func loadRequest() {
-        let url = URL(string: "https://ru.wikipedia.org/wiki/Пушкин,_Александр_Сергеевич")
+        let url = URL(string: CatalogConstants.catalogAuthorLink)
         guard let url = url else { return }
         let urlRequest = URLRequest(url: url)
         webView.load(urlRequest)
+    }
+    
+    func showProgress() {
+        progressView.setProgress(Float(webView.estimatedProgress), animated: true)
+        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.00001
     }
 }
