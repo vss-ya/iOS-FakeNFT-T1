@@ -9,6 +9,7 @@ import Foundation
 
 protocol StatisticsUserCollectionViewModelProtocol {
     var updateData: Binding<Bool>? { get set }
+    var updateNft: Binding<Int>? { get set }
     var numberOfSections: Int { get }
     
     init(ids: [String])

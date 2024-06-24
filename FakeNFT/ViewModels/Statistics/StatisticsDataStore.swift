@@ -15,7 +15,6 @@ final class StatisticsDataStore {
     private var taskNft: NetworkTask?
     
     var users: [StatisticsUser] = []
-    let nfts: [StatisticsNft] = []
     
     private init() {}
     
@@ -52,7 +51,19 @@ final class StatisticsDataStore {
         }
     }
     
-    func getNfts(ids: [String]) {
-        
+    func getNftById(id: String, completion: @escaping (StatisticsNft?) -> Void) {
+        if taskNft != nil { return }
+        let networkClient = DefaultNetworkClient()
+        let request = StatisticsNftRequest(id: id)
+        taskUsers = networkClient.send(request: request, type: StatisticsNft.self) { [weak self] result in
+            switch result {
+            case .success(let user):
+                completion(user)
+            case .failure(let error):
+                print(error.localizedDescription)
+                completion(nil)
+            }
+            self?.taskNft = nil
+        }
     }
 }

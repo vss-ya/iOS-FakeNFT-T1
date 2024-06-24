@@ -51,6 +51,7 @@ final class StatisticsUserCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
+        viewModel.getData()
     }
     
     private func setupViewController() {
@@ -79,8 +80,11 @@ final class StatisticsUserCollectionViewController: UIViewController {
     
     private func bind() {
         viewModel.updateData = { [weak self] update in
-            guard let self else { return }
+            guard let self, update else { return }
             self.collectionView.reloadData()
+        }
+        viewModel.updateNft = { [weak self] item in
+            self?.collectionView.reloadItems(at: [IndexPath(item: item, section: 0)])
         }
     }
     
@@ -107,10 +111,12 @@ extension StatisticsUserCollectionViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StatisticsCollectionCell.reuseIdentifier, for: indexPath)
-        guard let cell = cell as? StatisticsCollectionCell, let model = viewModel.model(at: indexPath) as? StatisticsNft else {
+        guard let cell = cell as? StatisticsCollectionCell else {
             return UICollectionViewCell()
         }
-        cell.nft = model
+        if let model = viewModel.model(at: indexPath) as? StatisticsNft {
+            cell.nft = model
+        }
         return cell
     }
 }
