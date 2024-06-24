@@ -2,7 +2,7 @@ import Foundation
 import Kingfisher
 import UIKit
 
-final class CartViewControllerCell: UITableViewCell {
+final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
     
     //MARK: - Properties
     
@@ -17,27 +17,30 @@ final class CartViewControllerCell: UITableViewCell {
     private lazy var nftNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .textPrimary
-        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.font = .bodyBold
         return label
     }()
     
-    private lazy var ratingImage: UIImageView = {
-        let imageView = UIImageView()
-        return imageView
+    private lazy var ratingStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.backgroundColor = .systemBackground
+        stackView.spacing = 2
+        return stackView
     }()
     
     private lazy var priceTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Цена"
         label.textColor = .textPrimary
-        label.font = .systemFont(ofSize: 13, weight: .regular)
+        label.font = .caption2
         return label
     }()
     
     private lazy var nftPriceLabel: UILabel = {
         let label = UILabel()
         label.textColor = .textPrimary
-        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.font = .bodyBold
         return label
     }()
     
@@ -55,14 +58,14 @@ final class CartViewControllerCell: UITableViewCell {
         setupConstraints()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     // MARK: - Private func
     
     private func addElements() {
-        [nftImage, nftNameLabel, ratingImage, priceTitleLabel, nftPriceLabel, deleteNftButton].forEach {
+        [nftImage, nftNameLabel, ratingStackView, priceTitleLabel, nftPriceLabel, deleteNftButton].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -79,12 +82,12 @@ final class CartViewControllerCell: UITableViewCell {
             nftNameLabel.leadingAnchor.constraint(equalTo: nftImage.trailingAnchor, constant: 20),
             nftNameLabel.topAnchor.constraint(equalTo: nftImage.topAnchor, constant: 8),
             nftNameLabel.heightAnchor.constraint(equalToConstant: 22),
-            nftNameLabel.widthAnchor.constraint(equalToConstant: 68),
+            nftNameLabel.widthAnchor.constraint(equalToConstant: 168),
             
-            ratingImage.leadingAnchor.constraint(equalTo: nftNameLabel.leadingAnchor),
-            ratingImage.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: 4),
-            ratingImage.heightAnchor.constraint(equalToConstant: 12),
-            ratingImage.widthAnchor.constraint(equalToConstant: 68),
+            ratingStackView.leadingAnchor.constraint(equalTo: nftNameLabel.leadingAnchor),
+            ratingStackView.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: 4),
+            ratingStackView.heightAnchor.constraint(equalToConstant: 12),
+            ratingStackView.widthAnchor.constraint(equalToConstant: 68),
             
             priceTitleLabel.leadingAnchor.constraint(equalTo: nftNameLabel.leadingAnchor),
             priceTitleLabel.bottomAnchor.constraint(equalTo: nftPriceLabel.topAnchor, constant: -2),
@@ -94,7 +97,7 @@ final class CartViewControllerCell: UITableViewCell {
             nftPriceLabel.leadingAnchor.constraint(equalTo: nftNameLabel.leadingAnchor),
             nftPriceLabel.bottomAnchor.constraint(equalTo: nftImage.bottomAnchor, constant: -8),
             nftPriceLabel.heightAnchor.constraint(equalToConstant: 22),
-            nftPriceLabel.widthAnchor.constraint(equalToConstant: 75),
+            nftPriceLabel.widthAnchor.constraint(equalToConstant: 175),
             
             deleteNftButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             deleteNftButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
@@ -112,14 +115,14 @@ final class CartViewControllerCell: UITableViewCell {
             options: [.processor(processor)])
     }
     
-    private func setRatingImage(rating: Int) {
-        switch rating {
-        case 1: ratingImage.image = UIImage(named: "rating_1")
-        case 2: ratingImage.image = UIImage(named: "rating_2")
-        case 3: ratingImage.image = UIImage(named: "rating_3")
-        case 4: ratingImage.image = UIImage(named: "rating_4")
-        case 5: ratingImage.image = UIImage(named: "rating_5")
-        default: ratingImage.image = UIImage(named: "rating_1")?.withTintColor(.yaLightGrayLight, renderingMode: .automatic)
+    private func setRatingStackView(rating: Int) {
+        for star in 1...5 {
+            let ratingImage = UIImageView()
+            ratingStackView.addArrangedSubview(ratingImage)
+            switch star > rating {
+            case true: ratingImage.image = UIImage(named: "star_no_active")
+            case false: ratingImage.image = UIImage(named: "star_active")
+            }
         }
     }
     
@@ -127,13 +130,12 @@ final class CartViewControllerCell: UITableViewCell {
         print("Кнопка удаления товара нажата")
     }
     
-    
     // MARK: - Internal func
     
     func configure(nft: Nft) {
         guard let url = nft.images.first else { return }
         loadAvatar(url: url)
-        setRatingImage(rating: nft.rating)
+        setRatingStackView(rating: nft.rating)
         nftNameLabel.text = nft.name
         nftPriceLabel.text = "\(nft.price) ETH"
     }

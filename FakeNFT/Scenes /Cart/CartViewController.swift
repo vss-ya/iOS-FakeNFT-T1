@@ -6,14 +6,11 @@ final class CartViewController: UIViewController {
     let servicesAssembly: ServicesAssembly
     
     private var viewModel: CartViewModel
-    private var order: Order {
-        return viewModel.order!
-    }
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     
     private lazy var orderTableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(CartViewControllerCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(CartViewControllerCell.self)
         tableView.separatorStyle = .none
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return tableView
@@ -31,7 +28,7 @@ final class CartViewController: UIViewController {
         let label = UILabel()
         label.backgroundColor = .yaLightGrayLight
         label.textColor = .textPrimary
-        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.font = .caption1
         label.text = "3 NFT"
         return label
     }()
@@ -40,7 +37,7 @@ final class CartViewController: UIViewController {
         let label = UILabel()
         label.backgroundColor = .yaLightGrayLight
         label.textColor = .yaGreenUniversal
-        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.font = .bodyBold
         label.text = "5,34 ETH"
         return label
     }()
@@ -49,7 +46,7 @@ final class CartViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = .yaBlackLight
         button.setTitle("К оплате", for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
+        button.titleLabel?.font = .bodyBold
         button.setTitleColor(.primary, for: .normal)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
@@ -70,11 +67,8 @@ final class CartViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.orderBinding = { [weak self] _ in
-            guard let self = self else { return }
-            self.calculateTotal()
-            self.orderTableView.reloadData()
-        }
+        
+        bindViewModel()
         view.backgroundColor = .systemBackground
         calculateTotal()
         addElements()
@@ -84,13 +78,22 @@ final class CartViewController: UIViewController {
         orderTableView.delegate = self
     }
     
+    private func bindViewModel() {
+        viewModel.orderedNftsBinding = { [weak self] _ in
+            guard let self = self else { return }
+            self.calculateTotal()
+            self.orderTableView.reloadData()
+        }
+    }
+    
     private func calculateTotal() {
-        let count = order.nfts.count
-        let sum = order.nfts.reduce(0) { (result, nft) in
+        let count = viewModel.orderedNfts.count
+        let sum = viewModel.orderedNfts.reduce(0) { (result, nft) in
             result + nft.price
         }
+        let sumString = String(format: "%.2f", sum)
         nftCountLabel.text = "\(count) NFT"
-        orderAmountLabel.text = "\(sum) ETH"
+        orderAmountLabel.text = sumString + " ETH"
     }
     
     private func addElements() {
@@ -163,14 +166,12 @@ final class CartViewController: UIViewController {
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        order.nfts.count
+        viewModel.orderedNfts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = orderTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CartViewControllerCell else {
-            return UITableViewCell()
-        }
-        let nft = order.nfts[indexPath.row]
+        let cell: CartViewControllerCell = orderTableView.dequeueReusableCell()
+        let nft = viewModel.orderedNfts[indexPath.row]
         cell.configure(nft: nft)
         return cell
     }

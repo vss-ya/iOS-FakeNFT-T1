@@ -3,8 +3,10 @@ import Foundation
 final class MockData {
     var mockOrder = Order(
         id: "1",
-        nfts: [
-            Nft(
+        nfts: ["1", "2", "3", "4"]
+        )
+      
+    var nfts: [Nft] = [Nft(
                 id: "1",
                 name: "Luna",
                 images: [URL(string: "https://img.freepik.com/free-photo/beautiful-kitten-with-colorful-clouds_23-2150752964.jpg?size=626&ext=jpg&ga=GA1.1.1788614524.1718668800&semt=ais_user")!],
@@ -27,8 +29,7 @@ final class MockData {
                 name: "Yran",
                 images: [URL(string: "https://st2.depositphotos.com/1886175/8316/i/450/depositphotos_83169300-stock-photo-gray-striped-cat-playful-cute.jpg")!],
                 rating: 5,
-                price: 14.5)
-        ])
+                price: 14.5)]
 }
             
             
