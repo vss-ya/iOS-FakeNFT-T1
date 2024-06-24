@@ -7,17 +7,23 @@
 
 import Foundation
 
-final class StatisticsUserCollectionViewModel: StatisticsCollectionsViewModelProtocol {
+final class StatisticsUserCollectionViewModel: StatisticsUserCollectionViewModelProtocol {
     private let dataStore = StatisticsDataStore.shared
     
     var updateData: Binding<Bool>?
+    
+    private var ids: [String]
     
     var numberOfSections: Int {
         return 1
     }
     
-    func getData(sortField: StatisticsSortFields) {
+    init(ids: [String]) {
+        self.ids = ids
+    }
     
+    func getData() {
+        
     }
     
     func numberOfItemsInSection(_ section: Int) -> Int {

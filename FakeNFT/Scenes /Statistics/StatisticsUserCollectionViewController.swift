@@ -34,11 +34,11 @@ final class StatisticsUserCollectionViewController: UIViewController {
         return collectionView
     }()
     
-    private var viewModel: StatisticsCollectionsViewModelProtocol
+    private var viewModel: StatisticsUserCollectionViewModelProtocol
     
     // MARK: - Lifecycle
     
-    init(viewModel: StatisticsCollectionsViewModelProtocol) {
+    init(viewModel: StatisticsUserCollectionViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         bind()

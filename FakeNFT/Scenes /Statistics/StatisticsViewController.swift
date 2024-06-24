@@ -25,11 +25,11 @@ final class StatisticsViewController: UIViewController {
         return tableView
     }()
     
-    private var viewModel: StatisticsCollectionsViewModelProtocol
+    private var viewModel: StatisticsViewModelProtocol
     
     // MARK: - Lifecycle
     
-    init(viewModel: StatisticsCollectionsViewModelProtocol) {
+    init(viewModel: StatisticsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         bind()
@@ -95,7 +95,7 @@ extension StatisticsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfItemsInSection(section)
+        return viewModel.numberOfRowsInSection(section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

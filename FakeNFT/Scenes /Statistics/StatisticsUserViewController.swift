@@ -86,6 +86,7 @@ final class StatisticsUserViewController: UIViewController {
     private var viewModel: StatisticsUserViewModelProtocol
     
     private var website: String = ""
+    private var nftsIds: [String] = []
     
     var dismissClosure: (() -> Void)?
     
@@ -202,6 +203,7 @@ final class StatisticsUserViewController: UIViewController {
                 nftsCollectionTitle + " (\(user.nfts.count))",
                 for: .normal
             )
+            nftsIds = user.nfts
         }
     }
     
@@ -218,7 +220,7 @@ final class StatisticsUserViewController: UIViewController {
     }
     
     @objc private func didTapNftsCollectionButton() {
-        let statisticsUserCollectionViewController = StatisticsUserCollectionViewController(viewModel: StatisticsUserCollectionViewModel())
+        let statisticsUserCollectionViewController = StatisticsUserCollectionViewController(viewModel: StatisticsUserCollectionViewModel(ids: nftsIds))
 
         let statisticsUserCollectionNavigationController = UINavigationController(rootViewController: statisticsUserCollectionViewController)
         statisticsUserCollectionNavigationController.modalPresentationStyle = .overCurrentContext

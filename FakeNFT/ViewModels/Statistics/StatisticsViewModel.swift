@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
+final class StatisticsViewModel: StatisticsViewModelProtocol {
     private let dataStore = StatisticsDataStore.shared
     
     var updateData: Binding<Bool>?
@@ -22,7 +22,7 @@ final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
         }
     }
     
-    func numberOfItemsInSection(_ section: Int) -> Int {
+    func numberOfRowsInSection(_ section: Int) -> Int {
         return dataStore.users.count
     }
     
