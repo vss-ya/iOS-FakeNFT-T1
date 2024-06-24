@@ -83,9 +83,9 @@ final class StatisticsUserViewController: UIViewController {
         return button
     }()
     
-    private let viewModel: StatisticsUserViewModelProtocol
+    private var viewModel: StatisticsUserViewModelProtocol
     
-    private let website: String
+    private var website: String = ""
     
     var dismissClosure: (() -> Void)?
     
@@ -93,26 +93,8 @@ final class StatisticsUserViewController: UIViewController {
     
     init(viewModel: StatisticsUserViewModelProtocol) {
         self.viewModel = viewModel
-        let user = self.viewModel.getUser()
-        self.website = user.website ?? ""
         super.init(nibName: nil, bundle: nil)
-        if let url = URL(string: user.avatar ?? "") {
-            let processor = RoundCornerImageProcessor(cornerRadius: 14)
-            avatarImageView.kf.setImage(
-                with: url,
-                placeholder: UIImage(systemName: "person.crop.circle.fill"),
-                options: [.processor(processor)]
-            )
-        } else {
-            avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
-        }
-        nameLabel.text = user.name
-        descriptionLabel.text = user.description
-        let nftsCollectionTitle = NSLocalizedString("Statistics.statisticsProfile.nftsCollectionButton", comment: "")
-        nftsCollectionTextButton.setTitle(
-            nftsCollectionTitle + " (\(user.nfts.count))",
-            for: .normal
-        )
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -126,6 +108,7 @@ final class StatisticsUserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
+        viewModel.getUser()
     }
     
     private func setupViewController() {
@@ -196,6 +179,30 @@ final class StatisticsUserViewController: UIViewController {
             nftsCollectionButton.widthAnchor.constraint(equalToConstant: 16),
             nftsCollectionButton.heightAnchor.constraint(equalToConstant: 16)
         ])
+    }
+    
+    private func bind() {
+        viewModel.updateData = { [weak self] user in
+            guard let self else { return }
+            self.website = user.website ?? ""
+            if let url = URL(string: user.avatar ?? "") {
+                let processor = RoundCornerImageProcessor(cornerRadius: 14)
+                avatarImageView.kf.setImage(
+                    with: url,
+                    placeholder: UIImage(systemName: "person.crop.circle.fill"),
+                    options: [.processor(processor)]
+                )
+            } else {
+                avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
+            }
+            nameLabel.text = user.name
+            descriptionLabel.text = user.description
+            let nftsCollectionTitle = NSLocalizedString("Statistics.statisticsProfile.nftsCollectionButton", comment: "")
+            nftsCollectionTextButton.setTitle(
+                nftsCollectionTitle + " (\(user.nfts.count))",
+                for: .normal
+            )
+        }
     }
     
     // MARK: - Actions

@@ -112,7 +112,8 @@ extension StatisticsViewController: UITableViewDataSource {
 
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let statisticsUserViewController = StatisticsUserViewController(viewModel: StatisticsUserViewModel(at: indexPath))
+        guard let model = viewModel.model(at: indexPath) as? StatisticsUser else { return }
+        let statisticsUserViewController = StatisticsUserViewController(viewModel: StatisticsUserViewModel(id: model.id))
         statisticsUserViewController.dismissClosure = { [weak self] in
             self?.tabBarController?.tabBar.isHidden = false
         }

@@ -9,15 +9,18 @@ import Foundation
 
 final class StatisticsUserViewModel: StatisticsUserViewModelProtocol {
     private let dataStore = StatisticsDataStore.shared
-    private let user: StatisticsUser
+    private let id: String
     
     var updateData: Binding<StatisticsUser>?
     
-    init(at indexPath: IndexPath) {
-        self.user = dataStore.users[indexPath.row]
+    init(id: String) {
+        self.id = id
     }
     
-    func getUser() -> StatisticsUser {
-        return user
+    func getUser() {
+        dataStore.getUser(id: id) { [weak self] user in
+            guard let user else { return }
+            self?.updateData?(user)
+        }
     }
 }

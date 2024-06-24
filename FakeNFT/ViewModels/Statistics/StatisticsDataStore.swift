@@ -11,6 +11,7 @@ final class StatisticsDataStore {
     static let shared = StatisticsDataStore()
     
     private var taskUsers: NetworkTask?
+    private var taskUser: NetworkTask?
     
     var users: [StatisticsUser] = []
     
@@ -93,7 +94,6 @@ final class StatisticsDataStore {
         if taskUsers != nil { return }
         let networkClient = DefaultNetworkClient()
         let request = StatisticsUsersRequest(sortField: sortField)
-        users = []
         taskUsers = networkClient.send(request: request, type: [StatisticsUser].self) { [weak self] result in
             switch result {
             case .success(let users):
@@ -104,6 +104,22 @@ final class StatisticsDataStore {
                 completion(false)
             }
             self?.taskUsers = nil
+        }
+    }
+    
+    func getUser(id: String, completion: @escaping (StatisticsUser?) -> Void) {
+        if taskUser != nil { return }
+        let networkClient = DefaultNetworkClient()
+        let request = StatisticsUserRequest(id: id)
+        taskUsers = networkClient.send(request: request, type: StatisticsUser.self) { [weak self] result in
+            switch result {
+            case .success(let user):
+                completion(user)
+            case .failure(let error):
+                print(error.localizedDescription)
+                completion(nil)
+            }
+            self?.taskUser = nil
         }
     }
 }
