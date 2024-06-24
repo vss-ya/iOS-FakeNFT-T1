@@ -14,22 +14,19 @@ final class StatisticsDataStore {
     private var taskUser: NetworkTask?
     private var taskNft: NetworkTask?
     
-    var users: [StatisticsUser] = []
-    
     private init() {}
     
-    func getUsers(sortField: StatisticsSortFields, completion: @escaping (Bool) -> Void) {
+    func getUsers(sortField: StatisticsSortFields, completion: @escaping ([StatisticsUser]) -> Void) {
         if taskUsers != nil { return }
         let networkClient = DefaultNetworkClient()
         let request = StatisticsUsersRequest(sortField: sortField)
         taskUsers = networkClient.send(request: request, type: [StatisticsUser].self) { [weak self] result in
             switch result {
             case .success(let users):
-                self?.users = users
-                completion(true)
+                completion(users)
             case .failure(let error):
                 print(error.localizedDescription)
-                completion(false)
+                completion([])
             }
             self?.taskUsers = nil
         }

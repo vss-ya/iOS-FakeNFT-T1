@@ -12,21 +12,25 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
     
     var updateData: Binding<Bool>?
     
+    private var users: [StatisticsUser] = []
+    
     var numberOfSections: Int {
         return 1
     }
     
     func getData(sortField: StatisticsSortFields) {
-        dataStore.getUsers(sortField: sortField) { [weak self] result in
-            self?.updateData?(result)
+        dataStore.getUsers(sortField: sortField) { [weak self] users in
+            guard let self else { return }
+            self.users = users
+            self.updateData?(true)
         }
     }
     
     func numberOfRowsInSection(_ section: Int) -> Int {
-        return dataStore.users.count
+        return users.count
     }
     
     func model(at indexPath: IndexPath) -> Decodable {
-        return dataStore.users[indexPath.row]
+        return users[indexPath.row]
     }
 }
