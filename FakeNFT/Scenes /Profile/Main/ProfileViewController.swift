@@ -41,13 +41,13 @@ final class ProfileViewController: UIViewController {
     
     private let tableItems = TableItem.allCases
     private let viewFactory = ProfileViewFactory.self
-    private let servicesAssembly: ServicesAssembly
+    private let viewModel: ProfileViewModelProtocol
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(servicesAssembly: ServicesAssembly) {
+    init(_ viewModel: ProfileViewModelProtocol) {
         self.editButton = viewFactory.createEditButton()
         self.avatarImageView = viewFactory.createAvatarImageView()
         self.headerLabel = viewFactory.createHeaderLabel()
@@ -55,7 +55,7 @@ final class ProfileViewController: UIViewController {
         self.linkLabel = viewFactory.createLinkLabel()
         self.tableView = viewFactory.createTableView()
         
-        self.servicesAssembly = servicesAssembly
+        self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -126,7 +126,8 @@ private extension ProfileViewController {
 extension ProfileViewController {
 
     @objc private func editAction() {
-        let vc = ProfileEditViewController(servicesAssembly: servicesAssembly) { [weak self]() in
+        let viewModel = ProfileEditViewModel(viewModel.servicesAssembly)
+        let vc = ProfileEditViewController(viewModel) { [weak self]() in
             guard let self else {
                 return
             }
@@ -136,12 +137,14 @@ extension ProfileViewController {
     }
     
     private func openMyNft() {
-        let vc = MyNftViewController(servicesAssembly: servicesAssembly)
+        let viewModel = MyNftViewModel(viewModel.servicesAssembly)
+        let vc = MyNftViewController(viewModel)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     private func openFavoritesNft() {
-        let vc = FavoritesNftViewController(servicesAssembly: servicesAssembly)
+        let viewModel = FavoritesNftViewModel(viewModel.servicesAssembly)
+        let vc = FavoritesNftViewController(viewModel)
         navigationController?.pushViewController(vc, animated: true)
     }
     

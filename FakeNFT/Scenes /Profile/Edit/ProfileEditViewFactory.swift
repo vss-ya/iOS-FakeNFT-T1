@@ -53,13 +53,18 @@ final class ProfileEditViewFactory {
     static func createTextField() -> UITextField {
         let textField = UITextField()
         let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
-        let rightView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
+        let rightView = UIView(frame: CGRect(x: 0, y: 0, width: 33, height: 40))
+        let btn = UIButton(frame: .init(x: 0, y: 0, width: 17, height: 40))
+        btn.setImage(.profileClear, for: .normal)
+        btn.isHidden = true
+        rightView.addSubview(btn)
         textField.backgroundColor = .ypLightGrey
         textField.textColor = .ypBlack
         textField.leftView = leftView
         textField.leftViewMode = .always
         textField.rightView = rightView
         textField.rightViewMode = .always
+        textField.returnKeyType = .done
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         textField.layer.cornerRadius = 12
         textField.layer.masksToBounds = true

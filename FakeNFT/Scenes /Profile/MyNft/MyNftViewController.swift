@@ -9,14 +9,14 @@ import UIKit
 
 final class MyNftViewController: UIViewController {
     
-    private let servicesAssembly: ServicesAssembly
+    private let viewModel: MyNftViewModelProtocol
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
+    init(_ viewModel: MyNftViewModelProtocol) {
+        self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
     }

@@ -25,6 +25,7 @@ final class ProfileEditViewController: UIViewController {
     }
     
     private let closeButton: UIButton
+    private let scrollView: UIScrollView
     private let avatarImageView: UIImageView
     private let avatarButton: UIButton
     private let nameLabel: UILabel
@@ -35,7 +36,7 @@ final class ProfileEditViewController: UIViewController {
     private let linkTextField: UITextField
     
     private let viewFactory = ProfileEditViewFactory.self
-    private let servicesAssembly: ServicesAssembly
+    private let viewModel: ProfileEditViewModelProtocol
     
     private var onCloseCallback: (()->(Void))?
     
@@ -43,8 +44,9 @@ final class ProfileEditViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(servicesAssembly: ServicesAssembly, onClose: (() -> Void)? = nil) {
+    init(_ viewModel: ProfileEditViewModelProtocol, onClose: (() -> Void)? = nil) {
         self.closeButton = viewFactory.createCloseButton()
+        self.scrollView = UIScrollView()
         self.avatarImageView = viewFactory.createAvatarImageView()
         self.avatarButton = viewFactory.createAvatarButton()
         self.nameLabel = viewFactory.createLabel(L10n.Profile.nameLabelText)
@@ -54,7 +56,7 @@ final class ProfileEditViewController: UIViewController {
         self.linkLabel = viewFactory.createLabel(L10n.Profile.linkLabelText)
         self.linkTextField = viewFactory.createTextField()
         
-        self.servicesAssembly = servicesAssembly
+        self.viewModel = viewModel
         self.onCloseCallback = onClose
         
         super.init(nibName: nil, bundle: nil)
@@ -74,13 +76,34 @@ private extension ProfileEditViewController {
     func setup() {
         setupViews()
         setupConstraints()
+        
+        nameTextField.delegate = self
+        linkTextField.delegate = self
+        
+        let nameClearButton = nameTextField.rightView?.subviews.first as? UIButton
+        let linkClearButton = linkTextField.rightView?.subviews.first as? UIButton
+        
+        closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
+        avatarButton.addTarget(self, action: #selector(avatarAction), for: .touchUpInside)
+        nameClearButton?.addTarget(self, action: #selector(clearAction), for: .touchUpInside)
+        linkClearButton?.addTarget(self, action: #selector(clearAction), for: .touchUpInside)
+        nameTextField.addTarget(self, action: #selector(tapAction), for: .primaryActionTriggered)
+        linkTextField.addTarget(self, action: #selector(tapAction), for: .primaryActionTriggered)
+        scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapAction)))
     }
     
     func setupViews() {
         view.backgroundColor = .ypWhite
         
         [
+            scrollView,
             closeButton,
+        ].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
+        
+        [
             avatarImageView,
             avatarButton,
             nameLabel,
@@ -91,25 +114,32 @@ private extension ProfileEditViewController {
             linkTextField
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview($0)
+            scrollView.addSubview($0)
         }
-        
-        closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
-        avatarButton.addTarget(self, action: #selector(avatarAction), for: .touchUpInside)
     }
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Margin.top),
             closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Margin.right),
-            avatarImageView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: Margin.avatarTop),
-            avatarImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 0),
+        ])
+        
+        NSLayoutConstraint.activate([
+            avatarImageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 80),
+            avatarImageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0),
             avatarImageView.widthAnchor.constraint(equalToConstant: Margin.avatarDia),
             avatarImageView.heightAnchor.constraint(equalToConstant: Margin.avatarDia),
             avatarButton.widthAnchor.constraint(equalToConstant: Margin.avatarDia),
             avatarButton.heightAnchor.constraint(equalToConstant: Margin.avatarDia),
             avatarButton.centerXAnchor.constraint(equalTo: avatarImageView.centerXAnchor, constant: 0),
             avatarButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor, constant: 0),
+            nameLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: Margin.left),
+            nameLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -Margin.right),
             nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: Margin.labelTop),
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Margin.left),
             nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Margin.right),
@@ -131,7 +161,18 @@ private extension ProfileEditViewController {
             linkTextField.leadingAnchor.constraint(equalTo: linkLabel.leadingAnchor, constant: 0),
             linkTextField.trailingAnchor.constraint(equalTo: linkLabel.trailingAnchor, constant: 0),
             linkTextField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight),
+            linkTextField.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
         ])
+    }
+    
+}
+
+extension ProfileEditViewController: UITextFieldDelegate {
+    
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        let text = textField.text ?? ""
+        let btn = textField.rightView?.subviews.first
+        btn?.isHidden = text.isEmpty
     }
     
 }
@@ -139,11 +180,20 @@ private extension ProfileEditViewController {
 // MARK: - Actions
 private extension ProfileEditViewController {
     
-    @objc private func closeAction() {
+    @objc func tapAction() {
+        view.endEditing(true)
+    }
+    
+    @objc func closeAction() {
         onCloseCallback?()
     }
     
-    @objc private func avatarAction() {
+    @objc func clearAction() {
+        let textField = [nameTextField, linkTextField].first(where: { $0.isFirstResponder })
+        textField?.text = ""
+    }
+    
+    @objc func avatarAction() {
         let alert = UIAlertController(
             title: L10n.Profile.loadImage,
             message: L10n.Profile.pasteLinkToImage,

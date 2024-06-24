@@ -9,14 +9,14 @@ import UIKit
 
 final class FavoritesNftViewController: UIViewController {
     
-    private let servicesAssembly: ServicesAssembly
+    private let viewModel: FavoritesNftViewModelProtocol
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(servicesAssembly: ServicesAssembly) {
-        self.servicesAssembly = servicesAssembly
+    init(_ viewModel: FavoritesNftViewModelProtocol) {
+        self.viewModel = viewModel
         
         super.init(nibName: nil, bundle: nil)
     }

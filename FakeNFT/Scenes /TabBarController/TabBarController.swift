@@ -56,7 +56,8 @@ final class TabBarController: UITabBarController {
     }
     
     private func initProfileTabBarViewController(_ servicesAssembly: ServicesAssembly) -> UIViewController {
-        let vc = ProfileViewController(servicesAssembly: servicesAssembly)
+        let viewModel = ProfileViewModel(servicesAssembly)
+        let vc = ProfileViewController(viewModel)
         let navVc = UINavigationController(rootViewController: vc)
         return navVc
     }
