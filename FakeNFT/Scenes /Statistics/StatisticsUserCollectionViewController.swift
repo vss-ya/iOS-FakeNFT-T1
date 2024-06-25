@@ -87,9 +87,6 @@ final class StatisticsUserCollectionViewController: UIViewController {
             guard let self else { return }
             let indexPath = IndexPath(item: item, section: 0)
             self.collectionView.reloadItems(at: [indexPath])
-            if let cell = self.collectionView.cellForItem(at: indexPath) as? StatisticsCollectionCell {
-                cell.inCart = viewModel.inCart(id: cell.nft?.id ?? "")
-            }
         }
     }
     
@@ -119,9 +116,7 @@ extension StatisticsUserCollectionViewController: UICollectionViewDataSource {
         guard let cell = cell as? StatisticsCollectionCell else {
             return UICollectionViewCell()
         }
-        if let model = viewModel.model(at: indexPath) as? StatisticsNft {
-            cell.nft = model
-        }
+        cell.initialize(viewModel: viewModel, at: indexPath)
         return cell
     }
 }
