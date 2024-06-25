@@ -51,11 +51,35 @@ final class StatisticsUserCollectionViewModel: StatisticsUserCollectionViewModel
     
     func inCart(id: String) -> Bool {
         var result = false
-        nfts.forEach { nft in
-            if let nft, nft.id == id {
+        order?.nfts.forEach { nft in
+            if nft == id {
                 result = true
             }
         }
         return result
+    }
+    
+    func addToCart(id: String, completion: @escaping () -> Void) {
+        guard let order else { return }
+        var newNfts = order.nfts
+        newNfts.append(id)
+        dataStore.sendCart(nfts: newNfts) { result in
+            if result {
+                self.order?.nfts = newNfts
+                completion()
+            }
+        }
+    }
+    
+    func removeFromCart(id: String, completion: @escaping () -> Void) {
+        guard let order else { return }
+        var newNfts = order.nfts
+        newNfts.removeAll(where: {$0 == id})
+        dataStore.sendCart(nfts: newNfts) { result in
+            if result {
+                self.order?.nfts = newNfts
+                completion()
+            }
+        }
     }
 }

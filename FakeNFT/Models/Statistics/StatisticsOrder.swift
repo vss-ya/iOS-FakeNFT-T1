@@ -8,6 +8,6 @@
 import Foundation
 
 struct StatisticsOrder: Decodable {
-    let nfts: [String]
+    var nfts: [String]
     let id: String
 }

@@ -79,7 +79,7 @@ final class StatisticsCollectionCell: UICollectionViewCell {
     }()
     private lazy var cartButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(named: "cart_add"), for: .normal)
+        button.backgroundColor = .clear
         button.addTarget(self, action: #selector(didTapCartButton), for: .touchUpInside)
         return button
     }()
@@ -242,6 +242,14 @@ final class StatisticsCollectionCell: UICollectionViewCell {
     // MARK: - Actions
     
     @objc private func didTapCartButton() {
-
+        if inCart {
+            viewModel?.removeFromCart(id: id) {
+                self.inCart = false
+            }
+        } else {
+            viewModel?.addToCart(id: id) {
+                self.inCart = true
+            }
+        }
     }
 }

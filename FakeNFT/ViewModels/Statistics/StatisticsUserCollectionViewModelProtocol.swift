@@ -17,4 +17,6 @@ protocol StatisticsUserCollectionViewModelProtocol {
     func numberOfItemsInSection(_ section: Int) -> Int
     func model(at indexPath: IndexPath) -> Decodable
     func inCart(id: String) -> Bool
+    func addToCart(id: String, completion: @escaping () -> Void)
+    func removeFromCart(id: String, completion: @escaping () -> Void)
 }

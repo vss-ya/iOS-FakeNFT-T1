@@ -14,6 +14,7 @@ final class StatisticsDataStore {
     private var taskUser: NetworkTask?
     private var taskNft: NetworkTask?
     private var taskOrder: NetworkTask?
+    private var taskCart: NetworkTask?
     
     private init() {}
     
@@ -78,6 +79,25 @@ final class StatisticsDataStore {
                 completion(nil)
             }
             self?.taskOrder = nil
+        }
+    }
+    
+    func sendCart(nfts: [String], completion: @escaping (Bool) -> Void) {
+        if taskCart != nil { return }
+        let networkClient = DefaultNetworkClient()
+        let bodyString = "nfts=\(nfts.joined(separator: ","))"
+        guard let bodyData = bodyString.data(using: .utf8) else { return }
+        let request = StatisticsCartRequest(httpBody: bodyData)
+        taskUsers = networkClient.send(request: request, type: StatisticsOrder.self) { [weak self] result in
+            switch result {
+            case .success(_):
+                completion(true)
+            case .failure(let error):
+                print(error.localizedDescription)
+                completion(false)
+            }
+            self?.taskCart = nil
+            
         }
     }
 }
