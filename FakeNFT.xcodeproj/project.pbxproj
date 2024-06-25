@@ -49,6 +49,8 @@
 		E701BBD32C25E995008D7811 /* StatisticsCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E701BBD22C25E995008D7811 /* StatisticsCollectionCell.swift */; };
 		E73A75F42C270CA800AE8CD8 /* StatisticsUsersRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73A75F32C270CA800AE8CD8 /* StatisticsUsersRequest.swift */; };
 		E73A75F62C272D2D00AE8CD8 /* StatisticsSortFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73A75F52C272D2D00AE8CD8 /* StatisticsSortFields.swift */; };
+		E755D4CE2C2AFF9500F4B844 /* StatisticsOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E755D4CD2C2AFF9500F4B844 /* StatisticsOrder.swift */; };
+		E755D4D02C2AFFF500F4B844 /* StatisticsOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E755D4CF2C2AFFF500F4B844 /* StatisticsOrderRequest.swift */; };
 		E784D36B2C218167002BEA2A /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D36A2C218167002BEA2A /* StatisticsViewController.swift */; };
 		E784D3702C218485002BEA2A /* StatisticsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D36F2C218485002BEA2A /* StatisticsViewModel.swift */; };
 		E784D3722C218667002BEA2A /* StatisticsViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E784D3712C218667002BEA2A /* StatisticsViewModelProtocol.swift */; };
@@ -133,6 +135,8 @@
 		E701BBD22C25E995008D7811 /* StatisticsCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsCollectionCell.swift; sourceTree = "<group>"; };
 		E73A75F32C270CA800AE8CD8 /* StatisticsUsersRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsUsersRequest.swift; sourceTree = "<group>"; };
 		E73A75F52C272D2D00AE8CD8 /* StatisticsSortFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsSortFields.swift; sourceTree = "<group>"; };
+		E755D4CD2C2AFF9500F4B844 /* StatisticsOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsOrder.swift; sourceTree = "<group>"; };
+		E755D4CF2C2AFFF500F4B844 /* StatisticsOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsOrderRequest.swift; sourceTree = "<group>"; };
 		E784D36A2C218167002BEA2A /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		E784D36F2C218485002BEA2A /* StatisticsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModel.swift; sourceTree = "<group>"; };
 		E784D3712C218667002BEA2A /* StatisticsViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -458,9 +462,11 @@
 			children = (
 				E784D3752C218C1F002BEA2A /* StatisticsUser.swift */,
 				E7FEF38D2C26E23F00DBD9BE /* StatisticsNft.swift */,
+				E755D4CD2C2AFF9500F4B844 /* StatisticsOrder.swift */,
 				E73A75F32C270CA800AE8CD8 /* StatisticsUsersRequest.swift */,
 				E7F14A272C29A3EB0010697D /* StatisticsUserRequest.swift */,
 				E7F14A292C29B32C0010697D /* StatisticsNftRequest.swift */,
+				E755D4CF2C2AFFF500F4B844 /* StatisticsOrderRequest.swift */,
 				E73A75F52C272D2D00AE8CD8 /* StatisticsSortFields.swift */,
 			);
 			path = Statistics;
@@ -662,6 +668,7 @@
 				0CFCB74E2A7817DC0009A829 /* NftStorage.swift in Sources */,
 				E784D3782C219186002BEA2A /* DefinableTypes.swift in Sources */,
 				3FC8C39129D2453B0081F015 /* ExampleRequest.swift in Sources */,
+				E755D4CE2C2AFF9500F4B844 /* StatisticsOrder.swift in Sources */,
 				0CFCB7462A78064B0009A829 /* NftDetailCellModel.swift in Sources */,
 				E784D37E2C21BCD4002BEA2A /* StatisticsUserViewController.swift in Sources */,
 				0CFCB74B2A780EA80009A829 /* UIView+Constraints.swift in Sources */,
@@ -682,6 +689,7 @@
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
 				E784D3842C21E6CE002BEA2A /* StatisticsWebViewViewModel.swift in Sources */,
 				0C79EE632A76DD1900EE90EA /* RequestConstants.swift in Sources */,
+				E755D4D02C2AFFF500F4B844 /* StatisticsOrderRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

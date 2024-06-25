@@ -84,7 +84,12 @@ final class StatisticsUserCollectionViewController: UIViewController {
             self.collectionView.reloadData()
         }
         viewModel.updateNft = { [weak self] item in
-            self?.collectionView.reloadItems(at: [IndexPath(item: item, section: 0)])
+            guard let self else { return }
+            let indexPath = IndexPath(item: item, section: 0)
+            self.collectionView.reloadItems(at: [indexPath])
+            if let cell = self.collectionView.cellForItem(at: indexPath) as? StatisticsCollectionCell {
+                cell.inCart = viewModel.inCart(id: cell.nft?.id ?? "")
+            }
         }
     }
     

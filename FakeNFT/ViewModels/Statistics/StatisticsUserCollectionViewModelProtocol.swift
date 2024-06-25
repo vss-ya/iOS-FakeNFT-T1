@@ -16,4 +16,5 @@ protocol StatisticsUserCollectionViewModelProtocol {
     func getData()
     func numberOfItemsInSection(_ section: Int) -> Int
     func model(at indexPath: IndexPath) -> Decodable
+    func inCart(id: String) -> Bool
 }

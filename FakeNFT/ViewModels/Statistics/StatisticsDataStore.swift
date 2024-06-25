@@ -13,6 +13,7 @@ final class StatisticsDataStore {
     private var taskUsers: NetworkTask?
     private var taskUser: NetworkTask?
     private var taskNft: NetworkTask?
+    private var taskOrder: NetworkTask?
     
     private init() {}
     
@@ -61,6 +62,22 @@ final class StatisticsDataStore {
                 completion(nil)
             }
             self?.taskNft = nil
+        }
+    }
+    
+    func getOrder(completion: @escaping (StatisticsOrder?) -> Void) {
+        if taskOrder != nil { return }
+        let networkClient = DefaultNetworkClient()
+        let request = StatisticsOrderRequest()
+        taskUsers = networkClient.send(request: request, type: StatisticsOrder.self) { [weak self] result in
+            switch result {
+            case .success(let order):
+                completion(order)
+            case .failure(let error):
+                print(error.localizedDescription)
+                completion(nil)
+            }
+            self?.taskOrder = nil
         }
     }
 }

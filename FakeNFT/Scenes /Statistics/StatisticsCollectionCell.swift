@@ -113,6 +113,12 @@ final class StatisticsCollectionCell: UICollectionViewCell {
         }
     }
     
+    var inCart: Bool = false {
+        didSet {
+            cartButton.setImage(UIImage(named: inCart ? "cart_delete" : "cart_add"), for: .normal)
+        }
+    }
+    
     static let reuseIdentifier = "statisticsCollectionCell"
     
     // MARK: - Lifecycle

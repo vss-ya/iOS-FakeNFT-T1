@@ -15,6 +15,7 @@ final class StatisticsUserCollectionViewModel: StatisticsUserCollectionViewModel
     
     private var ids: [String]
     private var nfts: [StatisticsNft?]
+    private var order: StatisticsOrder?
     
     var numberOfSections: Int {
         return 1
@@ -23,6 +24,9 @@ final class StatisticsUserCollectionViewModel: StatisticsUserCollectionViewModel
     init(ids: [String]) {
         self.ids = ids
         self.nfts = [StatisticsNft?](repeating: nil, count: ids.count)
+        dataStore.getOrder { [weak self] order in
+            self?.order = order
+        }
     }
     
     func getData() {
@@ -43,5 +47,15 @@ final class StatisticsUserCollectionViewModel: StatisticsUserCollectionViewModel
     
     func model(at indexPath: IndexPath) -> any Decodable {
         return nfts[indexPath.row]
+    }
+    
+    func inCart(id: String) -> Bool {
+        var result = false
+        nfts.forEach { nft in
+            if let nft, nft.id == id {
+                result = true
+            }
+        }
+        return result
     }
 }
