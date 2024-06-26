@@ -109,6 +109,7 @@ final class StatisticsUserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
+        UIBlockingProgressHUD.animate()
         viewModel.getUser()
     }
     
@@ -184,6 +185,7 @@ final class StatisticsUserViewController: UIViewController {
     
     private func bind() {
         viewModel.updateData = { [weak self] user in
+            UIBlockingProgressHUD.dismiss()
             guard let self else { return }
             self.website = user.website ?? ""
             if let url = URL(string: user.avatar ?? "") {
