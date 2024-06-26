@@ -24,6 +24,27 @@ internal enum L10n {
     /// Произошла неизвестная ошибка
     internal static let unknown = L10n.tr("Localizable", "Error.unknown", fallback: "Произошла неизвестная ошибка")
   }
+  internal enum Profile {
+    /// О разработчике
+    internal static let aboutDeveloper = L10n.tr("Localizable", "Profile.aboutDeveloper", fallback: "О разработчике")
+    /// Сменить
+    /// фото
+    internal static let changePhoto = L10n.tr("Localizable", "Profile.changePhoto", fallback: "Сменить\nфото")
+    /// Описание
+    internal static let descriptionLabelText = L10n.tr("Localizable", "Profile.descriptionLabelText", fallback: "Описание")
+    /// Избранные NFT
+    internal static let favoritesNft = L10n.tr("Localizable", "Profile.favoritesNft", fallback: "Избранные NFT")
+    /// Сайт
+    internal static let linkLabelText = L10n.tr("Localizable", "Profile.linkLabelText", fallback: "Сайт")
+    /// Загрузить изображение
+    internal static let loadImage = L10n.tr("Localizable", "Profile.loadImage", fallback: "Загрузить изображение")
+    /// Мои NFT
+    internal static let myNft = L10n.tr("Localizable", "Profile.myNft", fallback: "Мои NFT")
+    /// Имя
+    internal static let nameLabelText = L10n.tr("Localizable", "Profile.nameLabelText", fallback: "Имя")
+    /// Вставьте ссылку на изображение
+    internal static let pasteLinkToImage = L10n.tr("Localizable", "Profile.pasteLinkToImage", fallback: "Вставьте ссылку на изображение")
+  }
   internal enum Tab {
     /// Корзина
     internal static let cart = L10n.tr("Localizable", "Tab.cart", fallback: "Корзина")
