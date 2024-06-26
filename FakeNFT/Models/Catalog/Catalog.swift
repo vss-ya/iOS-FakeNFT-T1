@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Catalog {
+struct Catalog: Codable {
     let createdAt: String
     let name: String
     let cover: String

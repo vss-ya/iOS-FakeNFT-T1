@@ -10,11 +10,12 @@ import Foundation
 protocol CollectionViewModelProtocol: AnyObject {
     func getNftNumber() -> Int
     func getNfts() -> [Nft]
-    
+    func getCollection(with id: String) -> Catalog?
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
     private let nft = MokNft.shared
+    private let dataStore = CatalogDataStore.shared
     
     func getNftNumber() -> Int {
         nft.nft.count
@@ -24,5 +25,8 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         nft.nft
     }
     
+    func getCollection(with id: String) -> Catalog? {
+        dataStore.getCollection(with: id)
+    }
     
 }

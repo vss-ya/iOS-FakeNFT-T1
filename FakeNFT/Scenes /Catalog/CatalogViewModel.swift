@@ -8,31 +8,46 @@
 import Foundation
 
 protocol CatalogViewModelProtocol {
+    var updateData: Binding<Bool>? { get set }
+    
+    func getData()
     func getCollectionsNumber() -> Int
-    func getCollections() -> [Catalog]
+    func collection(at inadexPath: IndexPath) -> Catalog
     func sortByName()
     func sortByNftCount()
 }
 
 
 final class CatalogViewModel: CatalogViewModelProtocol {
+    
     private let mokCatalog = MokCatalog.shared
+    private let dataStore = CatalogDataStore.shared
+    
+    var updateData: Binding<Bool>?
     
     func getCollectionsNumber() -> Int {
-        mokCatalog.collections.count
+        dataStore.catalog.count
     }
     
-    func getCollections() -> [Catalog] {
-        mokCatalog.collections
+    func getData() {
+        dataStore.getCatalog { [weak self] result in
+            guard let self = self else { return }
+            self.updateData?(result)
+        }
     }
+    
+    func collection(at indexPath: IndexPath) -> Catalog {
+        dataStore.catalog[indexPath.row]   
+    }
+
     
     func sortByName() {
-        mokCatalog.collections.sort(by: { $0.name < $1.name })
+        dataStore.catalog.sort(by: { $0.name < $1.name })
     }
     
     func sortByNftCount() {
-        mokCatalog.collections.sort { $0.nfts.count > $1.nfts.count }
+        dataStore.catalog.sort { $0.nfts.count > $1.nfts.count }
     }
-    
-    
+
+
 }

@@ -66,21 +66,17 @@ private extension CatalogTableViewCell {
 }
 
 extension CatalogTableViewCell {
-    func configCell(_ catalog: [Catalog], _ indexPath: IndexPath) {
-        UIBlockingProgressHUD.show()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-            UIBlockingProgressHUD.dismiss()
-            let collectionCoverURL = URL(string: catalog[indexPath.row].cover)
+    func configCell(_ catalog: Catalog) {
+            let collectionCoverURL = URL(string: catalog.cover)
             let processor = ResizingImageProcessor(
                 referenceSize: CGSize(width: self.contentView.frame.width, height: Double(CatalogConstants.catalogCoverHeight)),
                 mode: .aspectFill)
             self.collectionImage.kf.setImage(with: collectionCoverURL, options: [.processor(processor)])
-            let collectionName = catalog[indexPath.row].name
-            let collectionCount = catalog[indexPath.row].nfts.count
+            let collectionName = catalog.name
+            let collectionCount = catalog.nfts.count
             self.collectionLabel.text = "\(collectionName) (\(collectionCount))"
-        })
-
     }
+
 }
 
 

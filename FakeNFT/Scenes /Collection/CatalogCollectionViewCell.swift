@@ -156,7 +156,6 @@ extension CatalogCollectionViewCell {
             self.nftNameLabel.text = nfts[indexPath.row].name
             self.nftPriceLabel.text = "\(price) ETH"
         })
-        
     }
     
     func setRating(_ rating: Int) {
@@ -171,8 +170,8 @@ extension CatalogCollectionViewCell {
             case false: ratingImage.image = UIImage(named: CatalogImages.starActive)
             }
         }
-        
     }
+    
 }
 
 extension UICollectionViewCell {

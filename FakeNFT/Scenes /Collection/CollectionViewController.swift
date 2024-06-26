@@ -10,7 +10,8 @@ import Kingfisher
 
 final class CollectionViewController: UIViewController {
     
-    var collectionSettings: CollectionSettings?
+//    var collectionSettings: CollectionSettings?
+    var selectedCollection: String?
     
     private let viewModel: CollectionViewModelProtocol
     private let params = CatalogCollectionParams(cellCount: 3, leftInset: 16, rightInset: 16, cellSpacing: 9)
@@ -94,8 +95,8 @@ final class CollectionViewController: UIViewController {
         CGSize(width: view.frame.width, height: view.frame.height)
     }
     
-    init(collectionSettings: CollectionSettings? = nil, viewModel: CollectionViewModelProtocol) {
-        self.collectionSettings = collectionSettings
+    init(selectedCollection: String? = nil, viewModel: CollectionViewModelProtocol) {
+        self.selectedCollection = selectedCollection
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -175,8 +176,7 @@ private extension CollectionViewController {
             authorStackView.heightAnchor.constraint(equalToConstant: 28),
             
             collectionAuthorLabel.widthAnchor.constraint(equalToConstant: widthOfString(font: .caption2, text: collectionAuthorLabel.text)),
-            collectionAuthorLink.widthAnchor.constraint(equalToConstant: widthOfString(font: .caption2, text: collectionSettings?.collectionAuthor)),
-
+            
             collectionDescriptionLabel.topAnchor.constraint(equalTo: authorStackView.bottomAnchor, constant: 5),
             collectionDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -190,10 +190,12 @@ private extension CollectionViewController {
     }
     
     func configView() {
-        guard let cover = collectionSettings?.collectionCover else { return }
-        guard let author = collectionSettings?.collectionAuthor else { return }
-        guard let name = collectionSettings?.collectionName else { return }
-        guard let description = collectionSettings?.collectionDescription else { return }
+        guard let id = selectedCollection else { return }
+        let collection = viewModel.getCollection(with: id)
+        guard let cover = collection?.cover else { return }
+        guard let author = collection?.author else { return }
+        guard let name = collection?.name else { return }
+        guard let description = collection?.description else { return }
         
         let coverURL = URL(string: cover)
         let processor = ResizingImageProcessor(
@@ -307,7 +309,6 @@ extension CollectionViewController: UICollectionViewDataSource {
         let nfts = viewModel.getNfts()
         cell.configCell(nfts, indexPath)
         return cell
-        
     }
     
     
