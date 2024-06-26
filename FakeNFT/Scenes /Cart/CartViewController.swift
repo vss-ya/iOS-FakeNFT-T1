@@ -3,14 +3,13 @@ import UIKit
 
 final class CartViewController: UIViewController, LoadingView {
     
-    let servicesAssembly: ServicesAssembly
-    
+    private let servicesAssembly: ServicesAssembly
     private var viewModel: CartViewModel
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-    internal lazy var activityIndicator = UIActivityIndicatorView()
     
     private lazy var orderTableView: UITableView = {
         let tableView = UITableView()
+        tableView.showsVerticalScrollIndicator = false
         tableView.register(CartViewControllerCell.self)
         tableView.separatorStyle = .none
         tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -37,9 +36,12 @@ final class CartViewController: UIViewController, LoadingView {
     private lazy var orderAmountLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .yaLightGrayLight
+        label.numberOfLines = 1
         label.textColor = .yaGreenUniversal
         label.font = .bodyBold
         label.text = "5,34 ETH"
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
     }()
     
@@ -54,13 +56,20 @@ final class CartViewController: UIViewController, LoadingView {
         return button
     }()
     
-
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.style = .large
+        activityIndicator.color = .yaBlackLight
+        return activityIndicator
+    }()
+    
+    
     init(servicesAssembly: ServicesAssembly, viewModel: CartViewModel) {
         self.servicesAssembly = servicesAssembly
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -68,7 +77,7 @@ final class CartViewController: UIViewController, LoadingView {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        self.showLoading()
         bindViewModel()
         view.backgroundColor = .systemBackground
         calculateTotal()
@@ -87,9 +96,10 @@ final class CartViewController: UIViewController, LoadingView {
         }
         viewModel.isLoadingBinding = { [weak self] isLoading in
             guard let self = self else { return }
-            isLoading ? self.showLoading() : self.hideLoading()
+            if !isLoading {
+                self.hideLoading()
+            }
         }
-        
     }
     
     private func calculateTotal() {
@@ -103,10 +113,11 @@ final class CartViewController: UIViewController, LoadingView {
     }
     
     private func addElements() {
-        [orderTableView, totalContainerView].forEach {
+        [orderTableView, totalContainerView, activityIndicator].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
+        
         [nftCountLabel, orderAmountLabel, paymentButton].forEach {
             totalContainerView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -133,23 +144,25 @@ final class CartViewController: UIViewController, LoadingView {
             orderAmountLabel.bottomAnchor.constraint(equalTo: totalContainerView.bottomAnchor, constant: -16),
             orderAmountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             orderAmountLabel.heightAnchor.constraint(equalToConstant: 20),
-            orderAmountLabel.widthAnchor.constraint(equalToConstant: 95),
             
             paymentButton.topAnchor.constraint(equalTo: totalContainerView.topAnchor, constant: 16),
             paymentButton.bottomAnchor.constraint(equalTo: totalContainerView.bottomAnchor, constant: -16),
             paymentButton.leadingAnchor.constraint(equalTo: orderAmountLabel.trailingAnchor,constant: 24),
-            paymentButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            paymentButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
     private func createNavigationBar() {
-        navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 46, width: view.frame.width - 10, height: 42))
+        navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 46, width: view.frame.width, height: 42))
         
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = .primary
         navBarAppearance.shadowColor = .clear
         navigationBar.standardAppearance = navBarAppearance
-
+        
         let navItem = UINavigationItem()
         let sortedButton = UIBarButtonItem(
             image: UIImage(named: "sort"),
@@ -159,7 +172,7 @@ final class CartViewController: UIViewController, LoadingView {
         )
         sortedButton.tintColor = .textPrimary
         navItem.rightBarButtonItem = sortedButton
-       
+        
         
         navigationBar.setItems([navItem], animated: false)
         view.addSubview(navigationBar)
@@ -167,6 +180,7 @@ final class CartViewController: UIViewController, LoadingView {
     
     @objc private func sortedButtonTapped() {
         print("Нажата кнопка сортировки")
+        //TODO
     }
 }
 

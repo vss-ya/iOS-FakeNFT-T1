@@ -24,6 +24,8 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
     private lazy var ratingStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        //stackView.alignment = .fill
+        stackView.distribution = .fillEqually
         stackView.backgroundColor = .systemBackground
         stackView.spacing = 2
         return stackView
@@ -60,6 +62,15 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        for view in ratingStackView.arrangedSubviews {
+            ratingStackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
     }
     
     // MARK: - Private func
@@ -117,12 +128,9 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
     
     private func setRatingStackView(rating: Int) {
         for star in 1...5 {
-            let ratingImage = UIImageView()
-            ratingStackView.addArrangedSubview(ratingImage)
-            switch star > rating {
-            case true: ratingImage.image = UIImage(named: "star_no_active")
-            case false: ratingImage.image = UIImage(named: "star_active")
-            }
+            let starImage = UIImageView()
+            ratingStackView.addArrangedSubview(starImage)
+            starImage.image = (star > rating) ? UIImage(named: "star_no_active") : UIImage(named: "star_active")
         }
     }
     

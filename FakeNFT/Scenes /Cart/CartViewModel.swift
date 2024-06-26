@@ -4,9 +4,8 @@ final class CartViewModel {
     
     //MARK: - Properties
     
-    private let networkClient = DefaultNetworkClient()
-    private let storage = NftStorageImpl()
-    private let nftService: NftServiceImpl
+    private var networkClient: NetworkClient
+    private var nftService: NftService
     private var order: Order?
     private(set) var orderedNfts: [Nft] = [] {
         didSet {
@@ -16,16 +15,17 @@ final class CartViewModel {
     var orderedNftsBinding: Binding<[Nft]>?
     var isLoadingBinding: Binding<Bool>?
     
-    init() {
-        nftService = NftServiceImpl(networkClient: networkClient, storage: storage)
+    init(networkClient: NetworkClient, nftService: NftService) {
+        self.networkClient = networkClient
+        self.nftService = nftService
         getOrder()
     }
     
     // MARK: - Function
     
     private func getOrder() {
-        isLoadingBinding?(true)
         let getOrderRequest = GetOrderRequest()
+        isLoadingBinding?(true)
         networkClient.send(request: getOrderRequest, type: Order.self) { result in
             switch result {
             case .success(let order):
@@ -33,6 +33,7 @@ final class CartViewModel {
                 self.getOrderedNfts()
             case .failure(let error):
                 print(error)
+                self.isLoadingBinding?(false)
             }
         }
     }
