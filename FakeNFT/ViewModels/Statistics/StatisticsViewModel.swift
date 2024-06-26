@@ -22,7 +22,7 @@ final class StatisticsViewModel: StatisticsViewModelProtocol {
         dataStore.getUsers(sortField: sortField) { [weak self] users in
             guard let self else { return }
             self.users = users
-            self.updateData?(true)
+            self.updateData?(!users.isEmpty)
         }
     }
     

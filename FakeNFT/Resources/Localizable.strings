@@ -15,3 +15,6 @@
 "Statistics.statisticsProfile.userWebsiteButton" = "Перейти на сайт пользователя";
 "Statistics.statisticsProfile.nftsCollectionButton" = "Коллекция NFT";
 "Statistics.statisticsUserCollection.title" = "Коллекция NFT";
+"Statistics.loadDataError.title" = "Не удалось получить данные";
+"Statistics.loadDataError.cancel" = "Отмена";
+"Statistics.loadDataError.repeat" = "Повторить";

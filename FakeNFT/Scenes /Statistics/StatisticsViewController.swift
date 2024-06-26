@@ -25,6 +25,8 @@ final class StatisticsViewController: UIViewController {
         return tableView
     }()
     
+    private var sortField: StatisticsSortFields = .byRating
+    
     private var viewModel: StatisticsViewModelProtocol
     
     // MARK: - Lifecycle
@@ -46,7 +48,7 @@ final class StatisticsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIBlockingProgressHUD.animate()
-        viewModel.getData(sortField: .byRating)
+        viewModel.getData(sortField: sortField)
     }
     
     private func setupViewController() {
@@ -76,7 +78,14 @@ final class StatisticsViewController: UIViewController {
         viewModel.updateData = { [weak self] update in
             UIBlockingProgressHUD.dismiss()
             guard let self else { return }
-            self.tableView.reloadData()
+            if update {
+                self.tableView.reloadData()
+            } else {
+                AlertPresenter.loadDataError(delegate: self) {
+                    UIBlockingProgressHUD.animate()
+                    self.viewModel.getData(sortField: self.sortField)
+                }
+            }
         }
     }
     
@@ -85,6 +94,7 @@ final class StatisticsViewController: UIViewController {
     @objc private func didTapSortButton() {
         AlertPresenter.statisticsSort(delegate: self) { [weak self] sortField in
             UIBlockingProgressHUD.animate()
+            self?.sortField = sortField
             self?.viewModel.getData(sortField: sortField)
         }
     }
