@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Kingfisher
+import ProgressHUD
 
 final class ProfileViewController: UIViewController {
     
@@ -64,6 +66,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         setup()
+        load()
     }
     
 }
@@ -74,6 +77,7 @@ private extension ProfileViewController {
     func setup() {
         setupViews()
         setupConstraints()
+        bind()
     }
     
     func setupViews() {
@@ -118,6 +122,60 @@ private extension ProfileViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
         ])
+    }
+    
+    func bind() {
+        viewModel.onDidLoad = { [weak self](profile) in
+            guard let self else {
+                return
+            }
+            updateProfile(profile)
+        }
+        viewModel.onDidLoadWithError = { [weak self](error) in
+            guard let self else {
+                return
+            }
+            showError(error)
+        }
+    }
+    
+    func load() {
+        showLoading()
+        viewModel.load()
+    }
+    
+    func updateProfile(_ profile: Profile) {
+        hideLoading()
+        headerLabel.text = profile.name
+        descriptionLabel.text = profile.description
+        linkLabel.text = profile.website?.absoluteString
+        if let avatarURLString = profile.avatar {
+            let avatarURL = URL(string: avatarURLString)
+            if let url = avatarURL {
+                updateAvatar(url: url)
+            }
+        }
+        tableView.reloadData()
+    }
+
+    func updateAvatar(url: URL) {
+        let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
+                                              .cacheOriginalImage]
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(with: url, placeholder: UIImage.profileAvatarMock, options: options)
+    }
+    
+    func showError(_ error: Error) {
+        hideLoading()
+        ProgressHUD.showError("\(error.localizedDescription)")
+    }
+
+    func showLoading() {
+        ProgressHUD.show()
+    }
+
+    func hideLoading() {
+        ProgressHUD.dismiss()
     }
     
 }
@@ -195,9 +253,9 @@ extension ProfileViewController: UITableViewDataSource {
         }
         switch indexPath.row {
         case 0:
-            cell.update(title: L10n.Profile.myNft, count: 0)
+            cell.update(title: L10n.Profile.myNft, count: viewModel.profile?.nfts.count ?? 0)
         case 1:
-            cell.update(title: L10n.Profile.favoritesNft, count: 0)
+            cell.update(title: L10n.Profile.favoritesNft, count: viewModel.profile?.likes.count ?? 0)
         case 2:
             cell.update(title: L10n.Profile.aboutDeveloper, count: nil)
         default:
