@@ -23,6 +23,7 @@ final class ProfileEditViewFactory {
     static func createAvatarImageView() -> UIImageView {
         let view = UIImageView()
         view.image = .profileAvatarMock
+        view.backgroundColor = .ypGrayUniversal
         view.layer.masksToBounds = true
         view.layer.cornerRadius = 35
         return view

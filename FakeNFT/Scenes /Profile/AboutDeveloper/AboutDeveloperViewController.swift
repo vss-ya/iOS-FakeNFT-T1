@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-final class AboutDeveloperViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
+final class AboutDeveloperViewController: UIViewController {
 
     private let webView: WKWebView = WKWebView()
     private let progressView: UIProgressView = UIProgressView()
@@ -17,24 +17,42 @@ final class AboutDeveloperViewController: UIViewController, WKUIDelegate, WKNavi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
+        
+        setup()
         openUrl()
     }
     
-    func setupViews() {
-        view.addSubview(webView)
-        webView.frame = self.view.bounds
-        webView.uiDelegate = self
-        webView.navigationDelegate = self
+    private func setup() {
+        setupViews()
+        
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: []
+        ) { [weak self] (_, _) in
+            guard let self else { return }
+            updateProgress()
+        }
     }
     
-    func openUrl() {
-        guard let url = URL(string: "https://www.apple.com") else {
+    private func setupViews() {
+        [webView, progressView].forEach {
+            $0.frame = view.bounds
+            view.addSubview($0)
+        }
+    }
+    
+    private func openUrl() {
+        guard let url = URL(string: "https://practicum.yandex.ru/") else {
             return
         }
         let request = URLRequest(url: url)
         webView.load(request)
     }
     
+    private func updateProgress() {
+        let progress = Float(webView.estimatedProgress)
+        progressView.progress = progress
+        progressView.isHidden = abs(progress - 1.0) <= 0.0001
+    }
+    
 }
-
