@@ -10,7 +10,8 @@ import Kingfisher
 
 final class CollectionViewController: UIViewController {
     
-    var collectionSettings: CollectionSettings?
+//    var collectionSettings: CollectionSettings?
+    var selectedCollection: String?
     
     private let viewModel: CollectionViewModelProtocol
     private let params = CatalogCollectionParams(cellCount: 3, leftInset: 16, rightInset: 16, cellSpacing: 9)
@@ -48,11 +49,35 @@ final class CollectionViewController: UIViewController {
         return label
     }()
     
+    private lazy var authorStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.spacing = 4
+        stackView.backgroundColor = .systemBackground
+        stackView.axis = .horizontal
+        return stackView
+    }()
+    
     private lazy var collectionAuthorLabel: UILabel = {
         let label = UILabel()
         label.font = .caption2
+        label.text = CatalogLocalization.catalogCollectionAuthor
         label.backgroundColor = .systemBackground
         return label
+    }()
+    
+    private lazy var collectionAuthorLink: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .systemBackground
+        button.titleLabel?.font = .caption2
+        button.setTitleColor(UIColor(named: "YP Blue Universal"), for: .normal)
+        button.addTarget(self, action: #selector(didTapAuthorName), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var borderView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        return view
     }()
     
     private lazy var collectionDescriptionLabel: UILabel = {
@@ -70,8 +95,8 @@ final class CollectionViewController: UIViewController {
         CGSize(width: view.frame.width, height: view.frame.height)
     }
     
-    init(collectionSettings: CollectionSettings? = nil, viewModel: CollectionViewModelProtocol) {
-        self.collectionSettings = collectionSettings
+    init(selectedCollection: String? = nil, viewModel: CollectionViewModelProtocol) {
+        self.selectedCollection = selectedCollection
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -86,6 +111,7 @@ final class CollectionViewController: UIViewController {
         addLayout()
         configView()
         addCollectionView()
+        addNavBar()
     }
     
 }
@@ -97,9 +123,15 @@ private extension CollectionViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
+        [collectionAuthorLabel,
+         collectionAuthorLink,
+         borderView].forEach {
+            authorStackView.addArrangedSubview($0)
+        }
+        
         [collectionImage,
          collectionNameLabel,
-         collectionAuthorLabel,
+         authorStackView,
          collectionDescriptionLabel,
          collectionView].forEach {
             contentView.addSubview($0)
@@ -111,7 +143,7 @@ private extension CollectionViewController {
          contentView,
          collectionImage,
          collectionNameLabel,
-         collectionAuthorLabel,
+         authorStackView,
          collectionDescriptionLabel,
          collectionView,
         ].forEach {
@@ -138,11 +170,14 @@ private extension CollectionViewController {
             collectionNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
-            collectionAuthorLabel.topAnchor.constraint(equalTo: collectionNameLabel.bottomAnchor, constant: 8),
-            collectionAuthorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            collectionAuthorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            authorStackView.topAnchor.constraint(equalTo: collectionNameLabel.bottomAnchor, constant: 8),
+            authorStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            authorStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            authorStackView.heightAnchor.constraint(equalToConstant: 28),
             
-            collectionDescriptionLabel.topAnchor.constraint(equalTo: collectionAuthorLabel.bottomAnchor, constant: 5),
+            collectionAuthorLabel.widthAnchor.constraint(equalToConstant: widthOfString(font: .caption2, text: collectionAuthorLabel.text)),
+            
+            collectionDescriptionLabel.topAnchor.constraint(equalTo: authorStackView.bottomAnchor, constant: 5),
             collectionDescriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
@@ -155,10 +190,12 @@ private extension CollectionViewController {
     }
     
     func configView() {
-        guard let cover = collectionSettings?.collectionCover else { return }
-        guard let author = collectionSettings?.collectionAuthor else { return }
-        guard let name = collectionSettings?.collectionName else { return }
-        guard let description = collectionSettings?.collectionDescription else { return }
+        guard let id = selectedCollection else { return }
+        let collection = viewModel.getCollection(with: id)
+        guard let cover = collection?.cover else { return }
+        guard let author = collection?.author else { return }
+        guard let name = collection?.name else { return }
+        guard let description = collection?.description else { return }
         
         let coverURL = URL(string: cover)
         let processor = ResizingImageProcessor(
@@ -167,9 +204,53 @@ private extension CollectionViewController {
         collectionImage.kf.setImage(with: coverURL, options: [.processor(processor)])
         
         collectionNameLabel.text = name
-        collectionAuthorLabel.text = CatalogLocalization.catalogCollectionAuthor + author
+        collectionAuthorLink.setTitle(author, for: .normal)
         collectionDescriptionLabel.text = description
     }
+    
+    func addNavBar() {
+        navigationItem.leftBarButtonItem = addBackButton()
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+    }
+    
+    func addBackButton() -> UIBarButtonItem {
+        let button = UIButton()
+        button.setImage(UIImage(named: CatalogImages.catalogBackButton), for: .normal)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 24),
+            button.heightAnchor.constraint(equalToConstant: 24)
+        ])
+        
+        let backButton = UIBarButtonItem(customView: button)
+        return backButton
+    }
+    
+    @objc
+    func backButtonTapped() {
+        dismiss(animated: true)
+    }
+    
+    @objc
+    func didTapAuthorName() {
+        let url = URL(string: CatalogConstants.catalogAuthorLink)
+        let viewController = WebViewController(url: url)
+        let navigationViewController = UINavigationController(rootViewController: viewController)
+        navigationViewController.modalPresentationStyle = .fullScreen
+        present(navigationViewController, animated: true)
+    }
+    
+    func widthOfString(font: UIFont, text: String?) -> CGFloat {
+        guard let text = text else { return 0 }
+        let attributes = [NSAttributedString.Key.font: font]
+        let size = (text as NSString).size(withAttributes: attributes)
+        return size.width
+    }
+    
 }
 
 extension CollectionViewController: UICollectionViewDelegateFlowLayout {
@@ -228,7 +309,6 @@ extension CollectionViewController: UICollectionViewDataSource {
         let nfts = viewModel.getNfts()
         cell.configCell(nfts, indexPath)
         return cell
-        
     }
     
     

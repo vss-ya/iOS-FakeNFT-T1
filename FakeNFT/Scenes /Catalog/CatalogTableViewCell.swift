@@ -60,23 +60,23 @@ private extension CatalogTableViewCell {
             collectionImage.heightAnchor.constraint(equalToConstant: CGFloat(CatalogConstants.catalogCoverHeight)),
             
             collectionLabel.topAnchor.constraint(equalTo: collectionImage.bottomAnchor, constant: 4),
-            collectionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
+            collectionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
         ])
     }
 }
 
 extension CatalogTableViewCell {
-    func configCell(_ catalog: [Catalog], _ indexPath: IndexPath) {
-        let collectionCoverURL = URL(string: catalog[indexPath.row].cover)
-        let processor = ResizingImageProcessor(
-            referenceSize: CGSize(width: contentView.frame.width, height: Double(CatalogConstants.catalogCoverHeight)),
-            mode: .aspectFill)
-        collectionImage.kf.setImage(with: collectionCoverURL, options: [.processor(processor)])
-        
-        let collectionName = catalog[indexPath.row].name
-        let collectionCount = catalog[indexPath.row].nfts.count
-        collectionLabel.text = "\(collectionName) (\(collectionCount))"
+    func configCell(_ catalog: Catalog) {
+            let collectionCoverURL = URL(string: catalog.cover)
+            let processor = ResizingImageProcessor(
+                referenceSize: CGSize(width: self.contentView.frame.width, height: Double(CatalogConstants.catalogCoverHeight)),
+                mode: .aspectFill)
+            self.collectionImage.kf.setImage(with: collectionCoverURL, options: [.processor(processor)])
+            let collectionName = catalog.name
+            let collectionCount = catalog.nfts.count
+            self.collectionLabel.text = "\(collectionName) (\(collectionCount))"
     }
+
 }
 
 

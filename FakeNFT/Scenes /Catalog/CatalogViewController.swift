@@ -9,13 +9,14 @@ import UIKit
 
 final class CatalogViewController: UIViewController {
     
-    private let viewModel: CatalogViewModelProtocol
+    private var viewModel: CatalogViewModelProtocol
     
     private lazy var tableView = UITableView()
     
     init(viewModel: CatalogViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -26,6 +27,11 @@ final class CatalogViewController: UIViewController {
         super.viewDidLoad()
         setupView()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.getData()
+    }
 }
 
 private extension CatalogViewController {
@@ -33,6 +39,7 @@ private extension CatalogViewController {
         view.backgroundColor = .systemBackground
         addTableView()
         configTableView()
+        addNavBar()
     }
     
     func addTableView() {
@@ -51,14 +58,65 @@ private extension CatalogViewController {
         tableView.backgroundColor = .systemBackground
         tableView.delegate = self
         tableView.dataSource = self
+        
         tableView.separatorColor = .clear
         tableView.register(CatalogTableViewCell.self, forCellReuseIdentifier: CatalogTableViewCell.reuseIdentifier)
     }
+    
+    func addNavBar() {
+        navigationItem.rightBarButtonItem = addSortButton()
+        navigationController?.navigationBar.backgroundColor = .systemBackground
+    }
+    
+    func addSortButton() -> UIBarButtonItem {
+        let button = UIButton()
+        button.setImage(UIImage(named: CatalogImages.catalogSortButton), for: .normal)
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 42),
+            button.heightAnchor.constraint(equalToConstant: 42)
+        ])
+        
+        let sortButton = UIBarButtonItem(customView: button)
+        return sortButton
+    }
+    
+    @objc
+    func sortButtonTapped() {
+        let alert = UIAlertController(
+            title: "",
+            message: CatalogLocalization.catalogSortMessage,
+            preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortByName, style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.viewModel.sortByName()
+            self.tableView.reloadData()
+            
+        }))
+        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortByNftCount, style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.viewModel.sortByNftCount()
+            self.tableView.reloadData()
+        }))
+        alert.addAction(UIAlertAction(title: CatalogLocalization.catalogSortCancel, style: .cancel))
+        self.present(alert, animated: true)
+    }
+    
+    func bind() {
+        viewModel.updateData = { [weak self] update in
+            guard let self = self else { return }
+            self.tableView.reloadData()
+        }
+    }
+    
 }
 
 extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.getCollectionsNumber()
+       viewModel.getCollectionsNumber()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -66,22 +124,19 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
         else {
             return UITableViewCell()
         }
-        let collections = viewModel.getCollections()
-        cell.configCell(collections, indexPath)
+        let collection = viewModel.collection(at: indexPath)
+        cell.configCell(collection)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let catalog = viewModel.getCollections()
-        let collection = CollectionSettings(
-            collectionCover: catalog[indexPath.row].cover,
-            collectionName: catalog[indexPath.row].name,
-            collectionAuthor: catalog[indexPath.row].author,
-            collectionDescription: catalog[indexPath.row].description)
-        let viewController = CollectionViewController(collectionSettings: collection, viewModel: CollectionViewModel())
-        viewController.modalPresentationStyle = .fullScreen
-        present(viewController, animated: true)
+        let collection = viewModel.collection(at: indexPath)
+        let id = collection.id
+        let viewController = CollectionViewController(selectedCollection: id, viewModel: CollectionViewModel())
+        let navigationViewController = UINavigationController(rootViewController: viewController)
+        navigationViewController.modalPresentationStyle = .fullScreen
+        present(navigationViewController, animated: true)
     }
     
     
