@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Kingfisher
+import ProgressHUD
 
 final class ProfileEditViewController: UIViewController {
     
@@ -66,6 +68,7 @@ final class ProfileEditViewController: UIViewController {
         super.viewDidLoad()
         
         setup()
+        load()
     }
     
 }
@@ -90,6 +93,8 @@ private extension ProfileEditViewController {
         nameTextField.addTarget(self, action: #selector(tapAction), for: .primaryActionTriggered)
         linkTextField.addTarget(self, action: #selector(tapAction), for: .primaryActionTriggered)
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapAction)))
+        
+        bind()
     }
     
     func setupViews() {
@@ -165,6 +170,61 @@ private extension ProfileEditViewController {
         ])
     }
     
+    func bind() {
+        viewModel.onDidLoad = { [weak self](profile) in
+            guard let self else { return }
+            updateProfile(profile)
+        }
+        viewModel.onDidLoadWithError = { [weak self](error) in
+            guard let self else { return }
+            
+        }
+        viewModel.onDidUpdate = { [weak self](profile) in
+            guard let self else { return }
+            hideLoading()
+            onCloseCallback?()
+        }
+        viewModel.onDidUpdateWithError = { [weak self](error) in
+            guard let self else { return }
+            showError(error)
+            onCloseCallback?()
+        }
+    }
+    
+    func load() {
+        showLoading()
+        viewModel.load()
+    }
+    
+    func updateProfile(_ profile: Profile) {
+        hideLoading()
+        nameTextField.text = profile.name
+        descriptionTextView.text = profile.description
+        linkTextField.text = profile.website?.absoluteString
+        if let url = profile.avatar {
+            updateAvatar(url: url)
+        }
+    }
+
+    func updateAvatar(url: URL) {
+        let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
+                                              .cacheOriginalImage]
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(with: url, placeholder: UIImage.profileAvatarMock, options: options)
+    }
+    
+    func showError(_ error: Error) {
+        ProgressHUD.showError("\(error.localizedDescription)")
+    }
+
+    func showLoading() {
+        ProgressHUD.show()
+    }
+
+    func hideLoading() {
+        ProgressHUD.dismiss()
+    }
+    
 }
 
 extension ProfileEditViewController: UITextFieldDelegate {
@@ -185,7 +245,20 @@ private extension ProfileEditViewController {
     }
     
     @objc func closeAction() {
-        onCloseCallback?()
+        guard let oldProfile = viewModel.profile else {
+            return
+        }
+        let profile = Profile(
+            id: oldProfile.id,
+            name: nameTextField.text ?? "",
+            avatar: viewModel.avatarUrl,
+            description: descriptionTextView.text,
+            website: URL(string: linkTextField.text ?? ""),
+            nfts: oldProfile.nfts,
+            likes: oldProfile.likes
+        )
+        showLoading()
+        viewModel.update(profile)
     }
     
     @objc func clearAction() {
@@ -200,8 +273,8 @@ private extension ProfileEditViewController {
             preferredStyle: .alert
         )
 
-        alert.addTextField { _ in
-            
+        alert.addTextField {
+            $0.text = self.viewModel.avatarUrl?.absoluteString ?? self.viewModel.profile?.avatar?.absoluteString
         }
         
         let action = UIAlertAction(
@@ -210,9 +283,10 @@ private extension ProfileEditViewController {
         { [weak self] _ in
             let textField = alert.textFields?[0]
             let urlString = textField?.text
-            guard let self, let textField, let urlString else {
+            guard let self, let urlString else {
                 return
             }
+            viewModel.updateAvatar(URL(string: urlString))
             alert.dismiss(animated: true)
         }
         
