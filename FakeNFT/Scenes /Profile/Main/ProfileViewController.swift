@@ -110,7 +110,7 @@ private extension ProfileViewController {
             avatarImageView.heightAnchor.constraint(equalToConstant: Margin.avatarDia),
             headerLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor, constant: 0),
             headerLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: Margin.headerLeft),
-            headerLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Margin.right),
+            headerLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Margin.right),
             descriptionLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: Margin.descriptionTop),
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Margin.left),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Margin.right),
@@ -149,11 +149,8 @@ private extension ProfileViewController {
         headerLabel.text = profile.name
         descriptionLabel.text = profile.description
         linkLabel.text = profile.website?.absoluteString
-        if let avatarURLString = profile.avatar {
-            let avatarURL = URL(string: avatarURLString)
-            if let url = avatarURL {
-                updateAvatar(url: url)
-            }
+        if let url = profile.avatar {
+            updateAvatar(url: url)
         }
         tableView.reloadData()
     }
@@ -166,7 +163,6 @@ private extension ProfileViewController {
     }
     
     func showError(_ error: Error) {
-        hideLoading()
         ProgressHUD.showError("\(error.localizedDescription)")
     }
 
@@ -190,6 +186,7 @@ extension ProfileViewController {
                 return
             }
             dismiss(animated: true)
+            load()
         }
         present(vc, animated: true, completion: nil)
     }

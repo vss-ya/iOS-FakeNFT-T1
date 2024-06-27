@@ -327,7 +327,6 @@
 		3F6806C929CBBCAF00B4F915 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				57511FC42C2C194C004B9BEC /* Profile */,
 				3F6806D829CC979D00B4F915 /* Network */,
 			);
 			path = Models;
@@ -373,13 +372,6 @@
 				0C79EE622A76DD1900EE90EA /* RequestConstants.swift */,
 			);
 			path = Requests;
-			sourceTree = "<group>";
-		};
-		57511FC42C2C194C004B9BEC /* Profile */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Profile;
 			sourceTree = "<group>";
 		};
 		579606C32C2A85250071C15A /* Frameworks */ = {
