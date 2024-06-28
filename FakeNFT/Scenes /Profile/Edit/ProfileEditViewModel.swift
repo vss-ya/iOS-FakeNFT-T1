@@ -50,6 +50,7 @@ final class ProfileEditViewModel: ProfileEditViewModelProtocol {
                 switch result {
                 case .success(let profile):
                     self?.profile = profile
+                    self?.avatarUrl = URL(string: profile.avatar ?? "")
                     self?.onDidLoad?(profile)
                 case .failure(let error):
                     self?.onDidLoadWithError?(error)

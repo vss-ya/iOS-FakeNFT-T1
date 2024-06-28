@@ -66,6 +66,10 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         setup()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         load()
     }
     
@@ -148,16 +152,15 @@ private extension ProfileViewController {
         hideLoading()
         headerLabel.text = profile.name
         descriptionLabel.text = profile.description
-        linkLabel.text = profile.website?.absoluteString
-        if let url = profile.avatar {
-            updateAvatar(url: url)
-        }
+        linkLabel.text = profile.website
+        updateAvatar(url: URL(string: profile.avatar ?? ""))
         tableView.reloadData()
     }
 
-    func updateAvatar(url: URL) {
+    func updateAvatar(url: URL?) {
         let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
                                               .cacheOriginalImage]
+        avatarImageView.kf.cancelDownloadTask()
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(with: url, placeholder: UIImage.profileAvatarMock, options: options)
     }

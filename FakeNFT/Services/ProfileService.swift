@@ -73,12 +73,18 @@ private extension ProfileServiceImpl {
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
 
+        let likes = profile.likes.isEmpty ? "null" : profile.likes.joined(separator: ",")
+        let name = profile.name
+        let avatar = (profile.avatar ?? "").addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
+        let description = profile.description ?? ""
+        let website = (profile.website ?? "").addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
+        
         var profileData: String = ""
-        profileData += "&likes=\(profile.likes.joined(separator: ","))"
-        profileData += "&name=\(profile.name)"
-        profileData += "&avatar=\((profile.avatar?.absoluteString ?? "").addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "")"
-        profileData += "&description=\(profile.description ?? "")"
-        profileData += "&website=\((profile.website?.absoluteString ?? "").addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "")"
+        profileData += "&likes=\(likes)"
+        profileData += "&name=\(name)"
+        profileData += "&avatar=\(avatar)"
+        profileData += "&description=\(description)"
+        profileData += "&website=\(website)"
 
         request.httpBody = profileData.data(using: .utf8)
 

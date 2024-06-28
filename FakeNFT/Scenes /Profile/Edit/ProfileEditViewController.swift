@@ -177,6 +177,7 @@ private extension ProfileEditViewController {
         }
         viewModel.onDidLoadWithError = { [weak self](error) in
             guard let self else { return }
+            showError(error)
             
         }
         viewModel.onDidUpdate = { [weak self](profile) in
@@ -200,15 +201,16 @@ private extension ProfileEditViewController {
         hideLoading()
         nameTextField.text = profile.name
         descriptionTextView.text = profile.description
-        linkTextField.text = profile.website?.absoluteString
-        if let url = profile.avatar {
-            updateAvatar(url: url)
-        }
+        linkTextField.text = profile.website
+        updateAvatar(url: URL(string: profile.avatar ?? ""))
     }
 
-    func updateAvatar(url: URL) {
+    func updateAvatar(url: URL?) {
+        viewModel.updateAvatar(url)
+        
         let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
                                               .cacheOriginalImage]
+        avatarImageView.kf.cancelDownloadTask()
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(with: url, placeholder: UIImage.profileAvatarMock, options: options)
     }
@@ -248,12 +250,13 @@ private extension ProfileEditViewController {
         guard let oldProfile = viewModel.profile else {
             return
         }
+        let avatar = viewModel.avatarUrl?.absoluteString
         let profile = Profile(
             id: oldProfile.id,
             name: nameTextField.text ?? "",
-            avatar: viewModel.avatarUrl,
+            avatar: avatar,
             description: descriptionTextView.text,
-            website: URL(string: linkTextField.text ?? ""),
+            website: linkTextField.text,
             nfts: oldProfile.nfts,
             likes: oldProfile.likes
         )
@@ -273,20 +276,18 @@ private extension ProfileEditViewController {
             preferredStyle: .alert
         )
 
-        alert.addTextField {
-            $0.text = self.viewModel.avatarUrl?.absoluteString ?? self.viewModel.profile?.avatar?.absoluteString
+        alert.addTextField { [weak self] in
+            $0.text = self?.viewModel.avatarUrl?.absoluteString
         }
         
         let action = UIAlertAction(
             title: "ОK",
             style: .default)
         { [weak self] _ in
-            let textField = alert.textFields?[0]
-            let urlString = textField?.text
-            guard let self, let urlString else {
+            guard let self, let urlString = alert.textFields?[0].text else {
                 return
             }
-            viewModel.updateAvatar(URL(string: urlString))
+            updateAvatar(url: URL(string: urlString))
             alert.dismiss(animated: true)
         }
         
