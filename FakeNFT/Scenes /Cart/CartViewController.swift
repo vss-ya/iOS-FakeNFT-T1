@@ -21,6 +21,7 @@ final class CartViewController: UIViewController, LoadingView {
         view.backgroundColor = .yaLightGrayLight
         view.layer.cornerRadius = 12
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMinYCorner]
+        view.isHidden = true
         return view
     }()
     
@@ -54,6 +55,17 @@ final class CartViewController: UIViewController, LoadingView {
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
         return button
+    }()
+    
+    private lazy var emptyCartLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .systemBackground
+        label.numberOfLines = 1
+        label.textColor = .textPrimary
+        label.font = .bodyBold
+        label.text = "Корзина пуста"
+        label.isHidden = true
+        return label
     }()
     
     lazy var activityIndicator: UIActivityIndicatorView = {
@@ -91,6 +103,7 @@ final class CartViewController: UIViewController, LoadingView {
     private func bindViewModel() {
         viewModel.orderedNftsBinding = { [weak self] _ in
             guard let self = self else { return }
+            self.checkIfCartIsEmpty()
             self.calculateTotal()
             self.orderTableView.reloadData()
         }
@@ -98,7 +111,15 @@ final class CartViewController: UIViewController, LoadingView {
             guard let self = self else { return }
             if !isLoading {
                 self.hideLoading()
+                self.checkIfCartIsEmpty()
             }
+        }
+    }
+    
+    private func checkIfCartIsEmpty() {
+        if viewModel.orderedNfts.isEmpty {
+            emptyCartLabel.isHidden = false
+            [orderTableView, totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = true }
         }
     }
     
@@ -113,7 +134,7 @@ final class CartViewController: UIViewController, LoadingView {
     }
     
     private func addElements() {
-        [orderTableView, totalContainerView, activityIndicator].forEach {
+        [orderTableView, totalContainerView, emptyCartLabel, activityIndicator].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -150,8 +171,12 @@ final class CartViewController: UIViewController, LoadingView {
             paymentButton.leadingAnchor.constraint(equalTo: orderAmountLabel.trailingAnchor,constant: 24),
             paymentButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
+            emptyCartLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyCartLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyCartLabel.heightAnchor.constraint(equalToConstant: 22),
+            
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
     }
     
