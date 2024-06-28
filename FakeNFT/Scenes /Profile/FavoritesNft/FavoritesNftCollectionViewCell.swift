@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class FavoritesNftCollectionViewCell: UICollectionViewCell {
     
@@ -20,6 +21,8 @@ final class FavoritesNftCollectionViewCell: UICollectionViewCell {
     private let nftNameLabel: UILabel = UILabel()
     private let priceLabel: UILabel = UILabel()
     
+    var onLike: (() -> Void)?
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -31,6 +34,21 @@ final class FavoritesNftCollectionViewCell: UICollectionViewCell {
         fillMockData()
     }
     
+    func configure(with nft: Nft) {
+        nftNameLabel.text = nft.name
+        priceLabel.text = "\(nft.price) ETH"
+        updateAvatar(url: nft.images.first)
+        updateRating(nft.rating)
+    }
+    
+    private func updateAvatar(url: URL?) {
+        let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
+                                              .cacheOriginalImage]
+        nftImageView.kf.cancelDownloadTask()
+        nftImageView.kf.indicatorType = .activity
+        nftImageView.kf.setImage(with: url, placeholder: UIImage.profileAvatarMock, options: options)
+    }
+    
     private func updateRating(_ value: Int) {
         ratingView.updateRating(value)
     }
@@ -40,13 +58,17 @@ final class FavoritesNftCollectionViewCell: UICollectionViewCell {
 private extension FavoritesNftCollectionViewCell {
     
     func fillMockData() {
-        nftImageView.image = .profileNftMock
-        nftNameLabel.text = "Spring"
+        nftImageView.image = .profileAvatarMock
+        nftImageView.backgroundColor = .ypGrayUniversal
+        nftImageView.layer.masksToBounds = true
+        nftImageView.layer.cornerRadius = 12
+        nftNameLabel.text = ""
         updateRating(1)
-        priceLabel.text = "1,78 ETH"
+        priceLabel.text = ""
     }
     
     @objc private func likeAction() {
+        onLike?()
     }
     
     func setupViews() {

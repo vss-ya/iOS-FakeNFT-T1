@@ -66,6 +66,10 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         setup()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         load()
     }
     
@@ -110,7 +114,7 @@ private extension ProfileViewController {
             avatarImageView.heightAnchor.constraint(equalToConstant: Margin.avatarDia),
             headerLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor, constant: 0),
             headerLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: Margin.headerLeft),
-            headerLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: Margin.right),
+            headerLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Margin.right),
             descriptionLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: Margin.descriptionTop),
             descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Margin.left),
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Margin.right),
@@ -148,22 +152,20 @@ private extension ProfileViewController {
         hideLoading()
         headerLabel.text = profile.name
         descriptionLabel.text = profile.description
-        linkLabel.text = profile.website?.absoluteString
-        if let avatarURLString = profile.avatar {
-            updateAvatar(url: URL(string: avatarURLString))
-        }
+        linkLabel.text = profile.website
+        updateAvatar(url: URL(string: profile.avatar ?? ""))
         tableView.reloadData()
     }
 
     func updateAvatar(url: URL?) {
         let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
                                               .cacheOriginalImage]
+        avatarImageView.kf.cancelDownloadTask()
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(with: url, placeholder: UIImage.profileAvatarMock, options: options)
     }
     
     func showError(_ error: Error) {
-        hideLoading()
         ProgressHUD.showError("\(error.localizedDescription)")
     }
 
@@ -187,6 +189,7 @@ extension ProfileViewController {
                 return
             }
             dismiss(animated: true)
+            load()
         }
         present(vc, animated: true, completion: nil)
     }
