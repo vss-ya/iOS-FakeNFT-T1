@@ -42,7 +42,15 @@ final class TabBarController: UITabBarController {
 
         let profileController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         let catalogController = TestCatalogViewController(servicesAssembly: servicesAssembly)
-        let cartController = CartViewController(servicesAssembly: servicesAssembly)
+        
+        let networkClient = DefaultNetworkClient()
+        let storage = NftStorageImpl()
+        let nftService = NftServiceImpl(networkClient: networkClient, storage: storage)
+        let viewModel = CartViewModel(networkClient: networkClient, nftService: nftService)
+        let cartController = CartViewController(
+            servicesAssembly: servicesAssembly,
+            viewModel: viewModel
+        )
         let statisticsController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         profileController.tabBarItem = profileTabBarItem
         catalogController.tabBarItem = catalogTabBarItem
@@ -50,7 +58,7 @@ final class TabBarController: UITabBarController {
         
         statisticsController.tabBarItem = statisticsTabBarItem
 
-        viewControllers = [cartController, profileController, catalogController, statisticsController]
+        viewControllers = [profileController, catalogController, cartController, statisticsController]
 
         view.backgroundColor = .systemBackground
     }
