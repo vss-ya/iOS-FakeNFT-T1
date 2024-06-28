@@ -24,7 +24,6 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
     private lazy var ratingStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        //stackView.alignment = .fill
         stackView.distribution = .fillEqually
         stackView.backgroundColor = .systemBackground
         stackView.spacing = 2

@@ -1,11 +1,18 @@
 import Foundation
 import UIKit
 
+enum Predicate {
+    case byPrice
+    case byRating
+    case byName
+}
+
 final class CartViewController: UIViewController, LoadingView {
     
     private let servicesAssembly: ServicesAssembly
     private var viewModel: CartViewModel
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    private var sortByPredicate: Predicate?
     
     private lazy var orderTableView: UITableView = {
         let tableView = UITableView()
@@ -76,7 +83,10 @@ final class CartViewController: UIViewController, LoadingView {
     }()
     
     
-    init(servicesAssembly: ServicesAssembly, viewModel: CartViewModel) {
+    init(
+        servicesAssembly: ServicesAssembly,
+        viewModel: CartViewModel
+    ) {
         self.servicesAssembly = servicesAssembly
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -89,12 +99,13 @@ final class CartViewController: UIViewController, LoadingView {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.showLoading()
-        bindViewModel()
         view.backgroundColor = .systemBackground
+        //showLoading()
         calculateTotal()
         addElements()
         setConstraints()
+        checkIfCartIsEmpty()
+        bindViewModel()
         createNavigationBar()
         orderTableView.dataSource = self
         orderTableView.delegate = self
@@ -111,7 +122,8 @@ final class CartViewController: UIViewController, LoadingView {
             guard let self = self else { return }
             if !isLoading {
                 self.hideLoading()
-                self.checkIfCartIsEmpty()
+            } else {
+                self.showLoading()
             }
         }
     }
@@ -120,6 +132,9 @@ final class CartViewController: UIViewController, LoadingView {
         if viewModel.orderedNfts.isEmpty {
             emptyCartLabel.isHidden = false
             [orderTableView, totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = true }
+        } else {
+            emptyCartLabel.isHidden = true
+            [orderTableView, totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = false }
         }
     }
     
@@ -204,8 +219,28 @@ final class CartViewController: UIViewController, LoadingView {
     }
     
     @objc private func sortedButtonTapped() {
-        print("Нажата кнопка сортировки")
-        //TODO
+        let sortSheet = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.sortByPredicate = .byPrice
+            self.orderTableView.reloadData()
+        }
+        let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
+            guard let self else { return }
+            self.sortByPredicate = .byRating
+            self.orderTableView.reloadData()
+        }
+        let sortByNameAction = UIAlertAction(title: "По названию", style: .default) { [weak self] _ in
+            guard let self else { return }
+            self.sortByPredicate = .byName
+            self.orderTableView.reloadData()
+        }
+        let closeAction = UIAlertAction(title: "Закрыть", style: .cancel) { [weak self] _ in
+            guard let self else { return }
+            self.dismiss(animated: true)
+        }
+        [sortByPriceAction, sortByRatingAction, sortByNameAction, closeAction].forEach { sortSheet.addAction($0) }
+        present(sortSheet, animated: true, completion: nil)
     }
 }
 
@@ -216,7 +251,11 @@ extension CartViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartViewControllerCell = orderTableView.dequeueReusableCell()
-        let nft = viewModel.orderedNfts[indexPath.row]
+        var nfts = viewModel.orderedNfts
+        if sortByPredicate != nil {
+            nfts = viewModel.sortNfts(by: sortByPredicate!)
+        }
+        let nft = nfts[indexPath.row]
         cell.configure(nft: nft)
         return cell
     }

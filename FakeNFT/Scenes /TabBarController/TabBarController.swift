@@ -47,10 +47,7 @@ final class TabBarController: UITabBarController {
         let storage = NftStorageImpl()
         let nftService = NftServiceImpl(networkClient: networkClient, storage: storage)
         let viewModel = CartViewModel(networkClient: networkClient, nftService: nftService)
-        let cartController = CartViewController(
-            servicesAssembly: servicesAssembly,
-            viewModel: viewModel
-        )
+        let cartController = CartViewController(servicesAssembly: servicesAssembly, viewModel: viewModel)
         let statisticsController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         profileController.tabBarItem = profileTabBarItem
         catalogController.tabBarItem = catalogTabBarItem

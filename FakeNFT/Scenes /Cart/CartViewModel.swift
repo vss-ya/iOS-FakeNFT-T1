@@ -58,10 +58,20 @@ final class CartViewModel {
                 }
             }
         }
-        
         dispatchGroup.notify(queue: .main) {
-            self.orderedNfts = nfts
             self.isLoadingBinding?(false)
+            self.orderedNfts = nfts
+        }
+    }
+    
+    func sortNfts(by predicat: Predicate) -> [Nft] {
+        switch predicat {
+        case .byPrice:
+            return orderedNfts.sorted { $0.price < $1.price }
+        case .byRating:
+            return orderedNfts.sorted { $0.rating < $1.rating }
+        case .byName:
+            return orderedNfts.sorted { $0.name < $1.name }
         }
     }
 }
