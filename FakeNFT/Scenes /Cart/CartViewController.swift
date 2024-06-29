@@ -100,7 +100,6 @@ final class CartViewController: UIViewController, LoadingView {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        //showLoading()
         calculateTotal()
         addElements()
         setConstraints()
@@ -218,6 +217,14 @@ final class CartViewController: UIViewController, LoadingView {
         view.addSubview(navigationBar)
     }
     
+    private func didTapDeleteButton(image: UIImage) {
+        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image)
+        deleteConfirmationViewController.modalPresentationStyle = .overCurrentContext
+        deleteConfirmationViewController.modalTransitionStyle = .crossDissolve
+        present(deleteConfirmationViewController, animated: true, completion: nil)
+    }
+    
+    
     @objc private func sortedButtonTapped() {
         let sortSheet = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
         let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { [weak self] _ in
@@ -257,6 +264,10 @@ extension CartViewController: UITableViewDataSource {
         }
         let nft = nfts[indexPath.row]
         cell.configure(nft: nft)
+        cell.deleteButtonAction = { [weak self] image in
+            guard let self = self else { return }
+            self.didTapDeleteButton(image: image)
+        }
         return cell
     }
 }
@@ -266,4 +277,7 @@ extension CartViewController: UITableViewDelegate {
         return 140
     }
 }
+
+   
+    
 
