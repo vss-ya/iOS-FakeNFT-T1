@@ -79,39 +79,19 @@ final class StatisticsCollectionCell: UICollectionViewCell {
     }()
     private lazy var cartButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.setImage(UIImage(named: "cart_add"), for: .normal)
+        button.backgroundColor = .clear
         button.addTarget(self, action: #selector(didTapCartButton), for: .touchUpInside)
         return button
     }()
     
-    var nft: StatisticsNft? {
+    var inCart: Bool = false {
         didSet {
-            guard let nft else { return }
-            let processor = RoundCornerImageProcessor(cornerRadius: 12)
-            nftImageView.kf.setImage(
-                with: URL(string: nft.images[0]),
-                placeholder: UIImage(systemName: "xmark.icloud"),
-                options: [.processor(processor)]
-            )
-            nameLabel.text = nft.name
-            priceLabel.text = "\(nft.price) ETH"
-            if nft.rating > 0 {
-                rating1ImageView.image = .starActive
-            }
-            if nft.rating > 1 {
-                rating2ImageView.image = .starActive
-            }
-            if nft.rating > 2 {
-                rating3ImageView.image = .starActive
-            }
-            if nft.rating > 3 {
-                rating4ImageView.image = .starActive
-            }
-            if nft.rating > 4 {
-                rating5ImageView.image = .starActive
-            }
+            cartButton.setImage(UIImage(named: inCart ? "cart_delete" : "cart_add"), for: .normal)
         }
     }
+    
+    private var id: String = ""
+    private var viewModel: StatisticsUserCollectionViewModelProtocol?
     
     static let reuseIdentifier = "statisticsCollectionCell"
     
@@ -124,6 +104,36 @@ final class StatisticsCollectionCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func initialize(viewModel: StatisticsUserCollectionViewModelProtocol, at indexPath: IndexPath) {
+        self.viewModel = viewModel
+        guard let nft = viewModel.model(at: indexPath) as? StatisticsNft else { return }
+        id = nft.id
+        let processor = RoundCornerImageProcessor(cornerRadius: 12)
+        nftImageView.kf.setImage(
+            with: URL(string: nft.images[0]),
+            placeholder: UIImage(systemName: "xmark.icloud"),
+            options: [.processor(processor)]
+        )
+        nameLabel.text = nft.name
+        priceLabel.text = "\(nft.price) ETH"
+        if nft.rating > 0 {
+            rating1ImageView.image = .starActive
+        }
+        if nft.rating > 1 {
+            rating2ImageView.image = .starActive
+        }
+        if nft.rating > 2 {
+            rating3ImageView.image = .starActive
+        }
+        if nft.rating > 3 {
+            rating4ImageView.image = .starActive
+        }
+        if nft.rating > 4 {
+            rating5ImageView.image = .starActive
+        }
+        inCart = viewModel.inCart(id: nft.id)
     }
     
     private func setupCell() {
@@ -232,6 +242,14 @@ final class StatisticsCollectionCell: UICollectionViewCell {
     // MARK: - Actions
     
     @objc private func didTapCartButton() {
-
+        if inCart {
+            viewModel?.removeFromCart(id: id) {
+                self.inCart = false
+            }
+        } else {
+            viewModel?.addToCart(id: id) {
+                self.inCart = true
+            }
+        }
     }
 }

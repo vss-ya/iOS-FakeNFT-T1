@@ -34,11 +34,11 @@ final class StatisticsUserCollectionViewController: UIViewController {
         return collectionView
     }()
     
-    private var viewModel: StatisticsCollectionsViewModelProtocol
+    private var viewModel: StatisticsUserCollectionViewModelProtocol
     
     // MARK: - Lifecycle
     
-    init(viewModel: StatisticsCollectionsViewModelProtocol) {
+    init(viewModel: StatisticsUserCollectionViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         bind()
@@ -51,6 +51,8 @@ final class StatisticsUserCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
+        UIBlockingProgressHUD.animate()
+        viewModel.getData()
     }
     
     private func setupViewController() {
@@ -79,8 +81,14 @@ final class StatisticsUserCollectionViewController: UIViewController {
     
     private func bind() {
         viewModel.updateData = { [weak self] update in
-            guard let self else { return }
+            UIBlockingProgressHUD.dismiss()
+            guard let self, update else { return }
             self.collectionView.reloadData()
+        }
+        viewModel.updateNft = { [weak self] item in
+            guard let self else { return }
+            let indexPath = IndexPath(item: item, section: 0)
+            self.collectionView.reloadItems(at: [indexPath])
         }
     }
     
@@ -107,10 +115,10 @@ extension StatisticsUserCollectionViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StatisticsCollectionCell.reuseIdentifier, for: indexPath)
-        guard let cell = cell as? StatisticsCollectionCell, let model = viewModel.model(at: indexPath) as? StatisticsNft else {
+        guard let cell = cell as? StatisticsCollectionCell else {
             return UICollectionViewCell()
         }
-        cell.nft = model
+        cell.initialize(viewModel: viewModel, at: indexPath)
         return cell
     }
 }

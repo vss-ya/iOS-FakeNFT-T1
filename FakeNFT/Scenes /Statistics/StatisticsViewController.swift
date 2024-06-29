@@ -25,11 +25,13 @@ final class StatisticsViewController: UIViewController {
         return tableView
     }()
     
-    private var viewModel: StatisticsCollectionsViewModelProtocol
+    private var sortField: StatisticsSortFields = .byRating
+    
+    private var viewModel: StatisticsViewModelProtocol
     
     // MARK: - Lifecycle
     
-    init(viewModel: StatisticsCollectionsViewModelProtocol) {
+    init(viewModel: StatisticsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         bind()
@@ -45,7 +47,8 @@ final class StatisticsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        viewModel.getData(sortField: .byRating)
+        UIBlockingProgressHUD.animate()
+        viewModel.getData(sortField: sortField)
     }
     
     private func setupViewController() {
@@ -73,8 +76,16 @@ final class StatisticsViewController: UIViewController {
     
     private func bind() {
         viewModel.updateData = { [weak self] update in
+            UIBlockingProgressHUD.dismiss()
             guard let self else { return }
-            self.tableView.reloadData()
+            if update {
+                self.tableView.reloadData()
+            } else {
+                AlertPresenter.loadDataError(delegate: self) {
+                    UIBlockingProgressHUD.animate()
+                    self.viewModel.getData(sortField: self.sortField)
+                }
+            }
         }
     }
     
@@ -82,6 +93,8 @@ final class StatisticsViewController: UIViewController {
     
     @objc private func didTapSortButton() {
         AlertPresenter.statisticsSort(delegate: self) { [weak self] sortField in
+            UIBlockingProgressHUD.animate()
+            self?.sortField = sortField
             self?.viewModel.getData(sortField: sortField)
         }
     }
@@ -95,7 +108,7 @@ extension StatisticsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfItemsInSection(section)
+        return viewModel.numberOfRowsInSection(section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -112,7 +125,8 @@ extension StatisticsViewController: UITableViewDataSource {
 
 extension StatisticsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let statisticsUserViewController = StatisticsUserViewController(viewModel: StatisticsUserViewModel(at: indexPath))
+        guard let model = viewModel.model(at: indexPath) as? StatisticsUser else { return }
+        let statisticsUserViewController = StatisticsUserViewController(viewModel: StatisticsUserViewModel(id: model.id))
         statisticsUserViewController.dismissClosure = { [weak self] in
             self?.tabBarController?.tabBar.isHidden = false
         }

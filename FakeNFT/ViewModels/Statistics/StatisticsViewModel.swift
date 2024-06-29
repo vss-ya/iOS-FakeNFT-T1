@@ -7,26 +7,30 @@
 
 import Foundation
 
-final class StatisticsViewModel: StatisticsCollectionsViewModelProtocol {
+final class StatisticsViewModel: StatisticsViewModelProtocol {
     private let dataStore = StatisticsDataStore.shared
     
     var updateData: Binding<Bool>?
+    
+    private var users: [StatisticsUser] = []
     
     var numberOfSections: Int {
         return 1
     }
     
     func getData(sortField: StatisticsSortFields) {
-        dataStore.getUsers(sortField: sortField) { [weak self] result in
-            self?.updateData?(result)
+        dataStore.getUsers(sortField: sortField) { [weak self] users in
+            guard let self else { return }
+            self.users = users
+            self.updateData?(!users.isEmpty)
         }
     }
     
-    func numberOfItemsInSection(_ section: Int) -> Int {
-        return dataStore.users.count
+    func numberOfRowsInSection(_ section: Int) -> Int {
+        return users.count
     }
     
     func model(at indexPath: IndexPath) -> Decodable {
-        return dataStore.users[indexPath.row]
+        return users[indexPath.row]
     }
 }
