@@ -46,6 +46,8 @@
 		5D91B30C2C263B8800E08877 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B30B2C263B8800E08877 /* Binding.swift */; };
 		5D91B3112C30715F00E08877 /* DeleteConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3102C30715F00E08877 /* DeleteConfirmationViewController.swift */; };
 		5D91B3132C30A73A00E08877 /* PutOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3122C30A73A00E08877 /* PutOrderRequest.swift */; };
+		5D91B3162C31DD2C00E08877 /* CurrencyPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3152C31DD2C00E08877 /* CurrencyPickerViewController.swift */; };
+		5D91B3182C31DE7B00E08877 /* CurrencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */; };
 		5DC7C5DA2C222C34000147D9 /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC7C5D92C222C34000147D9 /* CartViewController.swift */; };
 		5DC7C5DC2C22300E000147D9 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC7C5DB2C22300E000147D9 /* Order.swift */; };
 		5DC7C5DE2C223059000147D9 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC7C5DD2C223059000147D9 /* Currency.swift */; };
@@ -114,6 +116,8 @@
 		5D91B30B2C263B8800E08877 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		5D91B3102C30715F00E08877 /* DeleteConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteConfirmationViewController.swift; sourceTree = "<group>"; };
 		5D91B3122C30A73A00E08877 /* PutOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutOrderRequest.swift; sourceTree = "<group>"; };
+		5D91B3152C31DD2C00E08877 /* CurrencyPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyPickerViewController.swift; sourceTree = "<group>"; };
+		5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyViewModel.swift; sourceTree = "<group>"; };
 		5DC7C5D92C222C34000147D9 /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		5DC7C5DB2C22300E000147D9 /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
 		5DC7C5DD2C223059000147D9 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
@@ -357,9 +361,19 @@
 			path = Enums;
 			sourceTree = "<group>";
 		};
+		5D91B3142C31DBE600E08877 /* Currencies */ = {
+			isa = PBXGroup;
+			children = (
+				5D91B3152C31DD2C00E08877 /* CurrencyPickerViewController.swift */,
+				5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */,
+			);
+			path = Currencies;
+			sourceTree = "<group>";
+		};
 		5DC7C5D82C222C01000147D9 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
+				5D91B3142C31DBE600E08877 /* Currencies */,
 				5DC7C5D92C222C34000147D9 /* CartViewController.swift */,
 				5DC7C5DF2C2238BB000147D9 /* CartViewControllerCell.swift */,
 				5D91B3102C30715F00E08877 /* DeleteConfirmationViewController.swift */,
@@ -579,6 +593,7 @@
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
 				5DC7C5DC2C22300E000147D9 /* Order.swift in Sources */,
+				5D91B3182C31DE7B00E08877 /* CurrencyViewModel.swift in Sources */,
 				3F68069729CBBAF100B4F915 /* AppDelegate.swift in Sources */,
 				3F68069929CBBAF100B4F915 /* SceneDelegate.swift in Sources */,
 				0C79EE6C2A76DE2E00EE90EA /* ServicesAssemly.swift in Sources */,
@@ -593,6 +608,7 @@
 				5D91B30C2C263B8800E08877 /* Binding.swift in Sources */,
 				3F6806D329CBBE9600B4F915 /* NetworkRequest.swift in Sources */,
 				0CFCB7492A7808900009A829 /* TestCatalogController.swift in Sources */,
+				5D91B3162C31DD2C00E08877 /* CurrencyPickerViewController.swift in Sources */,
 				5DC7C5DA2C222C34000147D9 /* CartViewController.swift in Sources */,
 				5DC7C5DE2C223059000147D9 /* Currency.swift in Sources */,
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,

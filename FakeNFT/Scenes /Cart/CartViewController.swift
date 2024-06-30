@@ -27,7 +27,7 @@ final class CartViewController: UIViewController, LoadingView {
         let view = UIView()
         view.backgroundColor = .yaLightGrayLight
         view.layer.cornerRadius = 12
-        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMinYCorner]
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.isHidden = true
         return view
     }()
@@ -61,6 +61,7 @@ final class CartViewController: UIViewController, LoadingView {
         button.setTitleColor(.primary, for: .normal)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(paymentButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -125,8 +126,10 @@ final class CartViewController: UIViewController, LoadingView {
         viewModel.isLoadingBinding = { [weak self] isLoading in
             guard let self = self else { return }
             if !isLoading {
+                self.checkIfCartIsEmpty()
                 self.hideLoading()
             } else {
+                [self.orderTableView, self.totalContainerView, self.paymentButton, self.navigationBar, self.emptyCartLabel].forEach { $0.isHidden = true }
                 self.showLoading()
             }
         }
@@ -253,6 +256,14 @@ final class CartViewController: UIViewController, LoadingView {
         }
         [sortByPriceAction, sortByRatingAction, sortByNameAction, closeAction].forEach { sortSheet.addAction($0) }
         present(sortSheet, animated: true, completion: nil)
+    }
+    
+    @objc private func paymentButtonTapped() {
+        let networkClient = DefaultNetworkClient()
+        let currencyViewModel = CurrencyViewModel(networkClient: networkClient)
+        let currencyPickerViewController = CurrencyPickerViewController(currencyViewModel: currencyViewModel)
+        currencyPickerViewController.modalPresentationStyle = .fullScreen
+        self.present(currencyPickerViewController, animated: true)
     }
 }
 
