@@ -28,14 +28,15 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
     )
     
     private var currencyViewModel: CurrencyViewModel
+    private var currencies: [Currency] = []
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     
     private lazy var currencyCollectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 186, right: 0)
         collectionView.backgroundColor = .systemBackground
         //collectionView.showsVerticalScrollIndicator = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "currencyCell")
+        collectionView.register(CurrencyPickerCell.self, forCellWithReuseIdentifier: "currencyCell")
         return collectionView
     }()
     
@@ -107,7 +108,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         view.backgroundColor = .systemBackground
         addElements()
         setConstraints()
-    
+        currencies = MockCurrencies().currencies
         currencyCollectionView.dataSource = self
         currencyCollectionView.delegate = self
     }
@@ -160,12 +161,15 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
 
 extension CurrencyPickerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        8
+        return currencies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? UICollectionViewCell else { return UICollectionViewCell() }
-        //cell.delegate = self
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "currencyCell", for: indexPath) as? CurrencyPickerCell else {
+            return UICollectionViewCell()
+        }
+        let currency = currencies[indexPath.row]
+        cell.configure(currency: currency)
         return cell
     }
 }
@@ -180,7 +184,3 @@ extension CurrencyPickerViewController: UICollectionViewDelegateFlowLayout {
         return collectionParams.cellSpacing
     }
 }
-
-   
-    
-
