@@ -96,6 +96,11 @@ final class CartViewController: UIViewController, LoadingView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.getOrder()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -103,11 +108,11 @@ final class CartViewController: UIViewController, LoadingView {
         calculateTotal()
         addElements()
         setConstraints()
-        checkIfCartIsEmpty()
         bindViewModel()
         createNavigationBar()
         orderTableView.dataSource = self
         orderTableView.delegate = self
+        checkIfCartIsEmpty()
     }
     
     private func bindViewModel() {
@@ -217,8 +222,8 @@ final class CartViewController: UIViewController, LoadingView {
         view.addSubview(navigationBar)
     }
     
-    private func didTapDeleteButton(image: UIImage) {
-        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image)
+    private func didTapDeleteButton(image: UIImage, id: String) {
+        let deleteConfirmationViewController = DeleteConfirmationViewController(image: image, viewModel: viewModel, id: id)
         deleteConfirmationViewController.modalPresentationStyle = .overCurrentContext
         deleteConfirmationViewController.modalTransitionStyle = .crossDissolve
         present(deleteConfirmationViewController, animated: true, completion: nil)
@@ -266,7 +271,7 @@ extension CartViewController: UITableViewDataSource {
         cell.configure(nft: nft)
         cell.deleteButtonAction = { [weak self] image in
             guard let self = self else { return }
-            self.didTapDeleteButton(image: image)
+            self.didTapDeleteButton(image: image, id: nft.id)
         }
         return cell
     }

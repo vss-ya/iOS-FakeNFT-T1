@@ -5,7 +5,9 @@ import UIKit
 final class DeleteConfirmationViewController: UIViewController {
     
     private let image: UIImage
-    
+    private let viewModel: CartViewModel
+    private let id: String
+ 
     private lazy var confirmationView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -52,8 +54,10 @@ final class DeleteConfirmationViewController: UIViewController {
         return button
     }()
     
-    init(image: UIImage) {
+    init(image: UIImage, viewModel: CartViewModel, id: String) {
         self.image = image
+        self.viewModel = viewModel
+        self.id = id
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -116,6 +120,7 @@ final class DeleteConfirmationViewController: UIViewController {
     }
     
     @objc func deleteButtonTapped() {
+        viewModel.deleteNftFromOrder(id: self.id)
         dismiss(animated: true)
     }
     

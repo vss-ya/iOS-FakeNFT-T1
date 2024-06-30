@@ -14,8 +14,4 @@ protocol NetworkRequest {
     var dto: Encodable? { get }
 }
 
-// default values
-extension NetworkRequest {
-    var dto: Encodable? { nil }
-}
 
