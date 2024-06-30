@@ -220,7 +220,6 @@ final class CartViewController: UIViewController, LoadingView {
         sortedButton.tintColor = .textPrimary
         navItem.rightBarButtonItem = sortedButton
         
-        
         navigationBar.setItems([navItem], animated: false)
         view.addSubview(navigationBar)
     }

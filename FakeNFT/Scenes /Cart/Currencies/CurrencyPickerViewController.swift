@@ -106,6 +106,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        createNavigationBar()
         addElements()
         setConstraints()
         currencies = MockCurrencies().currencies
@@ -128,7 +129,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
     
     private func setConstraints() {
         NSLayoutConstraint.activate([
-            currencyCollectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 108),
+            currencyCollectionView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 20),
             currencyCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -186),
             currencyCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             currencyCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -156,6 +157,33 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor)
         ])
+    }
+    
+    private func createNavigationBar() {
+        navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 56, width: view.frame.width, height: 42))
+        
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.backgroundColor = .primary
+        navBarAppearance.shadowColor = .clear
+        navigationBar.standardAppearance = navBarAppearance
+        
+        let backButton = UIBarButtonItem(
+            image: UIImage(named: "backward"),
+            style: .plain,
+            target: self,
+            action: #selector(self.backButtonTapped)
+        )
+        backButton.tintColor = .textPrimary
+        
+        let navItem = UINavigationItem(title: "Выберите способ оплаты")
+        navItem.leftBarButtonItem = backButton
+        
+        navigationBar.setItems([navItem], animated: false)
+        view.addSubview(navigationBar)
+    }
+    
+    @objc private func backButtonTapped() {
+        self.dismiss(animated: true)
     }
 }
 
