@@ -109,12 +109,12 @@ final class FavoritesNftViewModel: FavoritesNftViewModelProtocol {
                     print("Failed to fetch NFTs: \(error)")
                 }
             }
-            dg.notify(queue: .global()) { [weak self] in
-                nfts.sort(by: { $0.rating > $1.rating })
-                DispatchQueue.main.async {
-                    self?.nfts = nfts
-                    self?.onDidLoad?(nfts)
-                }
+        }
+        dg.notify(queue: .global()) { [weak self] in
+            nfts.sort(by: { $0.rating > $1.rating })
+            DispatchQueue.main.async {
+                self?.nfts = nfts
+                self?.onDidLoad?(nfts)
             }
         }
     }
