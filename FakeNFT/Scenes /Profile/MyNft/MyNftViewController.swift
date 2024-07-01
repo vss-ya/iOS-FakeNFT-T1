@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ProgressHUD
 
 final class MyNftViewController: UIViewController {
     
@@ -123,15 +122,15 @@ private extension MyNftViewController {
     }
     
     func showError(_ error: Error) {
-        ProgressHUD.showError("\(error.localizedDescription)")
+        UIBlockingProgressHUD.showError(error)
     }
 
     func showLoading() {
-        ProgressHUD.show()
+        UIBlockingProgressHUD.show()
     }
 
     func hideLoading() {
-        ProgressHUD.dismiss()
+        UIBlockingProgressHUD.dismiss()
     }
     
 }

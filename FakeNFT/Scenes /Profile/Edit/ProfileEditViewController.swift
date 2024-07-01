@@ -7,7 +7,6 @@
 
 import UIKit
 import Kingfisher
-import ProgressHUD
 
 final class ProfileEditViewController: UIViewController {
     
@@ -216,15 +215,15 @@ private extension ProfileEditViewController {
     }
     
     func showError(_ error: Error) {
-        ProgressHUD.showError("\(error.localizedDescription)")
+        UIBlockingProgressHUD.showError(error)
     }
 
     func showLoading() {
-        ProgressHUD.show()
+        UIBlockingProgressHUD.show()
     }
 
     func hideLoading() {
-        ProgressHUD.dismiss()
+        UIBlockingProgressHUD.dismiss()
     }
     
 }

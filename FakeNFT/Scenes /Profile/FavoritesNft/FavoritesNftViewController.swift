@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import ProgressHUD
 
 final class FavoritesNftViewController: UIViewController {
     
@@ -103,15 +102,15 @@ final class FavoritesNftViewController: UIViewController {
     }
     
     func showError(_ error: Error) {
-        ProgressHUD.showError("\(error.localizedDescription)")
+        UIBlockingProgressHUD.showError(error)
     }
 
     func showLoading() {
-        ProgressHUD.show()
+        UIBlockingProgressHUD.show()
     }
 
     func hideLoading() {
-        ProgressHUD.dismiss()
+        UIBlockingProgressHUD.dismiss()
     }
     
 }
@@ -143,6 +142,7 @@ extension FavoritesNftViewController: UICollectionViewDataSource {
         let nft = viewModel.nfts[indexPath.row]
         cell.configure(with: nft)
         cell.onLike = { [unowned self] in
+            showLoading()
             viewModel.dislike(nft: nft)
         }
         return cell
