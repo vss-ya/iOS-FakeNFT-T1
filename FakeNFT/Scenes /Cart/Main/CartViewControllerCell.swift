@@ -6,6 +6,8 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
     
     //MARK: - Properties
     
+    var deleteButtonAction: ((UIImage) -> Void)?
+    
     private lazy var nftImage: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 12
@@ -24,7 +26,6 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
     private lazy var ratingStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        //stackView.alignment = .fill
         stackView.distribution = .fillEqually
         stackView.backgroundColor = .systemBackground
         stackView.spacing = 2
@@ -117,7 +118,7 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
         ])
     }
     
-    private func loadAvatar(url: URL) {
+    private func loadImage(url: URL) {
         nftImage.kf.indicatorType = .activity
         let processor = RoundCornerImageProcessor(cornerRadius: 12)
         nftImage.kf.setImage(
@@ -135,14 +136,14 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
     }
     
     @objc private func deleteNftButtonTapped() {
-        print("Кнопка удаления товара нажата")
+        deleteButtonAction?(self.nftImage.image ?? UIImage())
     }
     
     // MARK: - Internal func
     
     func configure(nft: Nft) {
         guard let url = nft.images.first else { return }
-        loadAvatar(url: url)
+        loadImage(url: url)
         setRatingStackView(rating: nft.rating)
         nftNameLabel.text = nft.name
         nftPriceLabel.text = "\(nft.price) ETH"
