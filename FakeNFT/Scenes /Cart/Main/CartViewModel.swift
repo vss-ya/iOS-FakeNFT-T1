@@ -4,8 +4,8 @@ final class CartViewModel {
     
     //MARK: - Properties
     
-    private var networkClient: NetworkClient
-    private var nftService: NftService
+    private let networkClient: NetworkClient
+    private let nftService: NftService
     private var order: Order?
     private(set) var orderedNfts: [Nft] = [] {
         didSet {
@@ -82,9 +82,9 @@ final class CartViewModel {
     func sortNfts(by predicat: Predicate) -> [Nft] {
         switch predicat {
         case .byPrice:
-            return orderedNfts.sorted { $0.price < $1.price }
+            return orderedNfts.sorted { $0.price > $1.price }
         case .byRating:
-            return orderedNfts.sorted { $0.rating < $1.rating }
+            return orderedNfts.sorted { $0.rating > $1.rating }
         case .byName:
             return orderedNfts.sorted { $0.name < $1.name }
         }
@@ -92,7 +92,7 @@ final class CartViewModel {
     
     func deleteNftFromOrder(id: String) {
         guard let order = order else { return }
-        let newOder = order.nfts.filter({ $0 != id })
+        let newOder = order.nfts.filter { $0 != id }
         updateOrder(newNfts: newOder)
     }
 }

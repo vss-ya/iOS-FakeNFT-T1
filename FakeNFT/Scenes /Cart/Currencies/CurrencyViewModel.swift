@@ -4,7 +4,7 @@ final class CurrencyViewModel {
     
     //MARK: - Properties
     
-    private var networkClient: NetworkClient
+    private let networkClient: NetworkClient
     private(set) var currencies: [Currency] = [] {
         didSet {
             currenciesBinding?(currencies)

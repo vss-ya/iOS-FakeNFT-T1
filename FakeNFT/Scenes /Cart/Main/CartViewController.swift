@@ -274,8 +274,8 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartViewControllerCell = orderTableView.dequeueReusableCell()
         var nfts = viewModel.orderedNfts
-        if sortByPredicate != nil {
-            nfts = viewModel.sortNfts(by: sortByPredicate!)
+        if let sortByPredicate {
+            nfts = viewModel.sortNfts(by: sortByPredicate)
         }
         let nft = nfts[indexPath.row]
         cell.configure(nft: nft)

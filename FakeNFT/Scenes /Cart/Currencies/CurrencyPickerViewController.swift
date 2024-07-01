@@ -3,22 +3,6 @@ import UIKit
 
 final class CurrencyPickerViewController: UIViewController, LoadingView {
     
-    private struct CollectionParams {
-        let cellCount: Int
-        let height: CGFloat
-        let leftInset: CGFloat
-        let rightInset: CGFloat
-        let cellSpacing: CGFloat
-        
-        init(cellCount: Int, height: CGFloat, leftInset: CGFloat, rightInset: CGFloat, cellSpacing: CGFloat) {
-            self.cellCount = cellCount
-            self.height = height
-            self.leftInset = leftInset
-            self.rightInset = rightInset
-            self.cellSpacing = cellSpacing
-        }
-    }
-    
     private let collectionParams = CollectionParams(
         cellCount: 2,
         height: 46,
@@ -27,7 +11,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         cellSpacing: 7
     )
     
-    private var currencyViewModel: CurrencyViewModel
+    private let currencyViewModel: CurrencyViewModel
     private var currencies: [Currency] = []
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     
@@ -35,7 +19,6 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 186, right: 0)
         collectionView.backgroundColor = .systemBackground
-        //collectionView.showsVerticalScrollIndicator = false
         collectionView.register(CurrencyPickerCell.self, forCellWithReuseIdentifier: "currencyCell")
         return collectionView
     }()
@@ -109,7 +92,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         createNavigationBar()
         addElements()
         setConstraints()
-        currencies = MockCurrencies().currencies
+        currencies = MockCurrencies.currencies
         currencyCollectionView.dataSource = self
         currencyCollectionView.delegate = self
     }
@@ -188,12 +171,21 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
 }
 
 extension CurrencyPickerViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
         return currencies.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "currencyCell", for: indexPath) as? CurrencyPickerCell else {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "currencyCell",
+            for: indexPath
+        ) as? CurrencyPickerCell else {
             return UICollectionViewCell()
         }
         let currency = currencies[indexPath.row]
@@ -203,12 +195,20 @@ extension CurrencyPickerViewController: UICollectionViewDataSource {
 }
 
 extension CurrencyPickerViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         return CGSize(width: (collectionView.bounds.width - collectionParams.cellSpacing) / CGFloat(collectionParams.cellCount),
                       height: collectionParams.height)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
         return collectionParams.cellSpacing
     }
 }
