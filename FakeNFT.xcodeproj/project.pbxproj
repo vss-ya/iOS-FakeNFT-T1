@@ -45,6 +45,7 @@
 		57511FD02C2D3FF7004B9BEC /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57511FCF2C2D3FF7004B9BEC /* Profile.swift */; };
 		57511FD22C2D402F004B9BEC /* ProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57511FD12C2D402F004B9BEC /* ProfileRequest.swift */; };
 		57511FD42C2D40DA004B9BEC /* ProfileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57511FD32C2D40DA004B9BEC /* ProfileStorage.swift */; };
+		57511FE62C32A8AA004B9BEC /* GeneratedAssetSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57511FE52C32A8AA004B9BEC /* GeneratedAssetSymbols.swift */; };
 		579606C52C2A85250071C15A /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 579606C42C2A85250071C15A /* IQKeyboardManagerSwift */; };
 		579606C72C2AA62A0071C15A /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579606C62C2AA62A0071C15A /* ProfileViewModel.swift */; };
 		579606C92C2AA7720071C15A /* ProfileEditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579606C82C2AA7720071C15A /* ProfileEditViewModel.swift */; };
@@ -124,6 +125,7 @@
 		57511FCF2C2D3FF7004B9BEC /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		57511FD12C2D402F004B9BEC /* ProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRequest.swift; sourceTree = "<group>"; };
 		57511FD32C2D40DA004B9BEC /* ProfileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStorage.swift; sourceTree = "<group>"; };
+		57511FE52C32A8AA004B9BEC /* GeneratedAssetSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedAssetSymbols.swift; sourceTree = "<group>"; };
 		579606C62C2AA62A0071C15A /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		579606C82C2AA7720071C15A /* ProfileEditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewModel.swift; sourceTree = "<group>"; };
 		579606CA2C2AA7880071C15A /* FavoritesNftViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesNftViewModel.swift; sourceTree = "<group>"; };
@@ -382,6 +384,14 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		57511FE42C32A889004B9BEC /* XCode */ = {
+			isa = PBXGroup;
+			children = (
+				57511FE52C32A8AA004B9BEC /* GeneratedAssetSymbols.swift */,
+			);
+			path = XCode;
+			sourceTree = "<group>";
+		};
 		579606C32C2A85250071C15A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -400,6 +410,7 @@
 		57D66F512C21D76100B73B18 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				57511FE42C32A889004B9BEC /* XCode */,
 				57D66F652C24557000B73B18 /* AboutDeveloper */,
 				57D66F592C240B2600B73B18 /* Edit */,
 				57D66F602C24521900B73B18 /* FavoritesNft */,
@@ -667,6 +678,7 @@
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				579606C72C2AA62A0071C15A /* ProfileViewModel.swift in Sources */,
 				57511FD42C2D40DA004B9BEC /* ProfileStorage.swift in Sources */,
+				57511FE62C32A8AA004B9BEC /* GeneratedAssetSymbols.swift in Sources */,
 				57D66F5B2C240B5800B73B18 /* ProfileEditViewController.swift in Sources */,
 				57511FCE2C2D3FE3004B9BEC /* ProfileService.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
@@ -749,6 +761,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -810,6 +823,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;

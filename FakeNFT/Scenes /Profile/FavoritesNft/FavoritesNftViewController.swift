@@ -80,7 +80,7 @@ extension FavoritesNftViewController: UICollectionViewDataSource {
             withReuseIdentifier: FavoritesNftCollectionViewCell.reuseIdentifier,
             for: indexPath
         ) as? FavoritesNftCollectionViewCell
-        guard let cell else {
+        guard let cell = cell else {
             return UICollectionViewCell()
         }
         return cell

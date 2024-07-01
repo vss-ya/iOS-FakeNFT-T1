@@ -155,7 +155,7 @@ extension MyNftViewController: UITableViewDataSource {
             withIdentifier: MyNftTableViewCell.reuseIdentifier,
             for: indexPath
         ) as? MyNftTableViewCell
-        guard let cell else {
+        guard let cell = cell else {
             return UITableViewCell()
         }
         return cell

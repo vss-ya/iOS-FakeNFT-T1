@@ -210,7 +210,7 @@ private extension ProfileEditViewController {
         { [weak self] _ in
             let textField = alert.textFields?[0]
             let urlString = textField?.text
-            guard let self, let textField, let urlString else {
+            guard let self = self, let textField = textField, let urlString = urlString else {
                 return
             }
             alert.dismiss(animated: true)
