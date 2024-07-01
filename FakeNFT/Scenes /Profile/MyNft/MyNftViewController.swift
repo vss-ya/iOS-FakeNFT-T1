@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class MyNftViewController: UIViewController {
     
@@ -29,7 +30,6 @@ final class MyNftViewController: UIViewController {
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .ypWhite
         tableView.register(MyNftTableViewCell.self,
                            forCellReuseIdentifier: MyNftTableViewCell.reuseIdentifier)
@@ -37,6 +37,14 @@ final class MyNftViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         return tableView
+    }()
+    
+    private lazy var noMyNftLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .ypBlack
+        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.text = L10n.Profile.noMyNft
+        return label
     }()
     
     private let viewModel: MyNftViewModelProtocol
@@ -55,6 +63,7 @@ final class MyNftViewController: UIViewController {
         super.viewDidLoad()
         
         setup()
+        load()
     }
     
 }
@@ -65,6 +74,7 @@ private extension MyNftViewController {
     func setup() {
         setupViews()
         setupConstraints()
+        bind()
     }
     
     func setupViews() {
@@ -72,8 +82,11 @@ private extension MyNftViewController {
         navigationItem.leftBarButtonItem = .init(customView: backButton)
         navigationItem.rightBarButtonItem = .init(customView: sortButton)
         view.backgroundColor = .ypWhite
-        
-        view.addSubview(tableView)
+        noMyNftLabel.isHidden = true
+        [tableView, noMyNftLabel].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
     }
     
     func setupConstraints() {
@@ -82,7 +95,43 @@ private extension MyNftViewController {
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            noMyNftLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+            noMyNftLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
         ])
+    }
+    
+    func bind() {
+        viewModel.onDidLoad = { [weak self](nfts) in
+            guard let self else { return }
+            didLoad()
+        }
+        viewModel.onDidLoadWithError = { [weak self](error) in
+            guard let self else { return }
+            showError(error)
+        }
+    }
+    
+    func load() {
+        showLoading()
+        viewModel.load()
+    }
+    
+    func didLoad() {
+        tableView.reloadData()
+        noMyNftLabel.isHidden = !viewModel.nfts.isEmpty
+        hideLoading()
+    }
+    
+    func showError(_ error: Error) {
+        ProgressHUD.showError("\(error.localizedDescription)")
+    }
+
+    func showLoading() {
+        ProgressHUD.show()
+    }
+
+    func hideLoading() {
+        ProgressHUD.dismiss()
     }
     
 }
@@ -105,18 +154,27 @@ private extension MyNftViewController {
             title: L10n.Profile.byPrice,
             style: .default
         ) { [weak self] _ in
+            guard let self else { return }
+            showLoading()
+            viewModel.sort(.byPrice)
         }
         
         let byRatingAction = UIAlertAction(
             title: L10n.Profile.byRating,
             style: .default
         ) { [weak self] _ in
+            guard let self else { return }
+            showLoading()
+            viewModel.sort(.byRaiting)
         }
         
         let byNameAction = UIAlertAction(
             title: L10n.Profile.byName,
             style: .default
         ) { [weak self] _ in
+            guard let self else { return }
+            showLoading()
+            viewModel.sort(.byName)
         }
         
         let close = UIAlertAction(
@@ -151,7 +209,7 @@ extension MyNftViewController: UITableViewDelegate {
 extension MyNftViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return viewModel.nfts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -161,6 +219,17 @@ extension MyNftViewController: UITableViewDataSource {
         ) as? MyNftTableViewCell
         guard let cell else {
             return UITableViewCell()
+        }
+        let nft = viewModel.nfts[indexPath.row]
+        let isLiked = viewModel.isLiked(nft: nft)
+        cell.configure(with: nft, isLiked: isLiked)
+        cell.onLike = { [unowned self] in
+            showLoading()
+            viewModel.like(nft: nft)
+        }
+        cell.onDislike = { [unowned self] in
+            showLoading()
+            viewModel.dislike(nft: nft)
         }
         return cell
     }
