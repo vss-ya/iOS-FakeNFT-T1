@@ -1,18 +1,20 @@
 import Foundation
 import UIKit
 
-enum Predicate {
-    case byPrice
-    case byRating
-    case byName
+enum SortOption: String, CaseIterable {
+    case byPrice = "По цене"
+    case byRating = "По рейтингу"
+    case byName = "По названию"
 }
 
 final class CartViewController: UIViewController, LoadingView {
     
     private let servicesAssembly: ServicesAssembly
+    private let userDefaults = UserDefaults.standard
+    private let savedSorting = "savedSorting"
     private var viewModel: CartViewModel
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-    private var sortByPredicate: Predicate?
+    private var sortOption: SortOption?
     
     private lazy var orderTableView: UITableView = {
         let tableView = UITableView()
@@ -114,6 +116,7 @@ final class CartViewController: UIViewController, LoadingView {
         orderTableView.dataSource = self
         orderTableView.delegate = self
         checkIfCartIsEmpty()
+        sortOption = getSortPredicate()
     }
     
     private func bindViewModel() {
@@ -136,21 +139,20 @@ final class CartViewController: UIViewController, LoadingView {
     }
     
     private func checkIfCartIsEmpty() {
-        if viewModel.orderedNfts.isEmpty {
-            emptyCartLabel.isHidden = false
-            [orderTableView, totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = true }
-        } else {
-            emptyCartLabel.isHidden = true
-            [orderTableView, totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = false }
-        }
+        changeStateEmptyCart(isHidden: viewModel.orderedNfts.isEmpty)
+    }
+    
+    private func changeStateEmptyCart(isHidden: Bool) {
+        emptyCartLabel.isHidden = !isHidden
+        [orderTableView, totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = isHidden }
     }
     
     private func calculateTotal() {
         let count = viewModel.orderedNfts.count
-        let sum = viewModel.orderedNfts.reduce(0) { (result, nft) in
+        let totalSum = viewModel.orderedNfts.reduce(0) { (result, nft) in
             result + nft.price
         }
-        let sumString = String(format: "%.2f", sum)
+        let sumString = String(format: "%.2f", totalSum)
         nftCountLabel.text = "\(count) NFT"
         orderAmountLabel.text = sumString + " ETH"
     }
@@ -160,7 +162,6 @@ final class CartViewController: UIViewController, LoadingView {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        
         [nftCountLabel, orderAmountLabel, paymentButton].forEach {
             totalContainerView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -231,30 +232,36 @@ final class CartViewController: UIViewController, LoadingView {
         present(deleteConfirmationViewController, animated: true, completion: nil)
     }
     
+    private func getSortPredicate() -> SortOption {
+        if let savedSortingString = userDefaults.string(forKey: savedSorting),
+           let savedSorting = SortOption(rawValue: savedSortingString) {
+            return savedSorting
+        }
+        return .byName
+    }
     
     @objc private func sortedButtonTapped() {
         let sortSheet = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
-        let sortByPriceAction = UIAlertAction(title: "По цене", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            self.sortByPredicate = .byPrice
-            self.orderTableView.reloadData()
-        }
-        let sortByRatingAction = UIAlertAction(title: "По рейтингу", style: .default) { [weak self] _ in
-            guard let self else { return }
-            self.sortByPredicate = .byRating
-            self.orderTableView.reloadData()
-        }
-        let sortByNameAction = UIAlertAction(title: "По названию", style: .default) { [weak self] _ in
-            guard let self else { return }
-            self.sortByPredicate = .byName
-            self.orderTableView.reloadData()
+        for option in SortOption.allCases {
+            addAction(to: sortSheet, sortPredicate: option, isSelected: option == sortOption)
         }
         let closeAction = UIAlertAction(title: "Закрыть", style: .cancel) { [weak self] _ in
-            guard let self else { return }
+            guard let self = self else { return }
             self.dismiss(animated: true)
         }
-        [sortByPriceAction, sortByRatingAction, sortByNameAction, closeAction].forEach { sortSheet.addAction($0) }
+        sortSheet.addAction(closeAction)
         present(sortSheet, animated: true, completion: nil)
+    }
+
+    private func addAction(to alert: UIAlertController, sortPredicate: SortOption, isSelected: Bool) {
+        let style: UIAlertAction.Style = isSelected ? .destructive : .default
+        let action = UIAlertAction(title: sortPredicate.rawValue, style: style) { [weak self] _ in
+            guard let self = self else { return }
+            self.sortOption = sortPredicate
+            self.userDefaults.set(sortPredicate.rawValue, forKey: self.savedSorting)
+            self.orderTableView.reloadData()
+        }
+        alert.addAction(action)
     }
     
     @objc private func paymentButtonTapped() {
@@ -274,8 +281,8 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartViewControllerCell = orderTableView.dequeueReusableCell()
         var nfts = viewModel.orderedNfts
-        if let sortByPredicate {
-            nfts = viewModel.sortNfts(by: sortByPredicate)
+        if let sortOption {
+            nfts = viewModel.sortNfts(by: sortOption)
         }
         let nft = nfts[indexPath.row]
         cell.configure(nft: nft)
@@ -293,6 +300,6 @@ extension CartViewController: UITableViewDelegate {
     }
 }
 
-   
-    
+
+
 

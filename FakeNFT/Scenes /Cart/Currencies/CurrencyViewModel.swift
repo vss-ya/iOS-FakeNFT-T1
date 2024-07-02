@@ -17,4 +17,4 @@ final class CurrencyViewModel {
         self.networkClient = networkClient
     }
 }
-    
+

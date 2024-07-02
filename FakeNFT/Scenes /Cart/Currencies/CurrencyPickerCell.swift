@@ -2,7 +2,7 @@ import Foundation
 import Kingfisher
 import UIKit
 
-final class CurrencyPickerCell: UICollectionViewCell {
+final class CurrencyPickerCell: UICollectionViewCell, ReuseIdentifying {
     
     //MARK: - Properties
     
@@ -24,7 +24,7 @@ final class CurrencyPickerCell: UICollectionViewCell {
         return label
     }()
     
-   
+    
     private lazy var shortNameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .yaGreenUniversal

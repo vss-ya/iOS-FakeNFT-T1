@@ -128,10 +128,10 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
     }
     
     private func setRatingStackView(rating: Int) {
-        for star in 1...5 {
+        for starNumber in 1...5 {
             let starImage = UIImageView()
             ratingStackView.addArrangedSubview(starImage)
-            starImage.image = (star > rating) ? UIImage(named: "star_no_active") : UIImage(named: "star_active")
+            starImage.image = (starNumber > rating) ? UIImage(named: "star_no_active") : UIImage(named: "star_active")
         }
     }
     

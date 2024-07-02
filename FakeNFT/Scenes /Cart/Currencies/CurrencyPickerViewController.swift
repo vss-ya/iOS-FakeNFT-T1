@@ -19,7 +19,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 186, right: 0)
         collectionView.backgroundColor = .systemBackground
-        collectionView.register(CurrencyPickerCell.self, forCellWithReuseIdentifier: "currencyCell")
+        collectionView.register(CurrencyPickerCell.self)
         return collectionView
     }()
     
@@ -97,13 +97,11 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         currencyCollectionView.delegate = self
     }
     
-   
     private func addElements() {
         [currencyCollectionView, paymentContainerView, activityIndicator].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        
         [agreementLabel, termsLabel, paymentButton].forEach {
             paymentContainerView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -182,12 +180,7 @@ extension CurrencyPickerViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "currencyCell",
-            for: indexPath
-        ) as? CurrencyPickerCell else {
-            return UICollectionViewCell()
-        }
+        let cell: CurrencyPickerCell = currencyCollectionView.dequeueReusableCell(indexPath: indexPath)
         let currency = currencies[indexPath.row]
         cell.configure(currency: currency)
         return cell

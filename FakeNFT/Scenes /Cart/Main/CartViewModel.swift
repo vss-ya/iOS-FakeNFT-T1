@@ -25,8 +25,17 @@ final class CartViewModel {
     
     func getOrder() {
         let getOrderRequest = GetOrderRequest()
+        sendRequestAndFetchResult(request: getOrderRequest)
+    }
+    
+    private func updateOrder(newNfts: [String]) {
+        let putOrderRequest = PutOrderRequest(nfts: newNfts)
+        sendRequestAndFetchResult(request: putOrderRequest)
+    }
+    
+    private func sendRequestAndFetchResult(request: NetworkRequest) {
         isLoadingBinding?(true)
-        networkClient.send(request: getOrderRequest, type: Order.self) { result in
+        networkClient.send(request: request, type: Order.self) { result in
             switch result {
             case .success(let order):
                 self.order = order
@@ -64,22 +73,7 @@ final class CartViewModel {
         }
     }
     
-    private func updateOrder(newNfts: [String]) {
-        isLoadingBinding?(true)
-        let putOrderRequest = PutOrderRequest(nfts: newNfts)
-        networkClient.send(request: putOrderRequest, type: Order.self) { result in
-            switch result {
-            case .success(let order):
-                self.order = order
-                self.getOrderedNfts()
-            case .failure(let error):
-                print(error)
-                self.isLoadingBinding?(false)
-            }
-        }
-    }
-    
-    func sortNfts(by predicat: Predicate) -> [Nft] {
+    func sortNfts(by predicat: SortOption) -> [Nft] {
         switch predicat {
         case .byPrice:
             return orderedNfts.sorted { $0.price > $1.price }
