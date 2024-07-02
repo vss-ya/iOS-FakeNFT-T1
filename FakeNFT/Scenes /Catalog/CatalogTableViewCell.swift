@@ -67,16 +67,16 @@ private extension CatalogTableViewCell {
 
 extension CatalogTableViewCell {
     func configCell(_ catalog: Catalog) {
-            let collectionCoverURL = URL(string: catalog.cover)
-            let processor = ResizingImageProcessor(
-                referenceSize: CGSize(width: self.contentView.frame.width, height: Double(CatalogConstants.catalogCoverHeight)),
-                mode: .aspectFill)
-            self.collectionImage.kf.setImage(with: collectionCoverURL, options: [.processor(processor)])
-            let collectionName = catalog.name
-            let collectionCount = catalog.nfts.count
-            self.collectionLabel.text = "\(collectionName) (\(collectionCount))"
+        let collectionCoverURL = URL(string: catalog.cover)
+        let processor = ResizingImageProcessor(
+            referenceSize: CGSize(width: self.contentView.frame.width, height: Double(CatalogConstants.catalogCoverHeight)),
+            mode: .aspectFill)
+        self.collectionImage.kf.setImage(with: collectionCoverURL, options: [.processor(processor)])
+        let collectionName = catalog.name
+        let collectionCount = catalog.nfts.count
+        self.collectionLabel.text = "\(collectionName) (\(collectionCount))"
     }
-
+    
 }
 
 

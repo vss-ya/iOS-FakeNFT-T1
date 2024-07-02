@@ -8,25 +8,44 @@
 import Foundation
 
 protocol CollectionViewModelProtocol: AnyObject {
-    func getNftNumber() -> Int
-    func getNfts() -> [Nft]
-    func getCollection(with id: String) -> Catalog?
+    var updateCollection: Binding<Bool>? { get set }
+    var nftNumber: Int { get }
+    
+    func getSelectedCollection() -> Catalog?
+    func getData()
+    func getNft(at indexPath: IndexPath) -> Nft
+    
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
-    private let nft = MokNft.shared
+    
     private let dataStore = CatalogDataStore.shared
     
-    func getNftNumber() -> Int {
-        nft.nft.count
+    var updateCollection: Binding<Bool>?
+    var nftNumber: Int = 0
+    
+    private (set) var selectedCollection: String
+    
+    init(updateCollection: Binding<Bool>? = nil, selectedCollection: String) {
+        self.updateCollection = updateCollection
+        self.selectedCollection = selectedCollection
     }
     
-    func getNfts() -> [Nft] {
-        nft.nft
+    func getSelectedCollection() -> Catalog? {
+        dataStore.getCollection(with: selectedCollection)
     }
     
-    func getCollection(with id: String) -> Catalog? {
-        dataStore.getCollection(with: id)
+    func getData() {
+        dataStore.getNft(with: selectedCollection) { [weak self] result in
+            guard let self = self else { return }
+            self.updateCollection?(result)
+            nftNumber = dataStore.collection.count
+        }
     }
+    
+    func getNft(at indexPath: IndexPath) -> Nft {
+        return  dataStore.collection[indexPath.row]
+    }
+    
     
 }

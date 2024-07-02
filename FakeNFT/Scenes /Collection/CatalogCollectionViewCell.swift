@@ -53,6 +53,7 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
@@ -60,6 +61,14 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        //        for view in ratingStack.arrangedSubviews {
+        //            ratingStack.removeArrangedSubview(view)
+        //            view.removeFromSuperview()
+        //        }
     }
     
 }
@@ -139,35 +148,30 @@ private extension CatalogCollectionViewCell {
 }
 
 extension CatalogCollectionViewCell {
-    func configCell(_ nfts: [Nft], _ indexPath: IndexPath) {
-        UIBlockingProgressHUD.show()
-        let nftImageURL = URL(string: nfts[indexPath.row].images[0])
+    func configCell(_ nft: Nft) {
+        let nftImageURL = URL(string: nft.images[0])
         let processor = ResizingImageProcessor(
             referenceSize: CGSize(width: 108, height: 108),
             mode: .aspectFill)
-        let rating = nfts[indexPath.row].rating
-        let price = String(nfts[indexPath.row].price)
+        let rating = nft.rating
+        let price = String(nft.price)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-            UIBlockingProgressHUD.dismiss()
-            self.nftImage.kf.setImage(with: nftImageURL, options: [.processor(processor)])
-            self.setRating(rating)
-            self.cartButton.setImage(UIImage(named: CatalogImages.addToCart), for: .normal)
-            self.nftNameLabel.text = nfts[indexPath.row].name
-            self.nftPriceLabel.text = "\(price) ETH"
-        })
+        nftImage.kf.setImage(with: nftImageURL, options: [.processor(processor)])
+        cartButton.setImage(UIImage(named: CatalogImages.addToCart), for: .normal)
+        nftNameLabel.text = nft.name
+        nftPriceLabel.text = "\(price) ETH"
+        setRating(rating)
     }
+    
     
     func setRating(_ rating: Int) {
         let maxRating = CatalogConstants.maxRating
-        let curentRating = rating
-        
         for number in 0..<maxRating {
             let ratingImage = UIImageView()
             ratingStack.addArrangedSubview(ratingImage)
-            switch number > curentRating-1 {
-            case true: ratingImage.image = UIImage(named: CatalogImages.starNoActive)
-            case false: ratingImage.image = UIImage(named: CatalogImages.starActive)
+            switch number < rating {
+            case true: ratingImage.image = UIImage(named: CatalogImages.starActive)
+            case false: ratingImage.image = UIImage(named: CatalogImages.starNoActive)
             }
         }
     }
