@@ -1,4 +1,3 @@
-
 import Foundation
 
 struct PutOrderRequest: NetworkRequest {
@@ -12,11 +11,10 @@ struct PutOrderRequest: NetworkRequest {
        RequestConstants.token
     }
     var dto: Encodable?
-    
+
     init(nfts: [String]) {
         let nftsString = nfts.joined(separator: ",")
         let bodyString = nfts.isEmpty ? "" : "nfts=\(nftsString)"
         self.dto = bodyString.data(using: .utf8)
     }
 }
-

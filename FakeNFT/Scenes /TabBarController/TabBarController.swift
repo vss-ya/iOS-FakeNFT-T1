@@ -9,19 +9,19 @@ final class TabBarController: UITabBarController {
         image: UIImage(systemName: "person.crop.circle.fill"),
         tag: 0
     )
-    
+
     private let catalogTabBarItem = UITabBarItem(
         title: L10n.Tab.catalog,
         image: UIImage(systemName: "rectangle.stack.fill"),
         tag: 0
     )
-    
+
     private let cartTabBarItem = UITabBarItem(
         title: L10n.Tab.cart,
         image: UIImage(systemName: "basket.fill"),
         tag: 0
     )
-    
+
     private let statisticsTabBarItem = UITabBarItem(
         title: L10n.Tab.statistics,
         image: UIImage(systemName: "flag.2.crossed.fill"),
@@ -36,13 +36,13 @@ final class TabBarController: UITabBarController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let profileController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         let catalogController = TestCatalogViewController(servicesAssembly: servicesAssembly)
-        
+
         let networkClient = DefaultNetworkClient()
         let storage = NftStorageImpl()
         let nftService = NftServiceImpl(networkClient: networkClient, storage: storage)
@@ -52,7 +52,7 @@ final class TabBarController: UITabBarController {
         profileController.tabBarItem = profileTabBarItem
         catalogController.tabBarItem = catalogTabBarItem
         cartController.tabBarItem = cartTabBarItem
-        
+
         statisticsController.tabBarItem = statisticsTabBarItem
 
         viewControllers = [profileController, catalogController, cartController, statisticsController]

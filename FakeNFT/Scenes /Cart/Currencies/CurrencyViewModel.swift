@@ -1,9 +1,9 @@
 import Foundation
 
 final class CurrencyViewModel {
-    
-    //MARK: - Properties
-    
+
+    // MARK: - Properties
+
     private let networkClient: NetworkClient
     private(set) var currencies: [Currency] = [] {
         didSet {
@@ -12,9 +12,8 @@ final class CurrencyViewModel {
     }
     var currenciesBinding: Binding<[Currency]>?
     var isLoadingBinding: Binding<Bool>?
-    
+
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
     }
 }
-

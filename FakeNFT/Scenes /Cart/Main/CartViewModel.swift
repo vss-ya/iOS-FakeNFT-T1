@@ -1,9 +1,9 @@
 import Foundation
 
 final class CartViewModel {
-    
-    //MARK: - Properties
-    
+
+    // MARK: - Properties
+
     private let networkClient: NetworkClient
     private let nftService: NftService
     private var order: Order?
@@ -14,25 +14,25 @@ final class CartViewModel {
     }
     var orderedNftsBinding: Binding<[Nft]>?
     var isLoadingBinding: Binding<Bool>?
-    
+
     init(networkClient: NetworkClient, nftService: NftService) {
         self.networkClient = networkClient
         self.nftService = nftService
         getOrder()
     }
-    
+
     // MARK: - Function
-    
+
     func getOrder() {
         let getOrderRequest = GetOrderRequest()
         sendRequestAndFetchResult(request: getOrderRequest)
     }
-    
+
     private func updateOrder(newNfts: [String]) {
         let putOrderRequest = PutOrderRequest(nfts: newNfts)
         sendRequestAndFetchResult(request: putOrderRequest)
     }
-    
+
     private func sendRequestAndFetchResult(request: NetworkRequest) {
         isLoadingBinding?(true)
         networkClient.send(request: request, type: Order.self) { result in
@@ -46,7 +46,7 @@ final class CartViewModel {
             }
         }
     }
-    
+
     private func getOrderedNfts() {
         guard let order = order else {
             isLoadingBinding?(false)
@@ -54,7 +54,7 @@ final class CartViewModel {
         }
         var nfts: [Nft] = []
         let dispatchGroup = DispatchGroup()
-        
+
         for nftID in order.nfts {
             dispatchGroup.enter()
             nftService.loadNft(id: nftID) { result in
@@ -72,7 +72,7 @@ final class CartViewModel {
             self.orderedNfts = nfts
         }
     }
-    
+
     func sortNfts(by predicat: SortOption) -> [Nft] {
         switch predicat {
         case .byPrice:
@@ -83,12 +83,10 @@ final class CartViewModel {
             return orderedNfts.sorted { $0.name < $1.name }
         }
     }
-    
+
     func deleteNftFromOrder(id: String) {
         guard let order = order else { return }
         let newOder = order.nfts.filter { $0 != id }
         updateOrder(newNfts: newOder)
     }
 }
-
-

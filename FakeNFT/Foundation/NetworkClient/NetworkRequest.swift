@@ -13,5 +13,3 @@ protocol NetworkRequest {
     var authToken: String? { get }
     var dto: Encodable? { get }
 }
-
-
