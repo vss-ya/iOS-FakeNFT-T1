@@ -46,28 +46,24 @@ final class FavoritesNftViewModel: FavoritesNftViewModelProtocol {
     
     func load() {
         profileService.loadProfile { [weak self](result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let profile):
-                    self?.profile = profile
-                    self?.loadNfts()
-                case .failure(let error):
-                    self?.onDidLoadWithError?(error)
-                }
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+                self?.loadNfts()
+            case .failure(let error):
+                self?.onDidLoadWithError?(error)
             }
         }
     }
     
     func update(_ profile: Profile) {
         profileService.updateProfile(profile) { [weak self](result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let profile):
-                    self?.profile = profile
-                    self?.loadNfts()
-                case .failure(let error):
-                    self?.onDidLoadWithError?(error)
-                }
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+                self?.loadNfts()
+            case .failure(let error):
+                self?.onDidLoadWithError?(error)
             }
         }
     }

@@ -46,29 +46,25 @@ final class ProfileEditViewModel: ProfileEditViewModelProtocol {
     
     func load() {
         service.loadProfile { [weak self](result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let profile):
-                    self?.profile = profile
-                    self?.avatarUrl = URL(string: profile.avatar ?? "")
-                    self?.onDidLoad?(profile)
-                case .failure(let error):
-                    self?.onDidLoadWithError?(error)
-                }
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+                self?.avatarUrl = URL(string: profile.avatar ?? "")
+                self?.onDidLoad?(profile)
+            case .failure(let error):
+                self?.onDidLoadWithError?(error)
             }
         }
     }
     
     func update(_ profile: Profile) {
         service.updateProfile(profile) { [weak self](result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let profile):
-                    self?.profile = profile
-                    self?.onDidUpdate?(profile)
-                case .failure(let error):
-                    self?.onDidUpdateWithError?(error)
-                }
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+                self?.onDidUpdate?(profile)
+            case .failure(let error):
+                self?.onDidUpdateWithError?(error)
             }
         }
     }
