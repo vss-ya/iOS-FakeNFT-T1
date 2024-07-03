@@ -49,11 +49,11 @@ final class ProfileEditViewController: UIViewController {
         self.scrollView = UIScrollView()
         self.avatarImageView = viewFactory.createAvatarImageView()
         self.avatarButton = viewFactory.createAvatarButton()
-        self.nameLabel = viewFactory.createLabel(L10n.Profile.nameLabelText)
+        self.nameLabel = viewFactory.createLabel(L10n.Profile.name)
         self.nameTextField = viewFactory.createTextField()
-        self.descriptionLabel = viewFactory.createLabel(L10n.Profile.descriptionLabelText)
+        self.descriptionLabel = viewFactory.createLabel(L10n.Profile.description)
         self.descriptionTextView = viewFactory.createTextView()
-        self.linkLabel = viewFactory.createLabel(L10n.Profile.linkLabelText)
+        self.linkLabel = viewFactory.createLabel(L10n.Profile.link)
         self.linkTextField = viewFactory.createTextField()
         
         self.viewModel = viewModel

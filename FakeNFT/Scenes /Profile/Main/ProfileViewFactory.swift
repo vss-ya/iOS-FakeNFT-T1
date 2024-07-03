@@ -18,6 +18,9 @@ final class ProfileViewFactory {
     static func createAvatarImageView() -> UIImageView {
         let view = UIImageView()
         view.image = .profileAvatarMock
+        view.backgroundColor = .ypGrayUniversal
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 35
         return view
     }
     
@@ -25,7 +28,6 @@ final class ProfileViewFactory {
         let label = UILabel()
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 22, weight: .bold)
-        label.text = "Joaquin Phoenix"
         return label
     }
     
@@ -33,7 +35,6 @@ final class ProfileViewFactory {
         let label = UILabel()
         label.textColor = .ypBlack
         label.font = .systemFont(ofSize: 13, weight: .regular)
-        label.text = "Дизайнер из Казани, люблю цифровое искусство и бейглы. В моей коллекции уже 100+ NFT, и еще больше — на моём сайте. Открыт к коллаборациям."
         label.numberOfLines = 0
         return label
     }
@@ -42,7 +43,6 @@ final class ProfileViewFactory {
         let label = UILabel()
         label.textColor = .ypBlueUniversal
         label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.text = "Joaquin Phoenix.com"
         return label
     }
     
