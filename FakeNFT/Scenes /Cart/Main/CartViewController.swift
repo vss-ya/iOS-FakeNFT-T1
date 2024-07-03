@@ -4,11 +4,8 @@ import UIKit
 final class CartViewController: UIViewController, LoadingView {
 
     private let servicesAssembly: ServicesAssembly
-    private let userDefaults = UserDefaults.standard
-    private let savedSorting = "savedSorting"
     private var viewModel: CartViewModel
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-    private var sortOption: SortOption?
 
     private lazy var orderTableView: UITableView = {
         let tableView = UITableView()
@@ -109,7 +106,6 @@ final class CartViewController: UIViewController, LoadingView {
         orderTableView.dataSource = self
         orderTableView.delegate = self
         checkIfCartIsEmpty()
-        sortOption = getSortPredicate()
     }
 
     private func bindViewModel() {
@@ -233,16 +229,9 @@ final class CartViewController: UIViewController, LoadingView {
         present(deleteConfirmationViewController, animated: true, completion: nil)
     }
 
-    private func getSortPredicate() -> SortOption {
-        if let savedSortingString = userDefaults.string(forKey: savedSorting),
-           let savedSorting = SortOption(rawValue: savedSortingString) {
-            return savedSorting
-        }
-        return .byName
-    }
-
     @objc private func sortedButtonTapped() {
         let sortSheet = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        let sortOption = viewModel.getSortPredicate()
         for option in SortOption.allCases {
             addAction(to: sortSheet, sortPredicate: option, isSelected: option == sortOption)
         }
@@ -258,8 +247,7 @@ final class CartViewController: UIViewController, LoadingView {
         let style: UIAlertAction.Style = isSelected ? .destructive : .default
         let action = UIAlertAction(title: sortPredicate.rawValue, style: style) { [weak self] _ in
             guard let self = self else { return }
-            self.sortOption = sortPredicate
-            self.userDefaults.set(sortPredicate.rawValue, forKey: self.savedSorting)
+            self.viewModel.saveSorting(sortPredicate: sortPredicate)
             self.orderTableView.reloadData()
         }
         alert.addAction(action)
@@ -281,12 +269,9 @@ extension CartViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartViewControllerCell = orderTableView.dequeueReusableCell()
-        var nfts = viewModel.orderedNfts
-        if let sortOption {
-            nfts = viewModel.sortNfts(by: sortOption)
-        }
-        let nft = nfts[indexPath.row]
+        let nft = viewModel.orderedNfts[indexPath.row]
         cell.configure(nft: nft)
+        cell.selectionStyle = .none
         cell.deleteButtonAction = { [weak self] image in
             guard let self = self else { return }
             self.didTapDeleteButton(image: image, id: nft.id)

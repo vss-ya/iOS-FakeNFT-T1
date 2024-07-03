@@ -6,6 +6,8 @@ final class CartViewModel {
 
     private let networkClient: NetworkClient
     private let nftService: NftService
+    private let userDefaults = UserDefaults.standard
+    private let savedSortingKey = "savedSorting"
     private var order: Order?
     private(set) var orderedNfts: [Nft] = [] {
         didSet {
@@ -69,18 +71,32 @@ final class CartViewModel {
         }
         dispatchGroup.notify(queue: .main) {
             self.isLoadingBinding?(false)
-            self.orderedNfts = nfts
+            let sortPredicate = self.getSortPredicate()
+            self.orderedNfts = self.sortNfts(nfts: nfts, by: sortPredicate)
         }
     }
 
-    func sortNfts(by predicat: SortOption) -> [Nft] {
+    func getSortPredicate() -> SortOption {
+        if let savedSortingString = userDefaults.string(forKey: savedSortingKey),
+           let savedSorting = SortOption(rawValue: savedSortingString) {
+            return savedSorting
+        }
+        return .byName
+    }
+
+    func saveSorting(sortPredicate: SortOption) {
+        userDefaults.set(sortPredicate.rawValue, forKey: self.savedSortingKey)
+        orderedNfts = sortNfts(nfts: orderedNfts, by: sortPredicate)
+    }
+
+    func sortNfts(nfts: [Nft], by predicat: SortOption) -> [Nft] {
         switch predicat {
         case .byPrice:
-            return orderedNfts.sorted { $0.price > $1.price }
+            return nfts.sorted { $0.price > $1.price }
         case .byRating:
-            return orderedNfts.sorted { $0.rating > $1.rating }
+            return nfts.sorted { $0.rating > $1.rating }
         case .byName:
-            return orderedNfts.sorted { $0.name < $1.name }
+            return nfts.sorted { $0.name < $1.name }
         }
     }
 
