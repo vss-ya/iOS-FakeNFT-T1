@@ -1,11 +1,11 @@
 import Foundation
 
 final class CartViewModel {
-    
-    //MARK: - Properties
-    
-    private var networkClient: NetworkClient
-    private var nftService: NftService
+
+    // MARK: - Properties
+
+    private let networkClient: NetworkClient
+    private let nftService: NftService
     private var order: Order?
     private(set) var orderedNfts: [Nft] = [] {
         didSet {
@@ -14,19 +14,28 @@ final class CartViewModel {
     }
     var orderedNftsBinding: Binding<[Nft]>?
     var isLoadingBinding: Binding<Bool>?
-    
+
     init(networkClient: NetworkClient, nftService: NftService) {
         self.networkClient = networkClient
         self.nftService = nftService
         getOrder()
     }
-    
+
     // MARK: - Function
-    
-    private func getOrder() {
+
+    func getOrder() {
         let getOrderRequest = GetOrderRequest()
+        sendRequestAndFetchResult(request: getOrderRequest)
+    }
+
+    private func updateOrder(newNfts: [String]) {
+        let putOrderRequest = PutOrderRequest(nfts: newNfts)
+        sendRequestAndFetchResult(request: putOrderRequest)
+    }
+
+    private func sendRequestAndFetchResult(request: NetworkRequest) {
         isLoadingBinding?(true)
-        networkClient.send(request: getOrderRequest, type: Order.self) { result in
+        networkClient.send(request: request, type: Order.self) { result in
             switch result {
             case .success(let order):
                 self.order = order
@@ -37,7 +46,7 @@ final class CartViewModel {
             }
         }
     }
-    
+
     private func getOrderedNfts() {
         guard let order = order else {
             isLoadingBinding?(false)
@@ -45,7 +54,7 @@ final class CartViewModel {
         }
         var nfts: [Nft] = []
         let dispatchGroup = DispatchGroup()
-        
+
         for nftID in order.nfts {
             dispatchGroup.enter()
             nftService.loadNft(id: nftID) { result in
@@ -58,12 +67,26 @@ final class CartViewModel {
                 }
             }
         }
-        
         dispatchGroup.notify(queue: .main) {
-            self.orderedNfts = nfts
             self.isLoadingBinding?(false)
+            self.orderedNfts = nfts
         }
     }
+
+    func sortNfts(by predicat: SortOption) -> [Nft] {
+        switch predicat {
+        case .byPrice:
+            return orderedNfts.sorted { $0.price > $1.price }
+        case .byRating:
+            return orderedNfts.sorted { $0.rating > $1.rating }
+        case .byName:
+            return orderedNfts.sorted { $0.name < $1.name }
+        }
+    }
+
+    func deleteNftFromOrder(id: String) {
+        guard let order = order else { return }
+        let newOder = order.nfts.filter { $0 != id }
+        updateOrder(newNfts: newOder)
+    }
 }
-
-
