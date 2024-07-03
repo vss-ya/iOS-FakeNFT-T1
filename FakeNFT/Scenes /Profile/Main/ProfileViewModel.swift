@@ -37,14 +37,12 @@ final class ProfileViewModel: ProfileViewModelProtocol {
     
     func load() {
         service.loadProfile { [weak self](result) in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let profile):
-                    self?.profile = profile
-                    self?.onDidLoad?(profile)
-                case .failure(let error):
-                    self?.onDidLoadWithError?(error)
-                }
+            switch result {
+            case .success(let profile):
+                self?.profile = profile
+                self?.onDidLoad?(profile)
+            case .failure(let error):
+                self?.onDidLoadWithError?(error)
             }
         }
     }

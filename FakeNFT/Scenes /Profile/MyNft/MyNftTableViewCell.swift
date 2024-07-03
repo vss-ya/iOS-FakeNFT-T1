@@ -13,7 +13,7 @@ final class MyNftTableViewCell: UITableViewCell {
     
     private let contentStackView: UIStackView = UIStackView()
     private let infoStackView: UIStackView = UIStackView()
-    private let starsStackView: UIStackView = UIStackView()
+    private let ratingView: ProfileNftRatingView = ProfileNftRatingView()
     private let fromStackView: UIStackView = UIStackView()
     private let priceStackView: UIStackView = UIStackView()
     
@@ -40,15 +40,7 @@ final class MyNftTableViewCell: UITableViewCell {
     }
     
     private func updateRating(_ value: Int) {
-        let value = value < 0 ? 0 : (value > 5 ? 5 : value)
-        (0..<value).forEach {
-            let view = starsStackView.arrangedSubviews[$0] as? UIImageView
-            view?.image = .starActive
-        }
-        (value..<5).forEach {
-            let view = starsStackView.arrangedSubviews[$0] as? UIImageView
-            view?.image = .starNoActive
-        }
+        ratingView.updateRating(value)
     }
     
 }
@@ -73,7 +65,6 @@ private extension MyNftTableViewCell {
         
         setupContentStackView()
         setupInfoStackView()
-        setupStarsStackView()
         setupFromStackView()
         setupPriceStackView()
         
@@ -134,24 +125,9 @@ private extension MyNftTableViewCell {
         infoStackView.distribution = .fill
         infoStackView.spacing = 4
         
-        [nftNameLabel, starsStackView, fromStackView].forEach {
+        [nftNameLabel, ratingView, fromStackView].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             infoStackView.addArrangedSubview($0)
-        }
-    }
-    
-    func setupStarsStackView() {
-        starsStackView.axis = .horizontal
-        starsStackView.alignment = .fill
-        starsStackView.distribution = .fill
-        starsStackView.spacing = 2
-        
-        (0..<5).forEach {
-            let view = UIImageView()
-            view.translatesAutoresizingMaskIntoConstraints = false
-            view.accessibilityIdentifier = "start_\($0)"
-            view.image = .starNoActive
-            starsStackView.addArrangedSubview(view)
         }
     }
     

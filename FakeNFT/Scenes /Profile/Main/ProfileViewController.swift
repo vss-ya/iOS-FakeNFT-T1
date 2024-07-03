@@ -150,15 +150,12 @@ private extension ProfileViewController {
         descriptionLabel.text = profile.description
         linkLabel.text = profile.website?.absoluteString
         if let avatarURLString = profile.avatar {
-            let avatarURL = URL(string: avatarURLString)
-            if let url = avatarURL {
-                updateAvatar(url: url)
-            }
+            updateAvatar(url: URL(string: avatarURLString))
         }
         tableView.reloadData()
     }
 
-    func updateAvatar(url: URL) {
+    func updateAvatar(url: URL?) {
         let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
                                               .cacheOriginalImage]
         avatarImageView.kf.indicatorType = .activity

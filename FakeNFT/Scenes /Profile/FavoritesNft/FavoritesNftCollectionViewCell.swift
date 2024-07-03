@@ -13,7 +13,7 @@ final class FavoritesNftCollectionViewCell: UICollectionViewCell {
     
     private let contentStackView: UIStackView = UIStackView()
     private let infoStackView: UIStackView = UIStackView()
-    private let starsStackView: UIStackView = UIStackView()
+    private let ratingView: ProfileNftRatingView = ProfileNftRatingView()
     
     private let nftImageView: UIImageView = UIImageView()
     private let nftLikeButton: UIButton = UIButton()
@@ -32,15 +32,7 @@ final class FavoritesNftCollectionViewCell: UICollectionViewCell {
     }
     
     private func updateRating(_ value: Int) {
-        let value = value < 0 ? 0 : (value > 5 ? 5 : value)
-        (0..<value).forEach {
-            let view = starsStackView.arrangedSubviews[$0] as? UIImageView
-            view?.image = .starActive
-        }
-        (value..<5).forEach {
-            let view = starsStackView.arrangedSubviews[$0] as? UIImageView
-            view?.image = .starNoActive
-        }
+        ratingView.updateRating(value)
     }
     
 }
@@ -64,7 +56,6 @@ private extension FavoritesNftCollectionViewCell {
         
         setupContentStackView()
         setupInfoStackView()
-        setupStarsStackView()
         
         nftImageView.layer.masksToBounds = true
         nftImageView.layer.cornerRadius = 12
@@ -112,26 +103,11 @@ private extension FavoritesNftCollectionViewCell {
         infoStackView.distribution = .fill
         infoStackView.spacing = 4
         
-        [nftNameLabel, starsStackView, priceLabel].forEach {
+        [nftNameLabel, ratingView, priceLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             infoStackView.addArrangedSubview($0)
         }
-        infoStackView.setCustomSpacing(8, after: starsStackView)
-    }
-    
-    func setupStarsStackView() {
-        starsStackView.axis = .horizontal
-        starsStackView.alignment = .fill
-        starsStackView.distribution = .fill
-        starsStackView.spacing = 2
-        
-        (0..<5).forEach {
-            let view = UIImageView()
-            view.translatesAutoresizingMaskIntoConstraints = false
-            view.accessibilityIdentifier = "star_\($0)"
-            view.image = .starNoActive
-            starsStackView.addArrangedSubview(view)
-        }
+        infoStackView.setCustomSpacing(8, after: ratingView)
     }
     
 }

@@ -9,6 +9,10 @@ import UIKit
 
 final class MyNftViewController: UIViewController {
     
+    override var hidesBottomBarWhenPushed: Bool {
+        set {} get { true }
+    }
+    
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setImage(.profileBack, for: .normal)
