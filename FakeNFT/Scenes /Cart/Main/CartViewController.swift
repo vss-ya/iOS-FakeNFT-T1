@@ -1,12 +1,6 @@
 import Foundation
 import UIKit
 
-enum SortOption: String, CaseIterable {
-    case byPrice = "По цене"
-    case byRating = "По рейтингу"
-    case byName = "По названию"
-}
-
 final class CartViewController: UIViewController, LoadingView {
 
     private let servicesAssembly: ServicesAssembly
