@@ -23,8 +23,7 @@ protocol MyNftViewModelProtocol: AnyObject {
     
     func load()
     func sort(_ filter: ProfileNftFilter)
-    func like(nft: Nft)
-    func dislike(nft: Nft)
+    func like(nft: Nft, _ isLiked: Bool)
     func isLiked(nft: Nft) -> Bool
     
 }
@@ -81,9 +80,15 @@ final class MyNftViewModel: MyNftViewModelProtocol {
         }
     }
     
-    func like(nft: Nft) {
-        guard let profile else {
+    func like(nft: Nft, _ isLiked: Bool) {
+        guard let profile = profile else {
+            let error = NSError(domain: "Missed profile", code: 0)
+            onDidLoadWithError?(error)
             return
+        }
+        let nftIds = switch isLiked {
+        case true: Array(Set(profile.likes).union([nft.id]))
+        case false: profile.likes.filter({ $0 != nft.id })
         }
         let updatedProfile = Profile(
             id: profile.id,
@@ -92,23 +97,7 @@ final class MyNftViewModel: MyNftViewModelProtocol {
             description: profile.description,
             website: profile.website,
             nfts: profile.nfts,
-            likes: Array(Set(profile.likes).union([nft.id]))
-        )
-        update(updatedProfile)
-    }
-    
-    func dislike(nft: Nft) {
-        guard let profile else {
-            return
-        }
-        let updatedProfile = Profile(
-            id: profile.id,
-            name: profile.name,
-            avatar: profile.avatar,
-            description: profile.description,
-            website: profile.website,
-            nfts: profile.nfts,
-            likes: profile.likes.filter({ $0 != nft.id })
+            likes: nftIds
         )
         update(updatedProfile)
     }
@@ -123,9 +112,10 @@ final class MyNftViewModel: MyNftViewModelProtocol {
         let dg = DispatchGroup()
         var nfts = [Nft]()
         let nftIds = profile?.nfts ?? []
-        if nftIds.isEmpty {
+        guard !nftIds.isEmpty else {
             self.nfts = nfts
             self.onDidLoad?(nfts)
+            return
         }
         for id in nftIds {
             dg.enter()
@@ -137,7 +127,7 @@ final class MyNftViewModel: MyNftViewModelProtocol {
                 case .success(let nft):
                     nfts.append(nft)
                 case .failure(let error):
-                    print("Failed to fetch NFTs: \(error)")
+                    print("Failed to load NFTs: \(error)")
                 }
             }
         }

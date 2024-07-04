@@ -222,13 +222,9 @@ extension MyNftViewController: UITableViewDataSource {
         let nft = viewModel.nfts[indexPath.row]
         let isLiked = viewModel.isLiked(nft: nft)
         cell.configure(with: nft, isLiked: isLiked)
-        cell.onLike = { [unowned self] in
+        cell.onLike = { [unowned self](isLiked) in
             showLoading()
-            viewModel.like(nft: nft)
-        }
-        cell.onDislike = { [unowned self] in
-            showLoading()
-            viewModel.dislike(nft: nft)
+            viewModel.like(nft: nft, isLiked)
         }
         return cell
     }

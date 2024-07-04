@@ -28,8 +28,7 @@ final class MyNftTableViewCell: UITableViewCell {
     
     private var isLiked: Bool = false
     
-    var onLike: (() -> Void)?
-    var onDislike: (() -> Void)?
+    var onLike: ((Bool) -> Void)?
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -84,11 +83,7 @@ private extension MyNftTableViewCell {
     }
     
     @objc private func likeAction() {
-        if isLiked {
-            onDislike?()
-        } else {
-            onLike?()
-        }
+        onLike?(!isLiked)
     }
     
     func setupViews() {

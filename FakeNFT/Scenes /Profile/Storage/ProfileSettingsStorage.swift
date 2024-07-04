@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ProfileSettingsStorage {
+final class ProfileSettingsStorage {
     
     enum Key: String {
         case nftFilter = "profile.nft.filter"
@@ -24,5 +24,7 @@ class ProfileSettingsStorage {
             return ProfileNftFilter(rawValue: value) ?? .byRaiting
         }
     }
+    
+    private init() {}
     
 }

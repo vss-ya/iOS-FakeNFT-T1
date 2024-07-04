@@ -87,12 +87,13 @@ final class FavoritesNftViewModel: FavoritesNftViewModelProtocol {
     private func loadNfts() {
         let dg = DispatchGroup()
         var nfts = [Nft]()
-        let likes = profile?.likes ?? []
-        if likes.isEmpty {
+        let nftIds = profile?.likes ?? []
+        guard !nftIds.isEmpty else {
             self.nfts = nfts
             self.onDidLoad?(nfts)
+            return
         }
-        for id in profile?.likes ?? [] {
+        for id in nftIds {
             dg.enter()
             nftService.loadNft(id: id) {
                 defer {
