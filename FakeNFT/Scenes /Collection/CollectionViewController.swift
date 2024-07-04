@@ -87,15 +87,12 @@ final class CollectionViewController: UIViewController {
         return label
     }()
     
-    //    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    
     private lazy var collectionView: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         flowLayout.scrollDirection = .vertical
         collection.collectionViewLayout = flowLayout
-        //        collection.register(NftCollectionCell.self)
         collection.backgroundColor = .clear
         return collection
     }()
@@ -313,8 +310,18 @@ extension CollectionViewController: UICollectionViewDataSource {
             preconditionFailure("Failed to cast UICollectionViewCell as CatalogCollectionViewCell")
         }
         let nft = viewModel.getNft(at: indexPath)
-        cell.configCell(nft)
+        let isLiked = viewModel.isLiked(nft.id)
+        cell.configCell(nft, isLiked)
+        cell.delegate = self
         return cell
     }
+    
+}
+
+extension CollectionViewController: CollectionCellDelegate {
+    func tapLikeButton(_ nft: String) {
+        viewModel.didTapLike(nft)
+    }
+    
     
 }

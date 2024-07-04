@@ -21,10 +21,12 @@ final class CatalogDataStore {
     private init() {}
     
     private var task: NetworkTask?
+    private var likes: [String] = []
     private let networkClient = DefaultNetworkClient()
     
     var catalog: [Catalog] = []
     var collection: [Nft] = []
+    var userProfile: UserProfile?
     
     func getCatalog(completion: @escaping (Bool) -> Void) {
         UIBlockingProgressHUD.show()
@@ -92,7 +94,57 @@ final class CatalogDataStore {
         }
     }
     
+    func getUserProfile(completion: @escaping (Bool) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            task?.cancel()
+            let request = CatalogUserProfileRequest()
+            self.task = self.networkClient.send(
+                request: request,
+                type: UserProfile.self) { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let userProfile):
+                        self.userProfile = userProfile
+                        completion(true)
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                        completion(false)
+                    }
+                    self.task = nil
+                }
+        }
+    }
     
-    
-    
+    func updateLike(_ nft: String, completion: @escaping (Bool) -> Void ) {
+        if let user = userProfile {
+            likes = user.likes
+            let isLiked = likes.contains(nft)
+            switch isLiked {
+            case true: likes = likes.filter { $0 != nft}
+            case false: likes.append(nft)
+            }
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            task?.cancel()
+            let dataString = "likes=\(likes.joined(separator: ", "))"
+            guard let data = dataString.data(using: .utf8) else { return }
+            let request = CatalogProfileUpdateLikes(httpBody: data)
+            task = networkClient.send(request: request,
+                                      type: UserProfile.self) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(_):
+                    completion(true)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    completion(false)
+                }
+                self.task = nil
+            }
+        }
+    }
 }
+
