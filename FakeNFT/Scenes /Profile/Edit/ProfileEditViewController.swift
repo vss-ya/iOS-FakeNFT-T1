@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileEditViewController: UIViewController {
     
@@ -66,6 +67,7 @@ final class ProfileEditViewController: UIViewController {
         super.viewDidLoad()
         
         setup()
+        load()
     }
     
 }
@@ -90,6 +92,8 @@ private extension ProfileEditViewController {
         nameTextField.addTarget(self, action: #selector(tapAction), for: .primaryActionTriggered)
         linkTextField.addTarget(self, action: #selector(tapAction), for: .primaryActionTriggered)
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapAction)))
+        
+        bind()
     }
     
     func setupViews() {
@@ -165,6 +169,63 @@ private extension ProfileEditViewController {
         ])
     }
     
+    func bind() {
+        viewModel.onDidLoad = { [weak self](profile) in
+            guard let self else { return }
+            updateProfile(profile)
+        }
+        viewModel.onDidLoadWithError = { [weak self](error) in
+            guard let self else { return }
+            showError(error)
+            
+        }
+        viewModel.onDidUpdate = { [weak self](profile) in
+            guard let self else { return }
+            hideLoading()
+            onCloseCallback?()
+        }
+        viewModel.onDidUpdateWithError = { [weak self](error) in
+            guard let self else { return }
+            showError(error)
+            onCloseCallback?()
+        }
+    }
+    
+    func load() {
+        showLoading()
+        viewModel.load()
+    }
+    
+    func updateProfile(_ profile: Profile) {
+        hideLoading()
+        nameTextField.text = profile.name
+        descriptionTextView.text = profile.description
+        linkTextField.text = profile.website
+        updateAvatar(url: URL(string: profile.avatar ?? ""))
+    }
+
+    func updateAvatar(url: URL?) {
+        viewModel.updateAvatar(url)
+        
+        let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
+                                              .cacheOriginalImage]
+        avatarImageView.kf.cancelDownloadTask()
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(with: url, placeholder: UIImage.profileAvatarMock, options: options)
+    }
+    
+    func showError(_ error: Error) {
+        UIBlockingProgressHUD.showError(error)
+    }
+
+    func showLoading() {
+        UIBlockingProgressHUD.show()
+    }
+
+    func hideLoading() {
+        UIBlockingProgressHUD.dismiss()
+    }
+    
 }
 
 extension ProfileEditViewController: UITextFieldDelegate {
@@ -185,7 +246,21 @@ private extension ProfileEditViewController {
     }
     
     @objc func closeAction() {
-        onCloseCallback?()
+        guard let oldProfile = viewModel.profile else {
+            return
+        }
+        let avatar = viewModel.avatarUrl?.absoluteString
+        let profile = Profile(
+            id: oldProfile.id,
+            name: nameTextField.text ?? "",
+            avatar: avatar,
+            description: descriptionTextView.text,
+            website: linkTextField.text,
+            nfts: oldProfile.nfts,
+            likes: oldProfile.likes
+        )
+        showLoading()
+        viewModel.update(profile)
     }
     
     @objc func clearAction() {
@@ -200,19 +275,18 @@ private extension ProfileEditViewController {
             preferredStyle: .alert
         )
 
-        alert.addTextField { _ in
-            
+        alert.addTextField { [weak self] in
+            $0.text = self?.viewModel.avatarUrl?.absoluteString
         }
         
         let action = UIAlertAction(
             title: "ОK",
             style: .default)
         { [weak self] _ in
-            let textField = alert.textFields?[0]
-            let urlString = textField?.text
-            guard let self, let textField, let urlString else {
+            guard let self, let urlString = alert.textFields?[0].text else {
                 return
             }
+            updateAvatar(url: URL(string: urlString))
             alert.dismiss(animated: true)
         }
         

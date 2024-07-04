@@ -23,7 +23,6 @@ final class FavoritesNftViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.contentInset = .init(top: 20, left: 16, bottom: 20, right: 16)
         view.register(FavoritesNftCollectionViewCell.self,
                       forCellWithReuseIdentifier: FavoritesNftCollectionViewCell.reuseIdentifier)
@@ -31,6 +30,14 @@ final class FavoritesNftViewController: UIViewController {
         view.dataSource = self
         view.delegate = self
         return view
+    }()
+    
+    private lazy var noFavoritesNftLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .ypBlack
+        label.font = .systemFont(ofSize: 17, weight: .bold)
+        label.text = L10n.Profile.noFavoritesNft
+        return label
     }()
     
     private let viewModel: FavoritesNftViewModelProtocol
@@ -50,15 +57,60 @@ final class FavoritesNftViewController: UIViewController {
         
         title = L10n.Profile.favoritesNft
         navigationItem.leftBarButtonItem = .init(customView: backButton)
-
-        view.addSubview(collectionView)
+        
+        [collectionView, noFavoritesNftLabel].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview($0)
+        }
+        
+        collectionView.alwaysBounceVertical = true
+        noFavoritesNftLabel.isHidden = true
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            collectionView.bottomAnchor .constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            noFavoritesNftLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+            noFavoritesNftLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0),
         ])
+        
+        bind()
+        load()
+    }
+    
+    func bind() {
+        viewModel.onDidLoad = { [weak self](nfts) in
+            guard let self else { return }
+            didLoad()
+        }
+        viewModel.onDidLoadWithError = { [weak self](error) in
+            guard let self else { return }
+            showError(error)
+        }
+    }
+    
+    func load() {
+        showLoading()
+        viewModel.load()
+    }
+    
+    func didLoad() {
+        collectionView.reloadData()
+        noFavoritesNftLabel.isHidden = !viewModel.nfts.isEmpty
+        hideLoading()
+    }
+    
+    func showError(_ error: Error) {
+        UIBlockingProgressHUD.showError(error)
+    }
+
+    func showLoading() {
+        UIBlockingProgressHUD.show()
+    }
+
+    func hideLoading() {
+        UIBlockingProgressHUD.dismiss()
     }
     
 }
@@ -76,7 +128,7 @@ private extension FavoritesNftViewController {
 extension FavoritesNftViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return viewModel.nfts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -86,6 +138,12 @@ extension FavoritesNftViewController: UICollectionViewDataSource {
         ) as? FavoritesNftCollectionViewCell
         guard let cell else {
             return UICollectionViewCell()
+        }
+        let nft = viewModel.nfts[indexPath.row]
+        cell.configure(with: nft)
+        cell.onLike = { [unowned self] in
+            showLoading()
+            viewModel.dislike(nft: nft)
         }
         return cell
     }

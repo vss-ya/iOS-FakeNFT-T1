@@ -13,7 +13,7 @@ struct Profile: Decodable {
     let name: String
     let avatar: String?
     let description: String?
-    let website: URL?
+    let website: String?
     let nfts: [String]
     let likes: [String]
     
