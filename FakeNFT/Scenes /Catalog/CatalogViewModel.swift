@@ -9,7 +9,6 @@ import Foundation
 
 protocol CatalogViewModelProtocol {
     var updateData: Binding<Bool>? { get set }
-    
     func getData()
     func getCollectionsNumber() -> Int
     func collection(at inadexPath: IndexPath) -> Catalog
@@ -20,9 +19,9 @@ protocol CatalogViewModelProtocol {
 
 final class CatalogViewModel: CatalogViewModelProtocol {
     
-    private var dataStore = CatalogDataStore.shared
-    
     var updateData: Binding<Bool>?
+    
+    private var dataStore = CatalogDataStore.shared
     
     func getCollectionsNumber() -> Int {
         dataStore.catalog.count
@@ -39,7 +38,6 @@ final class CatalogViewModel: CatalogViewModelProtocol {
         dataStore.catalog[indexPath.row]   
     }
     
-    
     func sortByName() {
         dataStore.catalog.sort(by: { $0.name < $1.name })
     }
@@ -47,6 +45,5 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     func sortByNftCount() {
         dataStore.catalog.sort { $0.nfts.count > $1.nfts.count }
     }
-    
     
 }

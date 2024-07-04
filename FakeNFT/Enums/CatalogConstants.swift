@@ -34,6 +34,11 @@ enum CatalogLocalization {
     //MARK: - CollectionViewController
     static let catalogCollectionAuthor = NSLocalizedString("Catalog.collectionAuthor", comment: "")
     
+    //MARK: - CatalogAlertPresenter
+    static let catalogAlertTitle = NSLocalizedString("Error.title", comment: "")
+    static let catalogAlertReload = NSLocalizedString("Error.repeat", comment: "")
+    static let catalogAlertMessage = NSLocalizedString("Error.network", comment: "") 
+    
 }
 
 enum CatalogImages {

@@ -10,22 +10,22 @@ import Foundation
 protocol CollectionViewModelProtocol: AnyObject {
     var updateCollection: Binding<Bool>? { get set }
     var nftNumber: Int { get }
-    
     func getSelectedCollection() -> Catalog?
     func getData()
     func getNft(at indexPath: IndexPath) -> Nft
     func isLiked(_ nft: String) -> Bool
+    func inCart(_ nft: String) -> Bool
     func didTapLike(_ nft: String)
+    func didTapCart(_ nft: String)
     
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
     
-    private let dataStore = CatalogDataStore.shared
-    
     var updateCollection: Binding<Bool>?
     var nftNumber: Int = 0
     
+    private let dataStore = CatalogDataStore.shared
     private (set) var selectedCollection: String
     
     init(updateCollection: Binding<Bool>? = nil, selectedCollection: String) {
@@ -42,10 +42,8 @@ final class CollectionViewModel: CollectionViewModelProtocol {
             guard let self = self else { return }
             self.updateCollection?(result)
             nftNumber = dataStore.collection.count
-        }
-        
-        dataStore.getUserProfile { [weak self] user in
-            guard let self = self else { return }
+            dataStore.getUserProfile()
+            dataStore.getUserCart()
         }
     }
     
@@ -62,11 +60,19 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     }
     
     func didTapLike(_ nft: String) {
-        dataStore.updateLike(nft) { [weak self] likes in
-            guard let self = self else { return }
+        dataStore.updateLike(nft)
+    }
+    
+    func inCart(_ nft: String) -> Bool {
+        var inCart: Bool = false
+        if let userCart = dataStore.userCart {
+            inCart = userCart.nfts.contains(nft)
         }
-        
-        
+        return inCart
+    }
+    
+    func didTapCart(_ nft: String) {
+        dataStore.updateCart(nft)
     }
     
     

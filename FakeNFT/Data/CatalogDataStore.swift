@@ -9,7 +9,6 @@ import Foundation
 
 protocol CatalogDataStoreProtocol {
     var catalog: [Catalog] { get set }
-    
     func getCatalog(completion: @escaping (Bool) -> Void)
     func getCollection(with id: String) -> Catalog?
     func getCollectionNft(with nfts: [String], completion: @escaping (Bool) -> Void)
@@ -20,14 +19,16 @@ final class CatalogDataStore {
     static let shared = CatalogDataStore()
     private init() {}
     
-    private var task: NetworkTask?
-    private var likes: [String] = []
-    private let networkClient = DefaultNetworkClient()
-    
     var catalog: [Catalog] = []
     var collection: [Nft] = []
     var userProfile: UserProfile?
+    var userCart: CatalogCart?
     
+    private var task: NetworkTask?
+    private var likes: [String] = []
+    private var cart: [String] = []
+    private let networkClient = DefaultNetworkClient()
+
     func getCatalog(completion: @escaping (Bool) -> Void) {
         UIBlockingProgressHUD.show()
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -88,13 +89,12 @@ final class CatalogDataStore {
                         }
                         
                         self.task = nil
-                        UIBlockingProgressHUD.dismiss()
                     }
             }
         }
     }
     
-    func getUserProfile(completion: @escaping (Bool) -> Void) {
+    func getUserProfile() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             task?.cancel()
@@ -106,17 +106,15 @@ final class CatalogDataStore {
                     switch result {
                     case .success(let userProfile):
                         self.userProfile = userProfile
-                        completion(true)
                     case .failure(let error):
                         print(error.localizedDescription)
-                        completion(false)
                     }
                     self.task = nil
                 }
         }
     }
     
-    func updateLike(_ nft: String, completion: @escaping (Bool) -> Void ) {
+    func updateLike(_ nft: String) {
         if let user = userProfile {
             likes = user.likes
             let isLiked = likes.contains(nft)
@@ -136,15 +134,63 @@ final class CatalogDataStore {
                                       type: UserProfile.self) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
-                case .success(_):
-                    completion(true)
+                case .success(_): getUserProfile()
                 case .failure(let error):
                     print(error.localizedDescription)
-                    completion(false)
                 }
                 self.task = nil
             }
         }
     }
+    
+    func getUserCart() {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            task?.cancel()
+            let request = CatalogCartRequest()
+            self.task = self.networkClient.send(
+                request: request,
+                type: CatalogCart.self) { [weak self] result in
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let userCart):
+                        self.userCart = userCart
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                    self.task = nil
+                }
+        }
+    }
+    
+    func updateCart(_ nft: String) {
+        if let userCart = userCart?.nfts {
+            cart = userCart
+            let inCart = cart.contains(nft)
+            switch inCart {
+            case true: cart = cart.filter { $0 != nft }
+            case false: cart.append(nft)
+            }
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            task?.cancel()
+            let dataString = "nfts=\(cart.joined(separator: ", "))"
+            guard let data = dataString.data(using: .utf8) else { return }
+            let request = CatalogCartUpdate(httpBody: data)
+            task = networkClient.send(request: request,
+                                      type: CatalogCart.self) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(_): getUserCart()
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+                self.task = nil
+            }
+        }
+    }
+    
 }
 

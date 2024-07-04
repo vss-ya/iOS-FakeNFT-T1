@@ -34,6 +34,7 @@ final class CatalogViewController: UIViewController {
     }
 }
 
+//MARK: - View Properies
 private extension CatalogViewController {
     func setupView() {
         view.backgroundColor = .systemBackground
@@ -113,6 +114,8 @@ private extension CatalogViewController {
     }
     
 }
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

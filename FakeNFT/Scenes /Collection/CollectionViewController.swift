@@ -10,6 +10,7 @@ import Kingfisher
 
 final class CollectionViewController: UIViewController {
     
+    // MARK: - Private Properties
     private let viewModel: CollectionViewModelProtocol
     
     private let params = CatalogCollectionParams(cellCount: 3, leftInset: 16, rightInset: 16, cellSpacing: 9)
@@ -101,6 +102,7 @@ final class CollectionViewController: UIViewController {
         CGSize(width: view.frame.width, height: view.frame.height)
     }
     
+    // MARK: - Initializers
     init(selectedCollection: String? = nil, viewModel: CollectionViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -111,6 +113,7 @@ final class CollectionViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
@@ -127,6 +130,7 @@ final class CollectionViewController: UIViewController {
     
 }
 
+//MARK: - View Properties
 private extension CollectionViewController {
     
     func addSubViews() {
@@ -265,12 +269,22 @@ private extension CollectionViewController {
     func bind() {
         viewModel.updateCollection = { [weak self] update in
             guard let self = self else { return }
-            self.collectionView.reloadData()
+            UIBlockingProgressHUD.dismiss()
+            switch update {
+            case true: self.collectionView.reloadData()
+            case false: do {
+                CatalogAlertPresenter.showAlert(delegate: self) {
+                    self.viewModel.getData()
+                }
+            }
+            }
         }
     }
     
+    
 }
 
+//MARK: - UICollectionViewDelegateFlowLayout
 extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     private func addCollectionView() {
         collectionView.dataSource = self
@@ -300,6 +314,7 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
+//MARK: - UICollectionViewDataSource
 extension CollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         viewModel.nftNumber
@@ -311,17 +326,21 @@ extension CollectionViewController: UICollectionViewDataSource {
         }
         let nft = viewModel.getNft(at: indexPath)
         let isLiked = viewModel.isLiked(nft.id)
-        cell.configCell(nft, isLiked)
+        let inCart = viewModel.inCart(nft.id)
+        cell.configCell(nft, isLiked, inCart)
         cell.delegate = self
         return cell
     }
     
 }
 
+//MARK: - CollectionCellDelegate
 extension CollectionViewController: CollectionCellDelegate {
     func tapLikeButton(_ nft: String) {
         viewModel.didTapLike(nft)
     }
     
-    
+    func tapCartButton(_ nft: String) {
+        viewModel.didTapCart(nft)
+    }
 }

@@ -10,13 +10,14 @@ import Kingfisher
 
 protocol CollectionCellDelegate: AnyObject {
     func tapLikeButton(_ nft: String)
-    
+    func tapCartButton(_ nft: String)
 }
 
 
 final class CatalogCollectionViewCell: UICollectionViewCell {
     
     private var isLiked: Bool = false
+    private var inCart: Bool = false
     private var nft: String?
     
     weak var delegate: CollectionCellDelegate?
@@ -79,6 +80,7 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
     
 }
 
+//MARK: - Cell Properties
 private extension CatalogCollectionViewCell {
     
     func setupCell() {
@@ -138,7 +140,7 @@ private extension CatalogCollectionViewCell {
     
     func  addTarget() {
         likeButton.addTarget(self, action: #selector(tapLikeButton), for: .touchUpInside)
-        cartButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
+        cartButton.addTarget(self, action: #selector(tapCartButton), for: .touchUpInside)
     }
     
     @objc
@@ -150,14 +152,18 @@ private extension CatalogCollectionViewCell {
     }
     
     @objc
-    func addToCart() {
-        cartButton.setImage(UIImage(named: CatalogImages.delFromCart), for: .normal)
+    func tapCartButton() {
+        inCart.toggle()
+        setCart(inCart)
+        guard let nft = nft else { return }
+        delegate?.tapCartButton(nft)
     }
     
 }
 
+//MARK: - Cell functions
 extension CatalogCollectionViewCell {
-    func configCell(_ nft: Nft, _ isLiked: Bool) {
+    func configCell(_ nft: Nft, _ isLiked: Bool, _ inCart: Bool) {
         let nftImageURL = URL(string: nft.images[0])
         let processor = ResizingImageProcessor(
             referenceSize: CGSize(width: 108, height: 108),
@@ -165,14 +171,15 @@ extension CatalogCollectionViewCell {
         let rating = nft.rating
         let price = String(nft.price)
         self.isLiked = isLiked
+        self.inCart = inCart
         self.nft = nft.id
         
         nftImage.kf.setImage(with: nftImageURL, options: [.processor(processor)])
-        cartButton.setImage(UIImage(named: CatalogImages.addToCart), for: .normal)
         nftNameLabel.text = nft.name
         nftPriceLabel.text = "\(price) ETH"
         setRating(rating)
         setLike(isLiked)
+        setCart(inCart)
     }
     
     
@@ -190,6 +197,10 @@ extension CatalogCollectionViewCell {
     
     func setLike(_ isLiked: Bool) {
         likeButton.setImage(UIImage(named: isLiked ? CatalogImages.favouritesPressed : CatalogImages.favorites ), for: .normal)
+    }
+    
+    func setCart(_ inCart: Bool) {
+        cartButton.setImage(UIImage(named: inCart ? CatalogImages.delFromCart : CatalogImages.addToCart), for: .normal)
     }
     
 }
