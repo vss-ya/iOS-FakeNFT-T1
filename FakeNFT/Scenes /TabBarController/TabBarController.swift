@@ -43,14 +43,17 @@ final class TabBarController: UITabBarController {
         let profileController = initProfileTabBarViewController(servicesAssembly)
         let catalogController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         let cartController = TestCatalogViewController(servicesAssembly: servicesAssembly)
-        let statisticsController = TestCatalogViewController(servicesAssembly: servicesAssembly)
+        
+        let statisticsViewController = StatisticsViewController(viewModel: StatisticsViewModel())
+        let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
+        statisticsNavigationController.modalPresentationStyle = .overCurrentContext
         
         profileController.tabBarItem = profileTabBarItem
         catalogController.tabBarItem = catalogTabBarItem
         cartController.tabBarItem = cartTabBarItem
-        statisticsController.tabBarItem = statisticsTabBarItem
+        statisticsNavigationController.tabBarItem = statisticsTabBarItem
 
-        viewControllers = [profileController, catalogController, cartController, statisticsController]
+        viewControllers = [profileController, catalogController, cartController, statisticsNavigationController]
 
         view.backgroundColor = .systemBackground
     }
