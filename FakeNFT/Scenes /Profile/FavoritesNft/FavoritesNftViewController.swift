@@ -57,12 +57,14 @@ final class FavoritesNftViewController: UIViewController {
         
         title = L10n.Profile.favoritesNft
         navigationItem.leftBarButtonItem = .init(customView: backButton)
+        view.backgroundColor = .ypWhite
         
         [collectionView, noFavoritesNftLabel].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
         
+        collectionView.backgroundColor = .ypWhite
         collectionView.alwaysBounceVertical = true
         noFavoritesNftLabel.isHidden = true
         
