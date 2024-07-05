@@ -109,7 +109,7 @@ final class StatisticsUserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
-        UIBlockingProgressHUD.animate()
+        UIBlockingProgressHUD.show()
         viewModel.getUser()
     }
     
