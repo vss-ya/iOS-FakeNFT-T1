@@ -47,7 +47,7 @@ final class StatisticsViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIBlockingProgressHUD.animate()
+        UIBlockingProgressHUD.show()
         viewModel.getData(sortField: sortField)
     }
     
@@ -77,12 +77,12 @@ final class StatisticsViewController: UIViewController {
     private func bind() {
         viewModel.updateData = { [weak self] update in
             UIBlockingProgressHUD.dismiss()
-            guard let self else { return }
+            guard let self = self else { return }
             if update {
                 self.tableView.reloadData()
             } else {
                 AlertPresenter.loadDataError(delegate: self) {
-                    UIBlockingProgressHUD.animate()
+                    UIBlockingProgressHUD.show()
                     self.viewModel.getData(sortField: self.sortField)
                 }
             }
@@ -93,7 +93,7 @@ final class StatisticsViewController: UIViewController {
     
     @objc private func didTapSortButton() {
         AlertPresenter.statisticsSort(delegate: self) { [weak self] sortField in
-            UIBlockingProgressHUD.animate()
+            UIBlockingProgressHUD.show()
             self?.sortField = sortField
             self?.viewModel.getData(sortField: sortField)
         }

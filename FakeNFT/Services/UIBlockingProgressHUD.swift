@@ -9,18 +9,30 @@ import UIKit
 import ProgressHUD
 
 final class UIBlockingProgressHUD {
+    
     private static var window: UIWindow? {
         return UIApplication.shared.windows.first
     }
-    static func animate() {
+    
+    static func show() {
+        assert(Thread.isMainThread)
         window?.isUserInteractionEnabled = false
         ProgressHUD.colorAnimation = .ypBlack
         ProgressHUD.colorBackground = .clear
-        ProgressHUD.animationType = .systemActivityIndicator
+        ProgressHUD.animationType = .activityIndicator
         ProgressHUD.show()
     }
+    
+    static func showError(_ error: Error) {
+        assert(Thread.isMainThread)
+        ProgressHUD.dismiss()
+        ProgressHUD.showError("\(error.localizedDescription)")
+    }
+    
     static func dismiss() {
+        assert(Thread.isMainThread)
         window?.isUserInteractionEnabled = true
         ProgressHUD.dismiss()
     }
+    
 }

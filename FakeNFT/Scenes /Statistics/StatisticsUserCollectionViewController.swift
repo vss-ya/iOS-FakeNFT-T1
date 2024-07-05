@@ -51,7 +51,7 @@ final class StatisticsUserCollectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
-        UIBlockingProgressHUD.animate()
+        UIBlockingProgressHUD.show()
         viewModel.getData()
     }
     
@@ -82,11 +82,11 @@ final class StatisticsUserCollectionViewController: UIViewController {
     private func bind() {
         viewModel.updateData = { [weak self] update in
             UIBlockingProgressHUD.dismiss()
-            guard let self, update else { return }
+            guard let self = self, update else { return }
             self.collectionView.reloadData()
         }
         viewModel.updateNft = { [weak self] item in
-            guard let self else { return }
+            guard let self = self else { return }
             let indexPath = IndexPath(item: item, section: 0)
             self.collectionView.reloadItems(at: [indexPath])
         }

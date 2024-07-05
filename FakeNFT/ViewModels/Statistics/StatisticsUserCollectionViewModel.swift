@@ -60,7 +60,7 @@ final class StatisticsUserCollectionViewModel: StatisticsUserCollectionViewModel
     }
     
     func addToCart(id: String, completion: @escaping () -> Void) {
-        guard let order else { return }
+        guard let order = order else { return }
         var newNfts = order.nfts
         newNfts.append(id)
         dataStore.sendCart(nfts: newNfts) { result in
@@ -72,7 +72,7 @@ final class StatisticsUserCollectionViewModel: StatisticsUserCollectionViewModel
     }
     
     func removeFromCart(id: String, completion: @escaping () -> Void) {
-        guard let order else { return }
+        guard let order = order else { return }
         var newNfts = order.nfts
         newNfts.removeAll(where: {$0 == id})
         dataStore.sendCart(nfts: newNfts) { result in

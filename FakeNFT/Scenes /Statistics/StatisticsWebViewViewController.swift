@@ -44,7 +44,7 @@ final class StatisticsWebViewViewController: UIViewController {
             \.estimatedProgress,
             options: [],
             changeHandler: { [weak self] _, _ in
-                guard let self else { return }
+                guard let self = self else { return }
                 self.viewModel.didUpdateProgressValue(self.webView.estimatedProgress)
             }
         )
