@@ -132,7 +132,7 @@ final class MyNftViewModel: MyNftViewModelProtocol {
             }
         }
         dg.notify(queue: .global()) { [weak self] in
-            guard let self else { return }
+            guard let self = self else { return }
             switch filter {
             case .byPrice: nfts.sort(by: { $0.price < $1.price })
             case .byRaiting: nfts.sort(by: { $0.rating > $1.rating })

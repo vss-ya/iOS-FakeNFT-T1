@@ -19,7 +19,7 @@ final class StatisticsUserViewModel: StatisticsUserViewModelProtocol {
     
     func getUser() {
         dataStore.getUser(id: id) { [weak self] user in
-            guard let user else { return }
+            guard let user = user else { return }
             self?.updateData?(user)
         }
     }

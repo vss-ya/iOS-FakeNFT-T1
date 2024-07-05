@@ -77,7 +77,7 @@ final class StatisticsViewController: UIViewController {
     private func bind() {
         viewModel.updateData = { [weak self] update in
             UIBlockingProgressHUD.dismiss()
-            guard let self else { return }
+            guard let self = self else { return }
             if update {
                 self.tableView.reloadData()
             } else {

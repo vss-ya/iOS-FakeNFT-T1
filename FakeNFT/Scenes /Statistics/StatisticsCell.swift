@@ -48,7 +48,7 @@ final class StatisticsCell: UITableViewCell {
     
     var user: StatisticsUser? {
         didSet {
-            guard let user else { return }
+            guard let user = user else { return }
             ratingLabel.text = user.rating
             if let url = URL(string: user.avatar ?? "") {
                 let processor = RoundCornerImageProcessor(cornerRadius: 14)

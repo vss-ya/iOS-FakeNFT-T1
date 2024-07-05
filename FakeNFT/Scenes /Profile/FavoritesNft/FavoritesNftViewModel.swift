@@ -69,7 +69,7 @@ final class FavoritesNftViewModel: FavoritesNftViewModelProtocol {
     }
     
     func dislike(nft: Nft) {
-        guard let profile else {
+        guard let profile = profile else {
             return
         }
         let updatedProfile = Profile(

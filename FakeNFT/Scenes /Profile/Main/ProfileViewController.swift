@@ -129,13 +129,13 @@ private extension ProfileViewController {
     
     func bind() {
         viewModel.onDidLoad = { [weak self](profile) in
-            guard let self else {
+            guard let self = self else {
                 return
             }
             updateProfile(profile)
         }
         viewModel.onDidLoadWithError = { [weak self](error) in
-            guard let self else {
+            guard let self = self else {
                 return
             }
             showError(error)
@@ -184,7 +184,7 @@ extension ProfileViewController {
     @objc private func editAction() {
         let viewModel = ProfileEditViewModel(viewModel.servicesAssembly)
         let vc = ProfileEditViewController(viewModel) { [weak self]() in
-            guard let self else {
+            guard let self = self else {
                 return
             }
             dismiss(animated: true)
@@ -247,7 +247,7 @@ extension ProfileViewController: UITableViewDataSource {
             withIdentifier: ProfileTableViewCell.reuseIdentifier,
             for: indexPath
         ) as? ProfileTableViewCell
-        guard let cell else {
+        guard let cell = cell else {
             return UITableViewCell()
         }
         switch indexPath.row {

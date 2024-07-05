@@ -171,21 +171,21 @@ private extension ProfileEditViewController {
     
     func bind() {
         viewModel.onDidLoad = { [weak self](profile) in
-            guard let self else { return }
+            guard let self = self else { return }
             updateProfile(profile)
         }
         viewModel.onDidLoadWithError = { [weak self](error) in
-            guard let self else { return }
+            guard let self = self else { return }
             showError(error)
             
         }
         viewModel.onDidUpdate = { [weak self](profile) in
-            guard let self else { return }
+            guard let self = self else { return }
             hideLoading()
             onCloseCallback?()
         }
         viewModel.onDidUpdateWithError = { [weak self](error) in
-            guard let self else { return }
+            guard let self = self else { return }
             showError(error)
             onCloseCallback?()
         }

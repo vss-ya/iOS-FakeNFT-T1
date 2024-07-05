@@ -29,7 +29,7 @@ final class AboutDeveloperViewController: UIViewController {
             \.estimatedProgress,
              options: []
         ) { [weak self] (_, _) in
-            guard let self else { return }
+            guard let self = self else { return }
             updateProgress()
         }
     }

@@ -101,11 +101,11 @@ private extension MyNftViewController {
     
     func bind() {
         viewModel.onDidLoad = { [weak self](nfts) in
-            guard let self else { return }
+            guard let self = self else { return }
             didLoad()
         }
         viewModel.onDidLoadWithError = { [weak self](error) in
-            guard let self else { return }
+            guard let self = self else { return }
             showError(error)
         }
     }
@@ -153,7 +153,7 @@ private extension MyNftViewController {
             title: L10n.Profile.byPrice,
             style: .default
         ) { [weak self] _ in
-            guard let self else { return }
+            guard let self = self else { return }
             showLoading()
             viewModel.sort(.byPrice)
         }
@@ -162,7 +162,7 @@ private extension MyNftViewController {
             title: L10n.Profile.byRating,
             style: .default
         ) { [weak self] _ in
-            guard let self else { return }
+            guard let self = self else { return }
             showLoading()
             viewModel.sort(.byRaiting)
         }
@@ -171,7 +171,7 @@ private extension MyNftViewController {
             title: L10n.Profile.byName,
             style: .default
         ) { [weak self] _ in
-            guard let self else { return }
+            guard let self = self else { return }
             showLoading()
             viewModel.sort(.byName)
         }
@@ -216,7 +216,7 @@ extension MyNftViewController: UITableViewDataSource {
             withIdentifier: MyNftTableViewCell.reuseIdentifier,
             for: indexPath
         ) as? MyNftTableViewCell
-        guard let cell else {
+        guard let cell = cell else {
             return UITableViewCell()
         }
         let nft = viewModel.nfts[indexPath.row]

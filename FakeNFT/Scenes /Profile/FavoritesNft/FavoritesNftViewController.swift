@@ -81,11 +81,11 @@ final class FavoritesNftViewController: UIViewController {
     
     func bind() {
         viewModel.onDidLoad = { [weak self](nfts) in
-            guard let self else { return }
+            guard let self = self else { return }
             didLoad()
         }
         viewModel.onDidLoadWithError = { [weak self](error) in
-            guard let self else { return }
+            guard let self = self else { return }
             showError(error)
         }
     }
@@ -136,7 +136,7 @@ extension FavoritesNftViewController: UICollectionViewDataSource {
             withReuseIdentifier: FavoritesNftCollectionViewCell.reuseIdentifier,
             for: indexPath
         ) as? FavoritesNftCollectionViewCell
-        guard let cell else {
+        guard let cell = cell else {
             return UICollectionViewCell()
         }
         let nft = viewModel.nfts[indexPath.row]
