@@ -24,8 +24,7 @@ final class UIBlockingProgressHUD {
     }
     
     static func showError(_ error: Error) {
-        assert(Thread.isMainThread)
-        ProgressHUD.dismiss()
+        dismiss()
         ProgressHUD.showError("\(error.localizedDescription)")
     }
     
