@@ -87,6 +87,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         createNavigationBar()
         addElements()
         setConstraints()
+        bindViewModel()
         currencies = MockCurrencies.currencies
         currencyCollectionView.dataSource = self
         currencyCollectionView.delegate = self
@@ -156,6 +157,21 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
 
         navigationBar.setItems([navItem], animated: false)
         view.addSubview(navigationBar)
+    }
+    
+    private func bindViewModel() {
+        currencyViewModel.currenciesBinding = { [weak self] _ in
+            guard let self = self else { return }
+            self.currencyCollectionView.reloadData()
+        }
+        currencyViewModel.isLoadingBinding = { [weak self] isLoading in
+            guard let self = self else { return }
+            if !isLoading {
+                self.hideLoading()
+            } else {
+                self.showLoading()
+            }
+        }
     }
 
     @objc private func backButtonTapped() {
