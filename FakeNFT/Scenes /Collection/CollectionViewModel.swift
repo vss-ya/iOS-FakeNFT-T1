@@ -8,25 +8,72 @@
 import Foundation
 
 protocol CollectionViewModelProtocol: AnyObject {
-    func getNftNumber() -> Int
-    func getNfts() -> [Nft]
-    func getCollection(with id: String) -> Catalog?
+    var updateCollection: Binding<Bool>? { get set }
+    var nftNumber: Int { get }
+    func getSelectedCollection() -> Catalog?
+    func getData()
+    func getNft(at indexPath: IndexPath) -> Nft
+    func isLiked(_ nft: String) -> Bool
+    func inCart(_ nft: String) -> Bool
+    func didTapLike(_ nft: String)
+    func didTapCart(_ nft: String)
+    
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
-    private let nft = MokNft.shared
+    
+    var updateCollection: Binding<Bool>?
+    var nftNumber: Int = 0
+    
     private let dataStore = CatalogDataStore.shared
+    private (set) var selectedCollection: String
     
-    func getNftNumber() -> Int {
-        nft.nft.count
+    init(updateCollection: Binding<Bool>? = nil, selectedCollection: String) {
+        self.updateCollection = updateCollection
+        self.selectedCollection = selectedCollection
     }
     
-    func getNfts() -> [Nft] {
-        nft.nft
+    func getSelectedCollection() -> Catalog? {
+        dataStore.getCollection(with: selectedCollection)
     }
     
-    func getCollection(with id: String) -> Catalog? {
-        dataStore.getCollection(with: id)
+    func getData() {
+        dataStore.getNft(with: selectedCollection) { [weak self] result in
+            guard let self = self else { return }
+            self.updateCollection?(result)
+            nftNumber = dataStore.collection.count
+            dataStore.getUserProfile()
+            dataStore.getUserCart()
+        }
     }
+    
+    func getNft(at indexPath: IndexPath) -> Nft {
+        return  dataStore.collection[indexPath.row]
+    }
+    
+    func isLiked(_ nft: String) -> Bool {
+        var isLiked: Bool = false
+        if let userLikes = dataStore.userProfile?.likes {
+            isLiked = userLikes.contains(nft)
+        }
+        return isLiked
+    }
+    
+    func didTapLike(_ nft: String) {
+        dataStore.updateLike(nft)
+    }
+    
+    func inCart(_ nft: String) -> Bool {
+        var inCart: Bool = false
+        if let userCart = dataStore.userCart {
+            inCart = userCart.nfts.contains(nft)
+        }
+        return inCart
+    }
+    
+    func didTapCart(_ nft: String) {
+        dataStore.updateCart(nft)
+    }
+    
     
 }

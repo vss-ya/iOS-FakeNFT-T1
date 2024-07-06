@@ -10,10 +10,9 @@ import Kingfisher
 
 final class CollectionViewController: UIViewController {
     
-//    var collectionSettings: CollectionSettings?
-    var selectedCollection: String?
-    
+    // MARK: - Private Properties
     private let viewModel: CollectionViewModelProtocol
+    
     private let params = CatalogCollectionParams(cellCount: 3, leftInset: 16, rightInset: 16, cellSpacing: 9)
     
     private lazy var scrollView: UIScrollView = {
@@ -89,22 +88,32 @@ final class CollectionViewController: UIViewController {
         return label
     }()
     
-    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private lazy var collectionView: UICollectionView = {
+        let collection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        flowLayout.scrollDirection = .vertical
+        collection.collectionViewLayout = flowLayout
+        collection.backgroundColor = .clear
+        return collection
+    }()
     
     private var contentSize: CGSize {
         CGSize(width: view.frame.width, height: view.frame.height)
     }
     
+    // MARK: - Initializers
     init(selectedCollection: String? = nil, viewModel: CollectionViewModelProtocol) {
-        self.selectedCollection = selectedCollection
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        bind()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubViews()
@@ -114,13 +123,20 @@ final class CollectionViewController: UIViewController {
         addNavBar()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.getData()
+    }
+    
 }
 
+//MARK: - View Properties
 private extension CollectionViewController {
     
     func addSubViews() {
         view.backgroundColor = .systemBackground
         view.addSubview(scrollView)
+        scrollView.constraintEdges(to: view)
         scrollView.addSubview(contentView)
         
         [collectionAuthorLabel,
@@ -160,6 +176,7 @@ private extension CollectionViewController {
             contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.heightAnchor.constraint(equalToConstant: 900),
             
             collectionImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             collectionImage.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -182,7 +199,6 @@ private extension CollectionViewController {
             collectionDescriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             collectionView.topAnchor.constraint(equalTo: collectionDescriptionLabel.bottomAnchor, constant: 24),
-            collectionView.heightAnchor.constraint(equalToConstant: heightOfCollectionView()),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -190,8 +206,7 @@ private extension CollectionViewController {
     }
     
     func configView() {
-        guard let id = selectedCollection else { return }
-        let collection = viewModel.getCollection(with: id)
+        let collection = viewModel.getSelectedCollection()
         guard let cover = collection?.cover else { return }
         guard let author = collection?.author else { return }
         guard let name = collection?.name else { return }
@@ -251,29 +266,31 @@ private extension CollectionViewController {
         return size.width
     }
     
+    func bind() {
+        viewModel.updateCollection = { [weak self] update in
+            guard let self = self else { return }
+            UIBlockingProgressHUD.dismiss()
+            switch update {
+            case true: self.collectionView.reloadData()
+            case false: do {
+                CatalogAlertPresenter.showAlert(delegate: self) {
+                    self.viewModel.getData()
+                }
+            }
+            }
+        }
+    }
+    
+    
 }
 
+//MARK: - UICollectionViewDelegateFlowLayout
 extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     private func addCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.isScrollEnabled = false
         collectionView.register(CatalogCollectionViewCell.self, forCellWithReuseIdentifier: CatalogCollectionViewCell.cellReuseIdentifier)
-    }
-    
-    private func heightOfCollectionView() -> CGFloat {
-        let numberOfNft = viewModel.getNftNumber()
-        var numbersOfRows = numberOfNft % params.cellCount
-        switch numbersOfRows {
-        case 0: do {
-            numbersOfRows = numberOfNft / params.cellCount
-        }
-        default: do {
-            numbersOfRows = (numberOfNft / params.cellCount) + 1
-        }
-        }
-        let hight = numbersOfRows * CatalogConstants.catalogCollectionCellHeight
-        return CGFloat(hight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -297,19 +314,33 @@ extension CollectionViewController: UICollectionViewDelegateFlowLayout {
     
 }
 
+//MARK: - UICollectionViewDataSource
 extension CollectionViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.getNftNumber()
+        viewModel.nftNumber
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CatalogCollectionViewCell.cellReuseIdentifier, for: indexPath) as? CatalogCollectionViewCell else {
             preconditionFailure("Failed to cast UICollectionViewCell as CatalogCollectionViewCell")
         }
-        let nfts = viewModel.getNfts()
-        cell.configCell(nfts, indexPath)
+        let nft = viewModel.getNft(at: indexPath)
+        let isLiked = viewModel.isLiked(nft.id)
+        let inCart = viewModel.inCart(nft.id)
+        cell.configCell(nft, isLiked, inCart)
+        cell.delegate = self
         return cell
     }
     
+}
+
+//MARK: - CollectionCellDelegate
+extension CollectionViewController: CollectionCellDelegate {
+    func tapLikeButton(_ nft: String) {
+        viewModel.didTapLike(nft)
+    }
     
+    func tapCartButton(_ nft: String) {
+        viewModel.didTapCart(nft)
+    }
 }

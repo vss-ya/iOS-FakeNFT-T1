@@ -8,11 +8,22 @@
 import UIKit
 import Kingfisher
 
+protocol CollectionCellDelegate: AnyObject {
+    func tapLikeButton(_ nft: String)
+    func tapCartButton(_ nft: String)
+}
+
+
 final class CatalogCollectionViewCell: UICollectionViewCell {
+    
+    private var isLiked: Bool = false
+    private var inCart: Bool = false
+    private var nft: String?
+    
+    weak var delegate: CollectionCellDelegate?
     
     private lazy var likeButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: CatalogImages.favorites), for: .normal)
         return button
     }()
     
@@ -53,6 +64,7 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
@@ -62,8 +74,13 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+    
 }
 
+//MARK: - Cell Properties
 private extension CatalogCollectionViewCell {
     
     func setupCell() {
@@ -122,54 +139,68 @@ private extension CatalogCollectionViewCell {
     }
     
     func  addTarget() {
-        likeButton.addTarget(self, action: #selector(setLike), for: .touchUpInside)
-        cartButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
+        likeButton.addTarget(self, action: #selector(tapLikeButton), for: .touchUpInside)
+        cartButton.addTarget(self, action: #selector(tapCartButton), for: .touchUpInside)
     }
     
     @objc
-    func setLike() {
-        likeButton.setImage(UIImage(named: CatalogImages.favouritesPressed), for: .normal)
+    func tapLikeButton() {
+        isLiked.toggle()
+        setLike(isLiked)
+        guard let nft = nft else { return }
+        delegate?.tapLikeButton(nft)
     }
     
     @objc
-    func addToCart() {
-        cartButton.setImage(UIImage(named: CatalogImages.delFromCart), for: .normal)
+    func tapCartButton() {
+        inCart.toggle()
+        setCart(inCart)
+        guard let nft = nft else { return }
+        delegate?.tapCartButton(nft)
     }
     
 }
 
+//MARK: - Cell functions
 extension CatalogCollectionViewCell {
-    func configCell(_ nfts: [Nft], _ indexPath: IndexPath) {
-        UIBlockingProgressHUD.show()
-        let nftImageURL = URL(string: nfts[indexPath.row].images[0])
+    func configCell(_ nft: Nft, _ isLiked: Bool, _ inCart: Bool) {
+        let nftImageURL = URL(string: nft.images[0])
         let processor = ResizingImageProcessor(
             referenceSize: CGSize(width: 108, height: 108),
             mode: .aspectFill)
-        let rating = nfts[indexPath.row].rating
-        let price = String(nfts[indexPath.row].price)
+        let rating = nft.rating
+        let price = String(nft.price)
+        self.isLiked = isLiked
+        self.inCart = inCart
+        self.nft = nft.id
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-            UIBlockingProgressHUD.dismiss()
-            self.nftImage.kf.setImage(with: nftImageURL, options: [.processor(processor)])
-            self.setRating(rating)
-            self.cartButton.setImage(UIImage(named: CatalogImages.addToCart), for: .normal)
-            self.nftNameLabel.text = nfts[indexPath.row].name
-            self.nftPriceLabel.text = "\(price) ETH"
-        })
+        nftImage.kf.setImage(with: nftImageURL, options: [.processor(processor)])
+        nftNameLabel.text = nft.name
+        nftPriceLabel.text = "\(price) ETH"
+        setRating(rating)
+        setLike(isLiked)
+        setCart(inCart)
     }
+    
     
     func setRating(_ rating: Int) {
         let maxRating = CatalogConstants.maxRating
-        let curentRating = rating
-        
         for number in 0..<maxRating {
             let ratingImage = UIImageView()
             ratingStack.addArrangedSubview(ratingImage)
-            switch number > curentRating-1 {
-            case true: ratingImage.image = UIImage(named: CatalogImages.starNoActive)
-            case false: ratingImage.image = UIImage(named: CatalogImages.starActive)
+            switch number < rating {
+            case true: ratingImage.image = UIImage(named: CatalogImages.starActive)
+            case false: ratingImage.image = UIImage(named: CatalogImages.starNoActive)
             }
         }
+    }
+    
+    func setLike(_ isLiked: Bool) {
+        likeButton.setImage(UIImage(named: isLiked ? CatalogImages.favouritesPressed : CatalogImages.favorites ), for: .normal)
+    }
+    
+    func setCart(_ inCart: Bool) {
+        cartButton.setImage(UIImage(named: inCart ? CatalogImages.delFromCart : CatalogImages.addToCart), for: .normal)
     }
     
 }

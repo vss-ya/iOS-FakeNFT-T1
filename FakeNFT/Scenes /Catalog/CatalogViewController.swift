@@ -34,6 +34,7 @@ final class CatalogViewController: UIViewController {
     }
 }
 
+//MARK: - View Properies
 private extension CatalogViewController {
     func setupView() {
         view.backgroundColor = .systemBackground
@@ -114,9 +115,11 @@ private extension CatalogViewController {
     
 }
 
+//MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       viewModel.getCollectionsNumber()
+        viewModel.getCollectionsNumber()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -133,7 +136,7 @@ extension CatalogViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         let collection = viewModel.collection(at: indexPath)
         let id = collection.id
-        let viewController = CollectionViewController(selectedCollection: id, viewModel: CollectionViewModel())
+        let viewController = CollectionViewController(viewModel: CollectionViewModel(selectedCollection: id))
         let navigationViewController = UINavigationController(rootViewController: viewController)
         navigationViewController.modalPresentationStyle = .fullScreen
         present(navigationViewController, animated: true)
