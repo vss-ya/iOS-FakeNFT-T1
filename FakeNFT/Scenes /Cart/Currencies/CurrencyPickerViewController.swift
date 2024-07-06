@@ -12,7 +12,6 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
     )
 
     private let currencyViewModel: CurrencyViewModel
-    private var currencies: [Currency] = []
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 
     private lazy var currencyCollectionView: UICollectionView = {
@@ -88,7 +87,6 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         addElements()
         setConstraints()
         bindViewModel()
-        currencies = MockCurrencies.currencies
         currencyCollectionView.dataSource = self
         currencyCollectionView.delegate = self
     }
@@ -158,7 +156,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         navigationBar.setItems([navItem], animated: false)
         view.addSubview(navigationBar)
     }
-    
+
     private func bindViewModel() {
         currencyViewModel.currenciesBinding = { [weak self] _ in
             guard let self = self else { return }
@@ -184,7 +182,7 @@ extension CurrencyPickerViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return currencies.count
+        return currencyViewModel.currencies.count
     }
 
     func collectionView(
@@ -192,7 +190,7 @@ extension CurrencyPickerViewController: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         let cell: CurrencyPickerCell = currencyCollectionView.dequeueReusableCell(indexPath: indexPath)
-        let currency = currencies[indexPath.row]
+        let currency = currencyViewModel.currencies[indexPath.row]
         cell.configure(currency: currency)
         return cell
     }
