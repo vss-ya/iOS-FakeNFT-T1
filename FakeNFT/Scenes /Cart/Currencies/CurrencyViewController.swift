@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-final class CurrencyViewController: UIViewController, LoadingView {
+final class CurrencyViewController: UIViewController, LoadingView, ErrorView {
 
     // MARK: - Properties
 
@@ -56,11 +56,12 @@ final class CurrencyViewController: UIViewController, LoadingView {
 
     private lazy var paymentButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .yaBlackLight
+        button.backgroundColor = .darkGray
         button.setTitle("Оплатить", for: .normal)
         button.titleLabel?.font = .bodyBold
         button.setTitleColor(.primary, for: .normal)
         button.layer.cornerRadius = 16
+        button.isEnabled = false
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector(paymentButtonTapped), for: .touchUpInside)
         return button
@@ -187,6 +188,8 @@ final class CurrencyViewController: UIViewController, LoadingView {
             guard let self = self else { return }
             if result {
                 self.showSuccessResult()
+            } else {
+                self.showFailResult()
             }
         }
     }
@@ -195,6 +198,17 @@ final class CurrencyViewController: UIViewController, LoadingView {
         let successPayViewController = SuccessPayViewController()
         successPayViewController.modalPresentationStyle = .fullScreen
         present(successPayViewController, animated: true)
+    }
+
+    private func showFailResult() {
+        let errorModel = ErrorModel(
+            message: "Не удалось произвести оплату",
+            actionText: "Повторить") { [weak self] in
+                guard let self = self,
+                let selectedCurrencyIndex = self.selectedCurrencyIndex else { return }
+                self.currencyViewModel.paymentButtonTapped(with: selectedCurrencyIndex)
+            }
+        showRetryError(errorModel)
     }
 
     // MARK: - Actions
@@ -263,6 +277,8 @@ extension CurrencyViewController: UICollectionViewDelegateFlowLayout {
         cell?.contentView.layer.borderColor = UIColor.textPrimary.cgColor
 
         selectedCurrencyIndex = indexPath.row
+        paymentButton.isEnabled = selectedCurrencyIndex != nil
+        paymentButton.backgroundColor = paymentButton.isEnabled ? .segmentActive : .darkGray
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
