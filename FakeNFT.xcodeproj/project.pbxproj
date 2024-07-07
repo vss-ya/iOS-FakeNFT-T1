@@ -44,7 +44,7 @@
 		57D66F4F2C1EB48800B73B18 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D66F4E2C1EB48800B73B18 /* Strings.swift */; };
 		5D91B30A2C263A2600E08877 /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3092C263A2600E08877 /* CartViewModel.swift */; };
 		5D91B30C2C263B8800E08877 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B30B2C263B8800E08877 /* Binding.swift */; };
-		5D91B3112C30715F00E08877 /* DeleteConfirmationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3102C30715F00E08877 /* DeleteConfirmationViewController.swift */; };
+		5D91B3112C30715F00E08877 /* ConfirmDeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3102C30715F00E08877 /* ConfirmDeleteViewController.swift */; };
 		5D91B3132C30A73A00E08877 /* PutOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3122C30A73A00E08877 /* PutOrderRequest.swift */; };
 		5D91B3162C31DD2C00E08877 /* CurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3152C31DD2C00E08877 /* CurrencyViewController.swift */; };
 		5D91B3182C31DE7B00E08877 /* CurrencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */; };
@@ -123,7 +123,7 @@
 		57D66F4E2C1EB48800B73B18 /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		5D91B3092C263A2600E08877 /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
 		5D91B30B2C263B8800E08877 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
-		5D91B3102C30715F00E08877 /* DeleteConfirmationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteConfirmationViewController.swift; sourceTree = "<group>"; };
+		5D91B3102C30715F00E08877 /* ConfirmDeleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmDeleteViewController.swift; sourceTree = "<group>"; };
 		5D91B3122C30A73A00E08877 /* PutOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PutOrderRequest.swift; sourceTree = "<group>"; };
 		5D91B3152C31DD2C00E08877 /* CurrencyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyViewController.swift; sourceTree = "<group>"; };
 		5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyViewModel.swift; sourceTree = "<group>"; };
@@ -408,7 +408,7 @@
 		5D91B31E2C33627A00E08877 /* NftRemoval */ = {
 			isa = PBXGroup;
 			children = (
-				5D91B3102C30715F00E08877 /* DeleteConfirmationViewController.swift */,
+				5D91B3102C30715F00E08877 /* ConfirmDeleteViewController.swift */,
 			);
 			path = NftRemoval;
 			sourceTree = "<group>";
@@ -653,7 +653,7 @@
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
 				5D91B3202C3366CC00E08877 /* CurrenciesParams.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
-				5D91B3112C30715F00E08877 /* DeleteConfirmationViewController.swift in Sources */,
+				5D91B3112C30715F00E08877 /* ConfirmDeleteViewController.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				5DA7C18F2C352FC60046F7A1 /* CartSortOption.swift in Sources */,

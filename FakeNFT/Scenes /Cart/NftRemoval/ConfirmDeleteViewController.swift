@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-final class DeleteConfirmationViewController: UIViewController {
+final class ConfirmDeleteViewController: UIViewController {
 
     private let image: UIImage
     private let viewModel: CartViewModel

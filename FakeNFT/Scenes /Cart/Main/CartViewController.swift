@@ -6,7 +6,8 @@ final class CartViewController: UIViewController, LoadingView {
     // MARK: - Properties
 
     private let servicesAssembly: ServicesAssembly
-    private var viewModel: CartViewModel
+    private let refreshControl = UIRefreshControl()
+    private let viewModel: CartViewModel
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 
     private lazy var orderTableView: UITableView = {
@@ -112,6 +113,7 @@ final class CartViewController: UIViewController, LoadingView {
         orderTableView.dataSource = self
         orderTableView.delegate = self
         checkIfCartIsEmpty()
+        setupRefreshControl()
     }
 
     // MARK: - Private Function
@@ -122,6 +124,7 @@ final class CartViewController: UIViewController, LoadingView {
             self.checkIfCartIsEmpty()
             self.calculateTotal()
             self.orderTableView.reloadData()
+            self.refreshControl.endRefreshing()
         }
         viewModel.isLoadingBinding = { [weak self] isLoading in
             guard let self = self else { return }
@@ -129,8 +132,7 @@ final class CartViewController: UIViewController, LoadingView {
                 self.checkIfCartIsEmpty()
                 self.hideLoading()
             } else {
-                [self.orderTableView,
-                 self.totalContainerView,
+                [self.totalContainerView,
                  self.paymentButton,
                  self.navigationBar,
                  self.emptyCartLabel
@@ -146,7 +148,7 @@ final class CartViewController: UIViewController, LoadingView {
 
     private func changeStateEmptyCart(isHidden: Bool) {
         emptyCartLabel.isHidden = !isHidden
-        [orderTableView, totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = isHidden }
+        [totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = isHidden }
     }
 
     private func calculateTotal() {
@@ -227,8 +229,14 @@ final class CartViewController: UIViewController, LoadingView {
         view.addSubview(navigationBar)
     }
 
+    private func setupRefreshControl() {
+        refreshControl.tintColor = .clear
+        refreshControl.addTarget(self, action: #selector(refreshCart), for: .valueChanged)
+        orderTableView.refreshControl = refreshControl
+    }
+
     private func didTapDeleteButton(image: UIImage, id: String) {
-        let deleteConfirmationViewController = DeleteConfirmationViewController(
+        let deleteConfirmationViewController = ConfirmDeleteViewController(
             image: image,
             viewModel: viewModel, id: id
         )
@@ -263,6 +271,10 @@ final class CartViewController: UIViewController, LoadingView {
         alert.addAction(action)
     }
 
+    @objc private func refreshCart() {
+        viewModel.getOrder()
+    }
+
     @objc private func paymentButtonTapped() {
         let networkClient = DefaultNetworkClient()
         let currencyViewModel = CurrencyViewModel(networkClient: networkClient)
@@ -272,7 +284,7 @@ final class CartViewController: UIViewController, LoadingView {
     }
 }
 
-    // MARK: - Extension
+// MARK: - Extension
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
