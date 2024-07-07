@@ -152,7 +152,7 @@ final class CurrencyViewController: UIViewController, LoadingView, ErrorView {
         navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 56, width: view.frame.width, height: 42))
 
         let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.backgroundColor = .primary
+        navBarAppearance.backgroundColor = .systemBackground
         navBarAppearance.shadowColor = .clear
         navigationBar.standardAppearance = navBarAppearance
 

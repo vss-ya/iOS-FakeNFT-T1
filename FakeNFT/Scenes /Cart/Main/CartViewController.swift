@@ -211,7 +211,7 @@ final class CartViewController: UIViewController, LoadingView {
         navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 46, width: view.frame.width, height: 42))
 
         let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.backgroundColor = .primary
+        navBarAppearance.backgroundColor = .systemBackground
         navBarAppearance.shadowColor = .clear
         navigationBar.standardAppearance = navBarAppearance
 

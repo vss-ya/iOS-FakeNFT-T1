@@ -40,7 +40,7 @@ extension UIColor {
     static let textOnPrimary = UIColor.white
     static let textOnSecondary = UIColor.black
 
-    static let yaBlackLight = UIColor(hexString: "1A1B22")
+    static let yaBlackLight = UIColor(named: "YP Black") ?? UIColor.black
     static let yaBlackDark = UIColor.white
     static let yaBlackUniversal = UIColor(named: "YP Black Universal") ?? UIColor(hexString: "#1A1B22")
     static let yaLightGrayLight = UIColor(named: "YP Light Grey") ?? UIColor(hexString: "#F7F7F8")
