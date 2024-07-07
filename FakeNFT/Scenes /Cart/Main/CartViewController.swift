@@ -2,6 +2,8 @@ import Foundation
 import UIKit
 
 final class CartViewController: UIViewController, LoadingView {
+    
+    // MARK: - Properties
 
     private let servicesAssembly: ServicesAssembly
     private var viewModel: CartViewModel
@@ -75,6 +77,8 @@ final class CartViewController: UIViewController, LoadingView {
         activityIndicator.color = .yaBlackLight
         return activityIndicator
     }()
+    
+    // MARK: - Initialization
 
     init(
         servicesAssembly: ServicesAssembly,
@@ -88,6 +92,8 @@ final class CartViewController: UIViewController, LoadingView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Lifecycle
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -107,6 +113,8 @@ final class CartViewController: UIViewController, LoadingView {
         orderTableView.delegate = self
         checkIfCartIsEmpty()
     }
+    
+    // MARK: - Private Function
 
     private func bindViewModel() {
         viewModel.orderedNftsBinding = { [weak self] _ in
@@ -228,6 +236,8 @@ final class CartViewController: UIViewController, LoadingView {
         deleteConfirmationViewController.modalTransitionStyle = .crossDissolve
         present(deleteConfirmationViewController, animated: true, completion: nil)
     }
+    
+    // MARK: - Actions
 
     @objc private func sortedButtonTapped() {
         let sortSheet = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
@@ -256,11 +266,13 @@ final class CartViewController: UIViewController, LoadingView {
     @objc private func paymentButtonTapped() {
         let networkClient = DefaultNetworkClient()
         let currencyViewModel = CurrencyViewModel(networkClient: networkClient)
-        let currencyPickerViewController = CurrencyPickerViewController(currencyViewModel: currencyViewModel)
-        currencyPickerViewController.modalPresentationStyle = .fullScreen
-        self.present(currencyPickerViewController, animated: true)
+        let currencyViewController = CurrencyViewController(currencyViewModel: currencyViewModel)
+        currencyViewController.modalPresentationStyle = .fullScreen
+        self.present(currencyViewController, animated: true)
     }
 }
+
+    // MARK: - Extension
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
