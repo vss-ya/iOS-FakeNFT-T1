@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 final class CartViewController: UIViewController, LoadingView {
-    
+
     // MARK: - Properties
 
     private let servicesAssembly: ServicesAssembly
@@ -77,7 +77,7 @@ final class CartViewController: UIViewController, LoadingView {
         activityIndicator.color = .yaBlackLight
         return activityIndicator
     }()
-    
+
     // MARK: - Initialization
 
     init(
@@ -92,7 +92,7 @@ final class CartViewController: UIViewController, LoadingView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Lifecycle
 
     override func viewWillAppear(_ animated: Bool) {
@@ -113,7 +113,7 @@ final class CartViewController: UIViewController, LoadingView {
         orderTableView.delegate = self
         checkIfCartIsEmpty()
     }
-    
+
     // MARK: - Private Function
 
     private func bindViewModel() {
@@ -236,7 +236,7 @@ final class CartViewController: UIViewController, LoadingView {
         deleteConfirmationViewController.modalTransitionStyle = .crossDissolve
         present(deleteConfirmationViewController, animated: true, completion: nil)
     }
-    
+
     // MARK: - Actions
 
     @objc private func sortedButtonTapped() {

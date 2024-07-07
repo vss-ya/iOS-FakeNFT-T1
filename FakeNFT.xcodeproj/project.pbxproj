@@ -391,7 +391,6 @@
 				5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */,
 				5D91B31B2C3202CB00E08877 /* MockCurrencies.swift */,
 				5D91B31F2C3366CC00E08877 /* CurrenciesParams.swift */,
-				5DA7C1992C3AC39C0046F7A1 /* SuccessPayViewController.swift */,
 			);
 			path = Currencies;
 			sourceTree = "<group>";
@@ -422,14 +421,31 @@
 			path = UserTermsViewController;
 			sourceTree = "<group>";
 		};
+		5DA7C19B2C3ACDA50046F7A1 /* PaymentResult */ = {
+			isa = PBXGroup;
+			children = (
+				5DA7C1992C3AC39C0046F7A1 /* SuccessPayViewController.swift */,
+			);
+			path = PaymentResult;
+			sourceTree = "<group>";
+		};
+		5DA7C19C2C3ACDFD0046F7A1 /* Binding */ = {
+			isa = PBXGroup;
+			children = (
+				5D91B30B2C263B8800E08877 /* Binding.swift */,
+			);
+			path = Binding;
+			sourceTree = "<group>";
+		};
 		5DC7C5D82C222C01000147D9 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
 				5D91B31D2C33620200E08877 /* Main */,
 				5D91B31E2C33627A00E08877 /* NftRemoval */,
 				5D91B3142C31DBE600E08877 /* Currencies */,
+				5DA7C19B2C3ACDA50046F7A1 /* PaymentResult */,
 				5DA7C1922C3A10F20046F7A1 /* UserTermsViewController */,
-				5D91B30B2C263B8800E08877 /* Binding.swift */,
+				5DA7C19C2C3ACDFD0046F7A1 /* Binding */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
