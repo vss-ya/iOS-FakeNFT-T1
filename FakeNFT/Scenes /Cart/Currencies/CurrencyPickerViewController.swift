@@ -47,6 +47,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         label.font = .caption2
         label.text = "Пользовательского соглашения"
         label.textAlignment = .left
+        label.isUserInteractionEnabled = true
         return label
     }()
 
@@ -89,6 +90,8 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         bindViewModel()
         currencyCollectionView.dataSource = self
         currencyCollectionView.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapTermsLabel))
+        termsLabel.addGestureRecognizer(tapGesture)
     }
 
     private func addElements() {
@@ -175,6 +178,13 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
     @objc private func backButtonTapped() {
         self.dismiss(animated: true)
     }
+
+    @objc private func didTapTermsLabel() {
+        let userTermsViewController = UserTermsViewController()
+        let navigationController = UINavigationController(rootViewController: userTermsViewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        present(navigationController, animated: true, completion: nil)
+    }
 }
 
 extension CurrencyPickerViewController: UICollectionViewDataSource {
@@ -214,5 +224,16 @@ extension CurrencyPickerViewController: UICollectionViewDelegateFlowLayout {
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
         return collectionParams.cellSpacing
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.contentView.layer.borderWidth = 1
+        cell?.contentView.layer.borderColor = UIColor.textPrimary.cgColor
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.contentView.layer.borderWidth = 0
     }
 }
