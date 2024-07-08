@@ -1,7 +1,11 @@
 import Foundation
 
 enum SortOption: String, CaseIterable {
-    case byPrice = "По цене"
-    case byRating = "По рейтингу"
-    case byName = "По названию"
+    case byPrice
+    case byRating
+    case byName
+
+    var localizedString: String {
+        return NSLocalizedString(rawValue, comment: "")
+    }
 }

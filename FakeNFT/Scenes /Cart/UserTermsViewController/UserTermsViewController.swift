@@ -4,9 +4,9 @@ import WebKit
 final class UserTermsViewController: UIViewController {
     private let webView: WKWebView = WKWebView()
     private let progressView: UIProgressView = UIProgressView()
-
+    
     private var estimatedProgressObservation: NSKeyValueObservation?
-
+    
     private lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
         let backButtonImage = UIImage(systemName: "chevron.left")
@@ -16,16 +16,16 @@ final class UserTermsViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         return button
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupViews()
         setupProgressObservation()
         setConstraints()
         loadWebView()
     }
-
+    
     private func setupViews() {
         progressView.tintColor = .yaBlackUniversal
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
@@ -34,7 +34,7 @@ final class UserTermsViewController: UIViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
     }
-
+    
     private func setupProgressObservation() {
         estimatedProgressObservation = webView.observe(
             \.estimatedProgress,
@@ -44,7 +44,7 @@ final class UserTermsViewController: UIViewController {
             self.updateProgress()
         }
     }
-
+    
     private func setConstraints() {
         webView.constraintEdges(to: view)
         NSLayoutConstraint.activate([
@@ -53,19 +53,19 @@ final class UserTermsViewController: UIViewController {
             progressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
     }
-
+    
     private func loadWebView() {
         if let url = URL(string: RequestConstants.userTermsURL) {
             webView.load(URLRequest(url: url))
         }
     }
-
+    
     private func updateProgress() {
         let progress = Float(webView.estimatedProgress)
         progressView.progress = progress
         progressView.isHidden = abs(progress - 1.0) <= 0.0001
     }
-
+    
     @objc private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
     }

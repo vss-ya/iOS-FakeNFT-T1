@@ -1,9 +1,9 @@
 import Foundation
 
 final class CurrencyViewModel {
-
+    
     // MARK: - Properties
-
+    
     private let networkClient: NetworkClient
     private(set) var currencies: [Currency] = [] {
         didSet {
@@ -13,16 +13,16 @@ final class CurrencyViewModel {
     var currenciesBinding: Binding<[Currency]>?
     var isLoadingBinding: Binding<Bool>?
     var showPaymentResult: Binding<Bool>?
-
+    
     // MARK: - Initialization
-
+    
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
         getCurrencies()
     }
-
+    
     // MARK: - Private Function
-
+    
     private func getCurrencies() {
         let request = GetCurrenciesRequest()
         isLoadingBinding?(true)
@@ -36,7 +36,7 @@ final class CurrencyViewModel {
             }
         }
     }
-
+    
     private func sendOrderPaymentRequest(id: String) {
         let request = OrderPaymentRequest(currencyId: id)
         isLoadingBinding?(true)
@@ -56,15 +56,15 @@ final class CurrencyViewModel {
             }
         }
     }
-
+    
     private func emptyCart() {
         let nftService = NftServiceImpl(networkClient: self.networkClient, storage: NftStorageImpl())
         let cartViewModel = CartViewModel(networkClient: self.networkClient, nftService: nftService)
         cartViewModel.updateOrder(newNfts: [])
     }
-
+    
     // MARK: - Internal Function
-
+    
     func paymentButtonTapped(with currencyIndex: Int) {
         let currencyId = currencies[currencyIndex].id
         sendOrderPaymentRequest(id: currencyId)
