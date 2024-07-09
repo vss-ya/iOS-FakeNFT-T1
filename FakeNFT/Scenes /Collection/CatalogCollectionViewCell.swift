@@ -163,7 +163,7 @@ private extension CatalogCollectionViewCell {
 
 //MARK: - Cell functions
 extension CatalogCollectionViewCell {
-    func configCell(_ nft: Nft, _ isLiked: Bool, _ inCart: Bool) {
+    func configCell(_ nft: CatalogNft, _ isLiked: Bool, _ inCart: Bool) {
         let nftImageURL = URL(string: nft.images[0])
         let processor = ResizingImageProcessor(
             referenceSize: CGSize(width: 108, height: 108),

@@ -20,7 +20,7 @@ final class CatalogDataStore {
     private init() {}
     
     var catalog: [Catalog] = []
-    var collection: [Nft] = []
+    var collection: [CatalogNft] = []
     var userProfile: UserProfile?
     var userCart: CatalogCart?
     
@@ -74,7 +74,7 @@ final class CatalogDataStore {
                 self.collection = []
                 self.task = self.networkClient.send(
                     request: request,
-                    type: Nft.self) { [weak self] result in
+                    type: CatalogNft.self) { [weak self] result in
                         guard let self = self else { return }
                         switch result {
                         case .success(let nft):

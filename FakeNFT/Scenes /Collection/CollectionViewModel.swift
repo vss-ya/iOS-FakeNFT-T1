@@ -12,7 +12,7 @@ protocol CollectionViewModelProtocol: AnyObject {
     var nftNumber: Int { get }
     func getSelectedCollection() -> Catalog?
     func getData()
-    func getNft(at indexPath: IndexPath) -> Nft
+    func getNft(at indexPath: IndexPath) -> CatalogNft
     func isLiked(_ nft: String) -> Bool
     func inCart(_ nft: String) -> Bool
     func didTapLike(_ nft: String)
@@ -47,7 +47,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         }
     }
     
-    func getNft(at indexPath: IndexPath) -> Nft {
+    func getNft(at indexPath: IndexPath) -> CatalogNft {
         return  dataStore.collection[indexPath.row]
     }
     

@@ -1,5 +1,5 @@
 //
-//  Nft.swift
+//  CatalogNft.swift
 //  FakeNFT
 //
 //  Created by Anton Filipchuk on 18.06.2024.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Nft: Codable {
+struct CatalogNft: Codable {
     let createdAt: String
     let name: String
     let images: [String]
