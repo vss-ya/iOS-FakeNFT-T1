@@ -34,7 +34,7 @@ final class CartViewControllerCell: UITableViewCell, ReuseIdentifying {
 
     private lazy var priceTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Цена"
+        label.text = L10n.CartCell.price
         label.textColor = .textPrimary
         label.font = .caption2
         return label

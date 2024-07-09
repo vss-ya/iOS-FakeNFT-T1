@@ -1,7 +1,9 @@
 import Foundation
 import UIKit
 
-final class CurrencyPickerViewController: UIViewController, LoadingView {
+final class CurrencyViewController: UIViewController, LoadingView, ErrorView {
+
+    // MARK: - Properties
 
     private let collectionParams = CollectionParams(
         cellCount: 2,
@@ -12,14 +14,14 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
     )
 
     private let currencyViewModel: CurrencyViewModel
-    private var currencies: [Currency] = []
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    private var selectedCurrencyIndex: Int?
 
     private lazy var currencyCollectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 186, right: 0)
         collectionView.backgroundColor = .systemBackground
-        collectionView.register(CurrencyPickerCell.self)
+        collectionView.register(CurrencyCell.self)
         return collectionView
     }()
 
@@ -36,7 +38,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         label.backgroundColor = .yaLightGrayLight
         label.textColor = .textPrimary
         label.font = .caption2
-        label.text = "Совершая покупку, вы соглашаетесь с условиями"
+        label.text = L10n.Currency.agreementLabel
         label.textAlignment = .left
         return label
     }()
@@ -46,19 +48,22 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         label.backgroundColor = .yaLightGrayLight
         label.textColor = .yaBlueUniversal
         label.font = .caption2
-        label.text = "Пользовательского соглашения"
+        label.text = L10n.Currency.termsLabel
         label.textAlignment = .left
+        label.isUserInteractionEnabled = true
         return label
     }()
 
     private lazy var paymentButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .yaBlackLight
-        button.setTitle("Оплатить", for: .normal)
+        button.backgroundColor = .darkGray
+        button.setTitle(L10n.Currency.paymentButton, for: .normal)
         button.titleLabel?.font = .bodyBold
         button.setTitleColor(.primary, for: .normal)
         button.layer.cornerRadius = 16
+        button.isEnabled = false
         button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(paymentButtonTapped), for: .touchUpInside)
         return button
     }()
 
@@ -68,6 +73,8 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         activityIndicator.color = .yaBlackLight
         return activityIndicator
     }()
+
+    // MARK: - Initialization
 
     init(
         currencyViewModel: CurrencyViewModel
@@ -80,6 +87,8 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -87,10 +96,14 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         createNavigationBar()
         addElements()
         setConstraints()
-        currencies = MockCurrencies.currencies
+        bindViewModel()
         currencyCollectionView.dataSource = self
         currencyCollectionView.delegate = self
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapTermsLabel))
+        termsLabel.addGestureRecognizer(tapGesture)
     }
+
+    // MARK: - Private Function
 
     private func addElements() {
         [currencyCollectionView, paymentContainerView, activityIndicator].forEach {
@@ -139,7 +152,7 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 56, width: view.frame.width, height: 42))
 
         let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.backgroundColor = .primary
+        navBarAppearance.backgroundColor = .systemBackground
         navBarAppearance.shadowColor = .clear
         navigationBar.standardAppearance = navBarAppearance
 
@@ -151,38 +164,94 @@ final class CurrencyPickerViewController: UIViewController, LoadingView {
         )
         backButton.tintColor = .textPrimary
 
-        let navItem = UINavigationItem(title: "Выберите способ оплаты")
+        let navItem = UINavigationItem(title: L10n.Currency.navItemTitle)
         navItem.leftBarButtonItem = backButton
 
         navigationBar.setItems([navItem], animated: false)
         view.addSubview(navigationBar)
     }
 
+    private func bindViewModel() {
+        currencyViewModel.currenciesBinding = { [weak self] _ in
+            guard let self = self else { return }
+            self.currencyCollectionView.reloadData()
+        }
+        currencyViewModel.isLoadingBinding = { [weak self] isLoading in
+            guard let self = self else { return }
+            if !isLoading {
+                self.hideLoading()
+            } else {
+                self.showLoading()
+            }
+        }
+        currencyViewModel.showPaymentResult = { [weak self] result in
+            guard let self = self else { return }
+            if result {
+                self.showSuccessResult()
+            } else {
+                self.showFailResult()
+            }
+        }
+    }
+
+    private func showSuccessResult() {
+        let successPayViewController = SuccessPayViewController()
+        successPayViewController.modalPresentationStyle = .fullScreen
+        present(successPayViewController, animated: true)
+    }
+
+    private func showFailResult() {
+        let errorModel = ErrorModel(
+            message: L10n.Currency.errorMessage,
+            actionText: L10n.Currency.actionText) { [weak self] in
+                guard let self = self,
+                      let selectedCurrencyIndex = self.selectedCurrencyIndex else { return }
+                self.currencyViewModel.paymentButtonTapped(with: selectedCurrencyIndex)
+            }
+        showRetryError(errorModel)
+    }
+
+    // MARK: - Actions
+
     @objc private func backButtonTapped() {
         self.dismiss(animated: true)
     }
+
+    @objc private func didTapTermsLabel() {
+        let userTermsViewController = UserTermsViewController()
+        let navigationController = UINavigationController(rootViewController: userTermsViewController)
+        navigationController.modalPresentationStyle = .fullScreen
+        present(navigationController, animated: true, completion: nil)
+    }
+
+    @objc private func paymentButtonTapped() {
+        guard let selectedCurrencyIndex = selectedCurrencyIndex else { return }
+        currencyViewModel.paymentButtonTapped(with: selectedCurrencyIndex)
+    }
 }
 
-extension CurrencyPickerViewController: UICollectionViewDataSource {
+// MARK: - Extension
+
+extension CurrencyViewController: UICollectionViewDataSource {
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return currencies.count
+        return currencyViewModel.currencies.count
     }
 
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell: CurrencyPickerCell = currencyCollectionView.dequeueReusableCell(indexPath: indexPath)
-        let currency = currencies[indexPath.row]
+        let cell: CurrencyCell = currencyCollectionView.dequeueReusableCell(indexPath: indexPath)
+        let currency = currencyViewModel.currencies[indexPath.row]
         cell.configure(currency: currency)
         return cell
     }
 }
 
-extension CurrencyPickerViewController: UICollectionViewDelegateFlowLayout {
+extension CurrencyViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
@@ -200,5 +269,20 @@ extension CurrencyPickerViewController: UICollectionViewDelegateFlowLayout {
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
         return collectionParams.cellSpacing
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.contentView.layer.borderWidth = 1
+        cell?.contentView.layer.borderColor = UIColor.textPrimary.cgColor
+
+        selectedCurrencyIndex = indexPath.row
+        paymentButton.isEnabled = selectedCurrencyIndex != nil
+        paymentButton.backgroundColor = paymentButton.isEnabled ? .segmentActive : .darkGray
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.contentView.layer.borderWidth = 0
     }
 }

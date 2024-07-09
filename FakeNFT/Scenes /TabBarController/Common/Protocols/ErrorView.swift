@@ -25,4 +25,19 @@ extension ErrorView where Self: UIViewController {
         alert.addAction(action)
         present(alert, animated: true)
     }
+
+    func showRetryError(_ model: ErrorModel) {
+        let alert = UIAlertController(
+            title: nil,
+            message: model.message,
+            preferredStyle: .alert
+        )
+        let retryAction = UIAlertAction(title: model.actionText, style: .default) { _ in
+            model.action()
+        }
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Отмена", comment: ""), style: .cancel)
+        alert.addAction(retryAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
+    }
 }

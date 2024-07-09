@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-final class DeleteConfirmationViewController: UIViewController {
+final class ConfirmDeleteViewController: UIViewController {
 
     private let image: UIImage
     private let viewModel: CartViewModel
@@ -25,7 +25,7 @@ final class DeleteConfirmationViewController: UIViewController {
         let label = UILabel()
         label.textColor = .textPrimary
         label.font = .caption2
-        label.text = "Вы уверены, что хотите удалить объект из корзины?"
+        label.text = L10n.NftRemoval.messageLabel
         label.textAlignment = .center
         label.numberOfLines = 0
         return label
@@ -34,7 +34,7 @@ final class DeleteConfirmationViewController: UIViewController {
     private lazy var deleteButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .yaBlackLight
-        button.setTitle("Удалить", for: .normal)
+        button.setTitle(L10n.NftRemoval.deleteButton, for: .normal)
         button.setTitleColor(.yaRedUniversal, for: .normal)
         button.titleLabel?.font = .bodyRegular
         button.layer.cornerRadius = 12
@@ -45,7 +45,7 @@ final class DeleteConfirmationViewController: UIViewController {
     private lazy var cancelButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .yaBlackLight
-        button.setTitle("Вернуться", for: .normal)
+        button.setTitle(L10n.NftRemoval.cancelButton, for: .normal)
         button.setTitleColor(.primary, for: .normal)
         button.titleLabel?.font = .bodyRegular
         button.layer.cornerRadius = 12

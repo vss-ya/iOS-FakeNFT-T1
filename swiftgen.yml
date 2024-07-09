@@ -1,0 +1,10 @@
+input_dir: FakeNFT/Resources
+output_dir: FakeNFT/Enums
+
+strings:
+  inputs:
+    - Localizable.strings
+  outputs:
+    - templateName: structured-swift5
+      output: Strings.swift
+

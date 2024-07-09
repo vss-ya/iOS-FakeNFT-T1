@@ -40,7 +40,7 @@ extension UIColor {
     static let textOnPrimary = UIColor.white
     static let textOnSecondary = UIColor.black
 
-    static let yaBlackLight = UIColor(hexString: "1A1B22")
+    static let yaBlackLight = UIColor(named: "YP Black") ?? UIColor.black
     static let yaBlackDark = UIColor.white
     static let yaBlackUniversal = UIColor(named: "YP Black Universal") ?? UIColor(hexString: "#1A1B22")
     static let yaLightGrayLight = UIColor(named: "YP Light Grey") ?? UIColor(hexString: "#F7F7F8")
@@ -48,6 +48,7 @@ extension UIColor {
     static let yaRedUniversal = UIColor(named: "YP Red Universal") ?? UIColor(hexString: "#F56B6C")
     static let yaBlueUniversal = UIColor(named: "YP Blue Universal") ?? UIColor(hexString: "#0A84FF")
     static let yaLightGrayDark = UIColor(hexString: "#2C2C2E")
+    static let yaForAlert = UIColor(hexString: "#F2F2F2")
 
     static let segmentActive = UIColor { traits in
         return traits.userInterfaceStyle == .dark

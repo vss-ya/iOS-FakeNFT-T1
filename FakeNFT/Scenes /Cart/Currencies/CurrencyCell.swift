@@ -2,7 +2,7 @@ import Foundation
 import Kingfisher
 import UIKit
 
-final class CurrencyPickerCell: UICollectionViewCell, ReuseIdentifying {
+final class CurrencyCell: UICollectionViewCell, ReuseIdentifying {
 
     // MARK: - Properties
 

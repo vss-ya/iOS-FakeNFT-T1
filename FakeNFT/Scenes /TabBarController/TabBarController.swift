@@ -13,19 +13,19 @@ final class TabBarController: UITabBarController {
     private let catalogTabBarItem = UITabBarItem(
         title: L10n.Tab.catalog,
         image: UIImage(systemName: "rectangle.stack.fill"),
-        tag: 0
+        tag: 1
     )
 
     private let cartTabBarItem = UITabBarItem(
         title: L10n.Tab.cart,
         image: UIImage(systemName: "basket.fill"),
-        tag: 0
+        tag: 2
     )
 
     private let statisticsTabBarItem = UITabBarItem(
         title: L10n.Tab.statistics,
         image: UIImage(systemName: "flag.2.crossed.fill"),
-        tag: 0
+        tag: 3
     )
 
     init(servicesAssembly: ServicesAssembly) {
@@ -58,5 +58,9 @@ final class TabBarController: UITabBarController {
         viewControllers = [profileController, catalogController, cartController, statisticsController]
 
         view.backgroundColor = .systemBackground
+    }
+
+    func returnToCatalog() {
+        self.selectedIndex = 1
     }
 }

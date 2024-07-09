@@ -1,14 +1,14 @@
 import Foundation
 import UIKit
 
-final class CartViewController: UIViewController, LoadingView {
+final class CartViewController: UIViewController, LoadingView, ErrorView {
+
+    // MARK: - Properties
 
     private let servicesAssembly: ServicesAssembly
-    private let userDefaults = UserDefaults.standard
-    private let savedSorting = "savedSorting"
-    private var viewModel: CartViewModel
+    private let refreshControl = UIRefreshControl()
+    private let viewModel: CartViewModel
     private var navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-    private var sortOption: SortOption?
 
     private lazy var orderTableView: UITableView = {
         let tableView = UITableView()
@@ -33,7 +33,6 @@ final class CartViewController: UIViewController, LoadingView {
         label.backgroundColor = .yaLightGrayLight
         label.textColor = .textPrimary
         label.font = .caption1
-        label.text = "3 NFT"
         return label
     }()
 
@@ -43,7 +42,6 @@ final class CartViewController: UIViewController, LoadingView {
         label.numberOfLines = 1
         label.textColor = .yaGreenUniversal
         label.font = .bodyBold
-        label.text = "5,34 ETH"
         label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return label
@@ -52,7 +50,7 @@ final class CartViewController: UIViewController, LoadingView {
     private lazy var paymentButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .yaBlackLight
-        button.setTitle("К оплате", for: .normal)
+        button.setTitle(L10n.Cart.paymentButtonTitle, for: .normal)
         button.titleLabel?.font = .bodyBold
         button.setTitleColor(.primary, for: .normal)
         button.layer.cornerRadius = 16
@@ -67,7 +65,7 @@ final class CartViewController: UIViewController, LoadingView {
         label.numberOfLines = 1
         label.textColor = .textPrimary
         label.font = .bodyBold
-        label.text = "Корзина пуста"
+        label.text = L10n.Cart.emptyCart
         label.isHidden = true
         return label
     }()
@@ -78,6 +76,8 @@ final class CartViewController: UIViewController, LoadingView {
         activityIndicator.color = .yaBlackLight
         return activityIndicator
     }()
+
+    // MARK: - Initialization
 
     init(
         servicesAssembly: ServicesAssembly,
@@ -91,6 +91,8 @@ final class CartViewController: UIViewController, LoadingView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Lifecycle
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -109,8 +111,10 @@ final class CartViewController: UIViewController, LoadingView {
         orderTableView.dataSource = self
         orderTableView.delegate = self
         checkIfCartIsEmpty()
-        sortOption = getSortPredicate()
+        setupRefreshControl()
     }
+
+    // MARK: - Private Function
 
     private func bindViewModel() {
         viewModel.orderedNftsBinding = { [weak self] _ in
@@ -118,6 +122,7 @@ final class CartViewController: UIViewController, LoadingView {
             self.checkIfCartIsEmpty()
             self.calculateTotal()
             self.orderTableView.reloadData()
+            self.refreshControl.endRefreshing()
         }
         viewModel.isLoadingBinding = { [weak self] isLoading in
             guard let self = self else { return }
@@ -125,8 +130,7 @@ final class CartViewController: UIViewController, LoadingView {
                 self.checkIfCartIsEmpty()
                 self.hideLoading()
             } else {
-                [self.orderTableView,
-                 self.totalContainerView,
+                [self.totalContainerView,
                  self.paymentButton,
                  self.navigationBar,
                  self.emptyCartLabel
@@ -134,6 +138,20 @@ final class CartViewController: UIViewController, LoadingView {
                 self.showLoading()
             }
         }
+        viewModel.showErrorResult = { [weak self] in
+            guard let self = self else { return }
+            self.showErrorAlert()
+        }
+    }
+
+    private func showErrorAlert() {
+        let errorModel = ErrorModel(
+            message: L10n.Cart.errorMessage,
+            actionText: L10n.Currency.actionText) { [weak self] in
+                guard let self = self else { return }
+                self.viewModel.getOrder()
+            }
+        showRetryError(errorModel)
     }
 
     private func checkIfCartIsEmpty() {
@@ -142,7 +160,7 @@ final class CartViewController: UIViewController, LoadingView {
 
     private func changeStateEmptyCart(isHidden: Bool) {
         emptyCartLabel.isHidden = !isHidden
-        [orderTableView, totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = isHidden }
+        [totalContainerView, paymentButton, navigationBar].forEach { $0.isHidden = isHidden }
     }
 
     private func calculateTotal() {
@@ -205,7 +223,7 @@ final class CartViewController: UIViewController, LoadingView {
         navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 46, width: view.frame.width, height: 42))
 
         let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.backgroundColor = .primary
+        navBarAppearance.backgroundColor = .systemBackground
         navBarAppearance.shadowColor = .clear
         navigationBar.standardAppearance = navBarAppearance
 
@@ -223,8 +241,14 @@ final class CartViewController: UIViewController, LoadingView {
         view.addSubview(navigationBar)
     }
 
+    private func setupRefreshControl() {
+        refreshControl.tintColor = .clear
+        refreshControl.addTarget(self, action: #selector(refreshCart), for: .valueChanged)
+        orderTableView.refreshControl = refreshControl
+    }
+
     private func didTapDeleteButton(image: UIImage, id: String) {
-        let deleteConfirmationViewController = DeleteConfirmationViewController(
+        let deleteConfirmationViewController = ConfirmDeleteViewController(
             image: image,
             viewModel: viewModel, id: id
         )
@@ -233,20 +257,15 @@ final class CartViewController: UIViewController, LoadingView {
         present(deleteConfirmationViewController, animated: true, completion: nil)
     }
 
-    private func getSortPredicate() -> SortOption {
-        if let savedSortingString = userDefaults.string(forKey: savedSorting),
-           let savedSorting = SortOption(rawValue: savedSortingString) {
-            return savedSorting
-        }
-        return .byName
-    }
+    // MARK: - Actions
 
     @objc private func sortedButtonTapped() {
-        let sortSheet = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        let sortSheet = UIAlertController(title: L10n.Cart.sortTitle, message: nil, preferredStyle: .actionSheet)
+        let sortOption = viewModel.getSortPredicate()
         for option in SortOption.allCases {
             addAction(to: sortSheet, sortPredicate: option, isSelected: option == sortOption)
         }
-        let closeAction = UIAlertAction(title: "Закрыть", style: .cancel) { [weak self] _ in
+        let closeAction = UIAlertAction(title: L10n.Cart.close, style: .cancel) { [weak self] _ in
             guard let self = self else { return }
             self.dismiss(animated: true)
         }
@@ -256,23 +275,28 @@ final class CartViewController: UIViewController, LoadingView {
 
     private func addAction(to alert: UIAlertController, sortPredicate: SortOption, isSelected: Bool) {
         let style: UIAlertAction.Style = isSelected ? .destructive : .default
-        let action = UIAlertAction(title: sortPredicate.rawValue, style: style) { [weak self] _ in
+        let action = UIAlertAction(title: sortPredicate.localizedString, style: style) { [weak self] _ in
             guard let self = self else { return }
-            self.sortOption = sortPredicate
-            self.userDefaults.set(sortPredicate.rawValue, forKey: self.savedSorting)
+            self.viewModel.saveSorting(sortPredicate: sortPredicate)
             self.orderTableView.reloadData()
         }
         alert.addAction(action)
     }
 
+    @objc private func refreshCart() {
+        viewModel.getOrder()
+    }
+
     @objc private func paymentButtonTapped() {
         let networkClient = DefaultNetworkClient()
         let currencyViewModel = CurrencyViewModel(networkClient: networkClient)
-        let currencyPickerViewController = CurrencyPickerViewController(currencyViewModel: currencyViewModel)
-        currencyPickerViewController.modalPresentationStyle = .fullScreen
-        self.present(currencyPickerViewController, animated: true)
+        let currencyViewController = CurrencyViewController(currencyViewModel: currencyViewModel)
+        currencyViewController.modalPresentationStyle = .fullScreen
+        self.present(currencyViewController, animated: true)
     }
 }
+
+// MARK: - Extension
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -281,12 +305,9 @@ extension CartViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartViewControllerCell = orderTableView.dequeueReusableCell()
-        var nfts = viewModel.orderedNfts
-        if let sortOption {
-            nfts = viewModel.sortNfts(by: sortOption)
-        }
-        let nft = nfts[indexPath.row]
+        let nft = viewModel.orderedNfts[indexPath.row]
         cell.configure(nft: nft)
+        cell.selectionStyle = .none
         cell.deleteButtonAction = { [weak self] image in
             guard let self = self else { return }
             self.didTapDeleteButton(image: image, id: nft.id)
