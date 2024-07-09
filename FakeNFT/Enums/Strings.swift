@@ -24,6 +24,45 @@ internal enum L10n {
     /// Произошла неизвестная ошибка
     internal static let unknown = L10n.tr("Localizable", "Error.unknown", fallback: "Произошла неизвестная ошибка")
   }
+  internal enum Profile {
+    /// О разработчике
+    internal static let aboutDeveloper = L10n.tr("Localizable", "Profile.aboutDeveloper", fallback: "О разработчике")
+    /// По названию
+    internal static let byName = L10n.tr("Localizable", "Profile.byName", fallback: "По названию")
+    /// По цене
+    internal static let byPrice = L10n.tr("Localizable", "Profile.byPrice", fallback: "По цене")
+    /// По рейтингу
+    internal static let byRating = L10n.tr("Localizable", "Profile.byRating", fallback: "По рейтингу")
+    /// Сменить
+    /// фото
+    internal static let changePhoto = L10n.tr("Localizable", "Profile.changePhoto", fallback: "Сменить\nфото")
+    /// Закрыть
+    internal static let close = L10n.tr("Localizable", "Profile.close", fallback: "Закрыть")
+    /// Описание
+    internal static let description = L10n.tr("Localizable", "Profile.description", fallback: "Описание")
+    /// Избранные NFT
+    internal static let favoritesNft = L10n.tr("Localizable", "Profile.favoritesNft", fallback: "Избранные NFT")
+    /// от
+    internal static let from = L10n.tr("Localizable", "Profile.from", fallback: "от")
+    /// Сайт
+    internal static let link = L10n.tr("Localizable", "Profile.link", fallback: "Сайт")
+    /// Загрузить изображение
+    internal static let loadImage = L10n.tr("Localizable", "Profile.loadImage", fallback: "Загрузить изображение")
+    /// Мои NFT
+    internal static let myNft = L10n.tr("Localizable", "Profile.myNft", fallback: "Мои NFT")
+    /// Имя
+    internal static let name = L10n.tr("Localizable", "Profile.name", fallback: "Имя")
+    /// У Вас ещё нет избранных NFT
+    internal static let noFavoritesNft = L10n.tr("Localizable", "Profile.noFavoritesNft", fallback: "У Вас ещё нет избранных NFT")
+    /// У Вас ещё нет NFT
+    internal static let noMyNft = L10n.tr("Localizable", "Profile.noMyNft", fallback: "У Вас ещё нет NFT")
+    /// Вставьте ссылку на изображение
+    internal static let pasteLinkToImage = L10n.tr("Localizable", "Profile.pasteLinkToImage", fallback: "Вставьте ссылку на изображение")
+    /// Цена
+    internal static let price = L10n.tr("Localizable", "Profile.price", fallback: "Цена")
+    /// Сортировка
+    internal static let sort = L10n.tr("Localizable", "Profile.sort", fallback: "Сортировка")
+  }
   internal enum Tab {
     /// Корзина
     internal static let cart = L10n.tr("Localizable", "Tab.cart", fallback: "Корзина")

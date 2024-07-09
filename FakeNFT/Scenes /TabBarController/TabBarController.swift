@@ -40,18 +40,30 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let profileController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         let catalogController = UINavigationController(rootViewController: CatalogViewController(viewModel: CatalogViewModel()))
+        let profileController = initProfileTabBarViewController(servicesAssembly)
+        
         let cartController = TestCatalogViewController(servicesAssembly: servicesAssembly)
-        let statisticsController = TestCatalogViewController(servicesAssembly: servicesAssembly)
+        
+        let statisticsViewController = StatisticsViewController(viewModel: StatisticsViewModel())
+        let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
+        statisticsNavigationController.modalPresentationStyle = .overCurrentContext
         
         profileController.tabBarItem = profileTabBarItem
         catalogController.tabBarItem = catalogTabBarItem
         cartController.tabBarItem = cartTabBarItem
-        statisticsController.tabBarItem = statisticsTabBarItem
+        statisticsNavigationController.tabBarItem = statisticsTabBarItem
 
-        viewControllers = [profileController, catalogController, cartController, statisticsController]
+        viewControllers = [profileController, catalogController, cartController, statisticsNavigationController]
 
         view.backgroundColor = .systemBackground
     }
+    
+    private func initProfileTabBarViewController(_ servicesAssembly: ServicesAssembly) -> UIViewController {
+        let viewModel = ProfileViewModel(servicesAssembly)
+        let vc = ProfileViewController(viewModel)
+        let navVc = UINavigationController(rootViewController: vc)
+        return navVc
+    }
+    
 }
