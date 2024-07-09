@@ -40,8 +40,9 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let catalogController = UINavigationController(rootViewController: CatalogViewController(viewModel: CatalogViewModel()))
         let profileController = initProfileTabBarViewController(servicesAssembly)
-        let catalogController = TestCatalogViewController(servicesAssembly: servicesAssembly)
+        
         let cartController = TestCatalogViewController(servicesAssembly: servicesAssembly)
         
         let statisticsViewController = StatisticsViewController(viewModel: StatisticsViewModel())

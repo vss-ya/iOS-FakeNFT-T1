@@ -10,8 +10,6 @@ import Kingfisher
 
 final class MyNftTableViewCell: UITableViewCell {
     
-    static let reuseIdentifier = "MyNftTableViewCell"
-    
     private let contentStackView: UIStackView = UIStackView()
     private let infoStackView: UIStackView = UIStackView()
     private let ratingView: ProfileNftRatingView = ProfileNftRatingView()

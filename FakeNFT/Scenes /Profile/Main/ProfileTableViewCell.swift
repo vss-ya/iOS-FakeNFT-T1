@@ -9,8 +9,6 @@ import UIKit
 
 final class ProfileTableViewCell: UITableViewCell {
     
-    static let reuseIdentifier = "ProfileTableViewCell"
-    
     private enum Margin {
         static let left: CGFloat = 16
         static let right: CGFloat = 16

@@ -3,6 +3,11 @@
 "Tab.cart" = "Корзина";
 "Tab.statistics" = "Статистика";
 "Catalog.openNft" = "Открыть Nft";
+"Catalog.collectionAuthor" = "Автор коллекции: ";
+"Catalog.sortMessage" = "Сортировка";
+"Catalog.sortByName" = "По названию";
+"Catalog.sortByNftCount" = "По количеству NFT";
+"Catalog.sortCancel" = "Закрыть";
 "Profile.myNft" = "Мои NFT";
 "Profile.favoritesNft" = "Избранные NFT";
 "Profile.aboutDeveloper" = "О разработчике";

@@ -65,8 +65,6 @@ final class StatisticsCell: UITableViewCell {
         }
     }
     
-    static let reuseIdentifier = "statisticsCell"
-    
     // MARK: - Lifecycle
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
