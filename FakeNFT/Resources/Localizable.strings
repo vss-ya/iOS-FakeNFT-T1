@@ -12,6 +12,7 @@
 "Cart.sortTitle" = "Сортировка";
 "Cart.close" = "Закрыть";
 "CartCell.price" = "Цена";
+"Cart.errorMessage" = "Не удалось загрузить корзину";
 "NftRemoval.messageLabel" = "Вы уверены, что хотите удалить объект из корзины?";
 "NftRemoval.deleteButton" = "Удалить";
 "NftRemoval.cancelButton" = "Вернуться";

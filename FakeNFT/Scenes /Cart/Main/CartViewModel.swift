@@ -1,9 +1,9 @@
 import Foundation
 
 final class CartViewModel {
-    
+
     // MARK: - Properties
-    
+
     private let networkClient: NetworkClient
     private let nftService: NftService
     private let userDefaults = UserDefaults.standard
@@ -16,17 +16,18 @@ final class CartViewModel {
     }
     var orderedNftsBinding: Binding<[Nft]>?
     var isLoadingBinding: Binding<Bool>?
-    
+    var showErrorResult: (() -> Void)?
+
     // MARK: - Initialization
-    
+
     init(networkClient: NetworkClient, nftService: NftService) {
         self.networkClient = networkClient
         self.nftService = nftService
         getOrder()
     }
-    
+
     // MARK: - Private Function
-    
+
     private func sendRequestAndFetchResult(request: NetworkRequest) {
         isLoadingBinding?(true)
         networkClient.send(request: request, type: Order.self) { result in
@@ -37,10 +38,11 @@ final class CartViewModel {
             case .failure(let error):
                 print(error)
                 self.isLoadingBinding?(false)
+                self.showErrorResult?()
             }
         }
     }
-    
+
     private func getOrderedNfts() {
         guard let order = order else {
             isLoadingBinding?(false)
@@ -48,16 +50,18 @@ final class CartViewModel {
         }
         var nfts: [Nft] = []
         let dispatchGroup = DispatchGroup()
-        
+
         for nftID in order.nfts {
             dispatchGroup.enter()
-            nftService.loadNft(id: nftID) { result in
+            nftService.loadNft(id: nftID) { [weak self] result in
+                guard let self = self else { return }
                 defer { dispatchGroup.leave() }
                 switch result {
                 case .success(let receivedNft):
                     nfts.append(receivedNft)
                 case .failure(let error):
                     print(error)
+                    self.showErrorResult?()
                 }
             }
         }
@@ -67,9 +71,9 @@ final class CartViewModel {
             self.orderedNfts = self.sortNfts(nfts: nfts, by: sortPredicate)
         }
     }
-    
+
     // MARK: - Internal Function
-    
+
     func getSortPredicate() -> SortOption {
         if let savedSortingString = userDefaults.string(forKey: savedSortingKey),
            let savedSorting = SortOption(rawValue: savedSortingString) {
@@ -77,12 +81,12 @@ final class CartViewModel {
         }
         return .byName
     }
-    
+
     func saveSorting(sortPredicate: SortOption) {
         userDefaults.set(sortPredicate.rawValue, forKey: self.savedSortingKey)
         orderedNfts = sortNfts(nfts: orderedNfts, by: sortPredicate)
     }
-    
+
     func sortNfts(nfts: [Nft], by predicat: SortOption) -> [Nft] {
         switch predicat {
         case .byPrice:
@@ -93,21 +97,21 @@ final class CartViewModel {
             return nfts.sorted { $0.name < $1.name }
         }
     }
-    
+
     func getOrder() {
         let getOrderRequest = GetOrderRequest()
         sendRequestAndFetchResult(request: getOrderRequest)
     }
-    
+
     func deleteNftFromOrder(id: String) {
         guard let order = order else { return }
         let newOder = order.nfts.filter { $0 != id }
         updateOrder(newNfts: newOder)
     }
-    
+
     func updateOrder(newNfts: [String]) {
         let putOrderRequest = PutOrderRequest(nfts: newNfts)
         sendRequestAndFetchResult(request: putOrderRequest)
     }
-    
+
 }

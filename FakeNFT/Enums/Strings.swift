@@ -21,6 +21,8 @@ internal enum L10n {
     internal static let close = L10n.tr("Localizable", "Cart.close", fallback: "Закрыть")
     /// Корзина пуста
     internal static let emptyCart = L10n.tr("Localizable", "Cart.emptyCart", fallback: "Корзина пуста")
+    /// Не удалось загрузить корзину
+    internal static let errorMessage = L10n.tr("Localizable", "Cart.errorMessage", fallback: "Не удалось загрузить корзину")
     /// К оплате
     internal static let paymentButtonTitle = L10n.tr("Localizable", "Cart.paymentButtonTitle", fallback: "К оплате")
     /// Сортировка

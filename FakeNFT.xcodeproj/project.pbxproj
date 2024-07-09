@@ -49,7 +49,6 @@
 		5D91B3162C31DD2C00E08877 /* CurrencyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3152C31DD2C00E08877 /* CurrencyViewController.swift */; };
 		5D91B3182C31DE7B00E08877 /* CurrencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */; };
 		5D91B31A2C31FCE500E08877 /* CurrencyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3192C31FCE500E08877 /* CurrencyCell.swift */; };
-		5D91B31C2C3202CB00E08877 /* MockCurrencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B31B2C3202CB00E08877 /* MockCurrencies.swift */; };
 		5D91B3202C3366CC00E08877 /* CurrenciesParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B31F2C3366CC00E08877 /* CurrenciesParams.swift */; };
 		5DA7C18F2C352FC60046F7A1 /* CartSortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA7C18E2C352FC60046F7A1 /* CartSortOption.swift */; };
 		5DA7C1912C39CC090046F7A1 /* GetCurrenciesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA7C1902C39CC080046F7A1 /* GetCurrenciesRequest.swift */; };
@@ -128,7 +127,6 @@
 		5D91B3152C31DD2C00E08877 /* CurrencyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyViewController.swift; sourceTree = "<group>"; };
 		5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyViewModel.swift; sourceTree = "<group>"; };
 		5D91B3192C31FCE500E08877 /* CurrencyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyCell.swift; sourceTree = "<group>"; };
-		5D91B31B2C3202CB00E08877 /* MockCurrencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCurrencies.swift; sourceTree = "<group>"; };
 		5D91B31F2C3366CC00E08877 /* CurrenciesParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrenciesParams.swift; sourceTree = "<group>"; };
 		5DA7C18E2C352FC60046F7A1 /* CartSortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartSortOption.swift; sourceTree = "<group>"; };
 		5DA7C1902C39CC080046F7A1 /* GetCurrenciesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrenciesRequest.swift; sourceTree = "<group>"; };
@@ -389,7 +387,6 @@
 				5D91B3192C31FCE500E08877 /* CurrencyCell.swift */,
 				5D91B3152C31DD2C00E08877 /* CurrencyViewController.swift */,
 				5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */,
-				5D91B31B2C3202CB00E08877 /* MockCurrencies.swift */,
 				5D91B31F2C3366CC00E08877 /* CurrenciesParams.swift */,
 			);
 			path = Currencies;
@@ -642,7 +639,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
-				5D91B31C2C3202CB00E08877 /* MockCurrencies.swift in Sources */,
 				5D91B30A2C263A2600E08877 /* CartViewModel.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
