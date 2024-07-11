@@ -40,27 +40,37 @@ final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let profileController = TestCatalogViewController(servicesAssembly: servicesAssembly)
-        let catalogController = TestCatalogViewController(servicesAssembly: servicesAssembly)
-
+        let catalogController = UINavigationController(rootViewController: CatalogViewController(viewModel: CatalogViewModel()))
+        let profileController = initProfileTabBarViewController(servicesAssembly)
+        
         let networkClient = DefaultNetworkClient()
         let storage = NftStorageImpl()
         let nftService = NftServiceImpl(networkClient: networkClient, storage: storage)
         let viewModel = CartViewModel(networkClient: networkClient, nftService: nftService)
         let cartController = CartViewController(servicesAssembly: servicesAssembly, viewModel: viewModel)
-        let statisticsController = TestCatalogViewController(servicesAssembly: servicesAssembly)
+        
+        let statisticsViewController = StatisticsViewController(viewModel: StatisticsViewModel())
+        let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
+        statisticsNavigationController.modalPresentationStyle = .overCurrentContext
+        
         profileController.tabBarItem = profileTabBarItem
         catalogController.tabBarItem = catalogTabBarItem
         cartController.tabBarItem = cartTabBarItem
+        statisticsNavigationController.tabBarItem = statisticsTabBarItem
 
-        statisticsController.tabBarItem = statisticsTabBarItem
-
-        viewControllers = [profileController, catalogController, cartController, statisticsController]
+        viewControllers = [profileController, catalogController, cartController, statisticsNavigationController]
 
         view.backgroundColor = .systemBackground
     }
 
     func returnToCatalog() {
         self.selectedIndex = 1
+    }
+    
+    private func initProfileTabBarViewController(_ servicesAssembly: ServicesAssembly) -> UIViewController {
+        let viewModel = ProfileViewModel(servicesAssembly)
+        let vc = ProfileViewController(viewModel)
+        let navVc = UINavigationController(rootViewController: vc)
+        return navVc
     }
 }
