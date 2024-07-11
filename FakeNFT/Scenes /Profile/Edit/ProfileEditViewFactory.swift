@@ -8,18 +8,18 @@
 import UIKit
 
 final class ProfileEditViewFactory {
-    
+
     static func createCloseButton() -> UIButton {
         let btn = UIButton()
         btn.setImage(.profileClose, for: .normal)
         return btn
     }
-    
+
     static func createScrollView() -> UIScrollView {
         let view = UIScrollView()
         return view
     }
-    
+
     static func createAvatarImageView() -> UIImageView {
         let view = UIImageView()
         view.image = .profileAvatarMock
@@ -28,7 +28,7 @@ final class ProfileEditViewFactory {
         view.layer.cornerRadius = 35
         return view
     }
-    
+
     static func createAvatarButton() -> UIButton {
         let btn = UIButton()
         btn.setTitle(L10n.Profile.changePhoto, for: .normal)
@@ -42,7 +42,7 @@ final class ProfileEditViewFactory {
         btn.layer.cornerRadius = 35
         return btn
     }
-    
+
     static func createLabel(_ text: String) -> UILabel {
         let label = UILabel()
         label.textColor = .ypBlack
@@ -50,7 +50,7 @@ final class ProfileEditViewFactory {
         label.text = text
         return label
     }
-    
+
     static func createTextField() -> UITextField {
         let textField = UITextField()
         let leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
@@ -71,7 +71,7 @@ final class ProfileEditViewFactory {
         textField.layer.masksToBounds = true
         return textField
     }
-    
+
     static func createTextView() -> UITextView {
         let view = UITextView()
         view.backgroundColor = .ypLightGrey
@@ -82,6 +82,5 @@ final class ProfileEditViewFactory {
         view.layer.masksToBounds = true
         return view
     }
-    
-}
 
+}

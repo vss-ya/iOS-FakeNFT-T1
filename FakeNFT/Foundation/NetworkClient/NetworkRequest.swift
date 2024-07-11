@@ -20,5 +20,5 @@ extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Encodable? { nil }
     var httpBody: Data? { nil }
+    var authToken: String? { "7e55487c-2d33-4c4a-8601-07943684c86d" }
 }
-

@@ -13,20 +13,19 @@ protocol CollectionCellDelegate: AnyObject {
     func tapCartButton(_ nft: String)
 }
 
-
 final class CatalogCollectionViewCell: UICollectionViewCell {
-    
+
     private var isLiked: Bool = false
     private var inCart: Bool = false
     private var nft: String?
-    
+
     weak var delegate: CollectionCellDelegate?
-    
+
     private lazy var likeButton: UIButton = {
         let button = UIButton()
         return button
     }()
-    
+
     private lazy var nftImage: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 12
@@ -34,7 +33,7 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
-    
+
     private lazy var ratingStack: UIStackView = {
         let stackView = UIStackView()
         stackView.spacing = 0
@@ -42,7 +41,7 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
         stackView.axis = .horizontal
         return stackView
     }()
-    
+
     private lazy var nftNameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
@@ -51,57 +50,52 @@ final class CatalogCollectionViewCell: UICollectionViewCell {
         label.font = .bodyBold
         return label
     }()
-    
+
     private lazy var nftPriceLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 10, weight: .medium)
         label.textAlignment = .left
         return label
     }()
-    
+
     private lazy var cartButton: UIButton = {
         let button = UIButton()
         return button
     }()
-    
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-    
+
 }
 
-//MARK: - Cell Properties
+// MARK: - Cell Properties
 private extension CatalogCollectionViewCell {
-    
+
     func setupCell() {
         addSubView()
         addLayout()
         addTarget()
         contentView.backgroundColor = .systemBackground
     }
-    
+
     func addSubView() {
         [nftImage,
          ratingStack,
          nftNameLabel,
          nftPriceLabel,
          likeButton,
-         cartButton,
+         cartButton
         ].forEach {
             contentView.addSubview($0)
         }
     }
-    
+
     func addLayout() {
         [nftImage,
          ratingStack,
@@ -112,37 +106,37 @@ private extension CatalogCollectionViewCell {
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+
         NSLayoutConstraint.activate([
             nftImage.topAnchor.constraint(equalTo: contentView.topAnchor),
             nftImage.heightAnchor.constraint(equalToConstant: 108),
             nftImage.widthAnchor.constraint(equalToConstant: 108),
-            
+
             likeButton.topAnchor.constraint(equalTo: nftImage.topAnchor),
             likeButton.trailingAnchor.constraint(equalTo: nftImage.trailingAnchor),
-            
+
             ratingStack.topAnchor.constraint(equalTo: nftImage.bottomAnchor, constant: 8),
             ratingStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            
+
             nftNameLabel.topAnchor.constraint(equalTo: ratingStack.bottomAnchor, constant: 5),
             nftNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nftNameLabel.widthAnchor.constraint(equalToConstant: 68),
-            
+
             nftPriceLabel.topAnchor.constraint(equalTo: nftNameLabel.bottomAnchor, constant: 4),
             nftPriceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             nftPriceLabel.widthAnchor.constraint(equalToConstant: 68),
-            
+
             cartButton.topAnchor.constraint(equalTo: nftImage.bottomAnchor, constant: 24),
             cartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cartButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 68),
+            cartButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 68)
         ])
     }
-    
+
     func  addTarget() {
         likeButton.addTarget(self, action: #selector(tapLikeButton), for: .touchUpInside)
         cartButton.addTarget(self, action: #selector(tapCartButton), for: .touchUpInside)
     }
-    
+
     @objc
     func tapLikeButton() {
         isLiked.toggle()
@@ -150,7 +144,7 @@ private extension CatalogCollectionViewCell {
         guard let nft = nft else { return }
         delegate?.tapLikeButton(nft)
     }
-    
+
     @objc
     func tapCartButton() {
         inCart.toggle()
@@ -158,10 +152,10 @@ private extension CatalogCollectionViewCell {
         guard let nft = nft else { return }
         delegate?.tapCartButton(nft)
     }
-    
+
 }
 
-//MARK: - Cell functions
+// MARK: - Cell functions
 extension CatalogCollectionViewCell {
     func configCell(_ nft: CatalogNft, _ isLiked: Bool, _ inCart: Bool) {
         let nftImageURL = URL(string: nft.images[0])
@@ -173,7 +167,7 @@ extension CatalogCollectionViewCell {
         self.isLiked = isLiked
         self.inCart = inCart
         self.nft = nft.id
-        
+
         nftImage.kf.setImage(with: nftImageURL, options: [.processor(processor)])
         nftNameLabel.text = nft.name
         nftPriceLabel.text = "\(price) ETH"
@@ -181,8 +175,7 @@ extension CatalogCollectionViewCell {
         setLike(isLiked)
         setCart(inCart)
     }
-    
-    
+
     func setRating(_ rating: Int) {
         let maxRating = CatalogConstants.maxRating
         for number in 0..<maxRating {
@@ -194,15 +187,15 @@ extension CatalogCollectionViewCell {
             }
         }
     }
-    
+
     func setLike(_ isLiked: Bool) {
         likeButton.setImage(UIImage(named: isLiked ? CatalogImages.favouritesPressed : CatalogImages.favorites ), for: .normal)
     }
-    
+
     func setCart(_ inCart: Bool) {
         cartButton.setImage(UIImage(named: inCart ? CatalogImages.delFromCart : CatalogImages.addToCart), for: .normal)
     }
-    
+
 }
 
 extension UICollectionViewCell {

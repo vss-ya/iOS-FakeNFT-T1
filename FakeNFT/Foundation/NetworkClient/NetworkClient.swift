@@ -44,7 +44,7 @@ extension NetworkClient {
                             onResponse: @escaping (Result<T, Error>) -> Void) -> NetworkTask? {
         send(urlRequest: urlRequest, type: type, completionQueue: .main, onResponse: onResponse)
     }
-    
+
     @discardableResult
     func send(request: NetworkRequest,
               onResponse: @escaping (Result<Data, Error>) -> Void) -> NetworkTask? {
@@ -71,7 +71,7 @@ struct DefaultNetworkClient: NetworkClient {
         self.decoder = decoder
         self.encoder = encoder
     }
-    
+
     @discardableResult
     func send(
         urlRequest: URLRequest,
@@ -83,7 +83,7 @@ struct DefaultNetworkClient: NetworkClient {
                 onResponse(result)
             }
         }
-        
+
         let task = session.dataTask(with: urlRequest) { data, response, error in
             guard let response = response as? HTTPURLResponse else {
                 onResponse(.failure(NetworkClientError.urlSessionError))
@@ -111,7 +111,7 @@ struct DefaultNetworkClient: NetworkClient {
 
         return DefaultNetworkTask(dataTask: task)
     }
-    
+
     @discardableResult
     func send<T: Decodable>(
         urlRequest: URLRequest,
@@ -136,7 +136,7 @@ struct DefaultNetworkClient: NetworkClient {
         onResponse: @escaping (Result<Data, Error>) -> Void
     ) -> NetworkTask? {
         guard let urlRequest = create(request: request) else { return nil }
-        
+
         return send(urlRequest: urlRequest, completionQueue: completionQueue, onResponse: onResponse)
     }
 
@@ -169,7 +169,6 @@ struct DefaultNetworkClient: NetworkClient {
         urlRequest.httpMethod = request.httpMethod.rawValue
         urlRequest.setValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
 
-<<<<<<< HEAD
         if let authToken = request.authToken {
             urlRequest.setValue(authToken, forHTTPHeaderField: "X-Practicum-Mobile-Token")
         }
@@ -178,15 +177,8 @@ struct DefaultNetworkClient: NetworkClient {
             urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
             urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = dto as? Data
-=======
-        if let dto = request.dto,
-           let dtoEncoded = try? encoder.encode(dto) {
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            urlRequest.httpBody = dtoEncoded
->>>>>>> develop
         }
-        
+
         if let httpBody = request.httpBody {
             urlRequest.setValue("application/json", forHTTPHeaderField: "Accept")
             urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")

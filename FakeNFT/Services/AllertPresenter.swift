@@ -38,7 +38,7 @@ final class AlertPresenter {
         )
         delegate?.present(alert, animated: true, completion: nil)
     }
-    
+
     static func loadDataError(delegate: UIViewController?, repeatCompletion: @escaping () -> Void) {
         let alert = UIAlertController(
             title: NSLocalizedString("Statistics.loadDataError.title", comment: ""),
@@ -62,4 +62,3 @@ final class AlertPresenter {
         delegate?.present(alert, animated: true, completion: nil)
     }
 }
-

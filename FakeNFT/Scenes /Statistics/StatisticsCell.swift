@@ -45,7 +45,7 @@ final class StatisticsCell: UITableViewCell {
         label.textAlignment = .right
         return label
     }()
-    
+
     var user: StatisticsUser? {
         didSet {
             guard let user = user else { return }
@@ -64,25 +64,25 @@ final class StatisticsCell: UITableViewCell {
             nftsLabel.text = String(user.nfts.count)
         }
     }
-    
+
     // MARK: - Lifecycle
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupCell() {
         backgroundColor = .clear
         selectionStyle = .none
         addSubViews()
         applyConstraints()
     }
-    
+
     private func addSubViews() {
         [ratingLabel, backgroundLabel].forEach { subview in
             subview.translatesAutoresizingMaskIntoConstraints = false
@@ -93,7 +93,7 @@ final class StatisticsCell: UITableViewCell {
             backgroundLabel.addSubview(subview)
         }
     }
-    
+
     private func applyConstraints() {
         NSLayoutConstraint.activate([
             ratingLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -116,7 +116,7 @@ final class StatisticsCell: UITableViewCell {
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 8),
             nameLabel.centerYAnchor.constraint(equalTo: backgroundLabel.centerYAnchor),
-            nameLabel.trailingAnchor.constraint(equalTo: nftsLabel.leadingAnchor, constant: -16),
+            nameLabel.trailingAnchor.constraint(equalTo: nftsLabel.leadingAnchor, constant: -16)
         ])
         NSLayoutConstraint.activate([
             nftsLabel.trailingAnchor.constraint(equalTo: backgroundLabel.trailingAnchor, constant: -16),

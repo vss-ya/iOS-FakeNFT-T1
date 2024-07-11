@@ -11,7 +11,7 @@ protocol StatisticsUserCollectionViewModelProtocol {
     var updateData: Binding<Bool>? { get set }
     var updateNft: Binding<Int>? { get set }
     var numberOfSections: Int { get }
-    
+
     init(ids: [String])
     func getData()
     func numberOfItemsInSection(_ section: Int) -> Int

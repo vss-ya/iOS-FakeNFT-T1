@@ -33,28 +33,28 @@ final class StatisticsUserCollectionViewController: UIViewController {
         collectionView.delegate = self
         return collectionView
     }()
-    
+
     private var viewModel: StatisticsUserCollectionViewModelProtocol
-    
+
     // MARK: - Lifecycle
-    
+
     init(viewModel: StatisticsUserCollectionViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         bind()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
         UIBlockingProgressHUD.show()
         viewModel.getData()
     }
-    
+
     private func setupViewController() {
         view.backgroundColor = .ypWhite
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
@@ -62,7 +62,7 @@ final class StatisticsUserCollectionViewController: UIViewController {
         addSubViews()
         applyConstraints()
     }
-    
+
     private func addSubViews() {
         [backButton, titleLabel, collectionView].forEach { subview in
             subview.translatesAutoresizingMaskIntoConstraints = false
@@ -78,7 +78,7 @@ final class StatisticsUserCollectionViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
+
     private func bind() {
         viewModel.updateData = { [weak self] update in
             UIBlockingProgressHUD.dismiss()
@@ -91,9 +91,9 @@ final class StatisticsUserCollectionViewController: UIViewController {
             self.collectionView.reloadItems(at: [indexPath])
         }
     }
-    
+
     // MARK: - Actions
-    
+
     @objc private func didTapBackButton() {
         dismiss(animated: true)
     }
@@ -105,11 +105,11 @@ extension StatisticsUserCollectionViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return viewModel.numberOfSections
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.numberOfItemsInSection(section)
     }
-    
+
     func collectionView(
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath

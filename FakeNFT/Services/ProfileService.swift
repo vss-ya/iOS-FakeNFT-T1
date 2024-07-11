@@ -41,7 +41,7 @@ final class ProfileServiceImpl: ProfileService {
             }
         }
     }
-    
+
     func updateProfile(_ profile: Profile, completion: @escaping ProfileCompletion) {
         guard let urlRequest = makePutRequest(with: profile) else {
             let error = NSError(domain: "URL request error", code: 0)
@@ -58,11 +58,11 @@ final class ProfileServiceImpl: ProfileService {
             }
         }
     }
-    
+
 }
 
 private extension ProfileServiceImpl {
-    
+
     func makePutRequest(with profile: Profile) -> URLRequest? {
         guard let url = ProfileRequest().endpoint else {
             return nil
@@ -78,7 +78,7 @@ private extension ProfileServiceImpl {
         let avatar = (profile.avatar ?? "").addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
         let description = profile.description ?? ""
         let website = (profile.website ?? "").addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
-        
+
         var profileData: String = ""
         profileData += "&likes=\(likes)"
         profileData += "&name=\(name)"
@@ -91,5 +91,5 @@ private extension ProfileServiceImpl {
         return request
 
     }
-    
+
 }

@@ -2,6 +2,6 @@
 //  DefinableTypes.swift
 //  FakeNFT
 //
-import Foundation
-
-typealias Binding<T> = (T) -> Void
+// import Foundation
+//
+// typealias Binding<T> = (T) -> Void

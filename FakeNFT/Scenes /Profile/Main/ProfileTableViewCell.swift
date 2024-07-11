@@ -8,13 +8,13 @@
 import UIKit
 
 final class ProfileTableViewCell: UITableViewCell {
-    
+
     private enum Margin {
         static let left: CGFloat = 16
         static let right: CGFloat = 16
         static let countLeft: CGFloat = 8
     }
-    
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -22,7 +22,7 @@ final class ProfileTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
     }()
-    
+
     private lazy var countLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -30,24 +30,24 @@ final class ProfileTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 17, weight: .bold)
         return label
     }()
-    
+
     private lazy var chevronImageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.image = .profileChevronForward
         return view
     }()
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         backgroundColor = .ypWhite
         selectionStyle = .none
-        
+
         contentView.addSubview(titleLabel)
         contentView.addSubview(countLabel)
         contentView.addSubview(chevronImageView)
@@ -58,16 +58,17 @@ final class ProfileTableViewCell: UITableViewCell {
             countLabel.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: Margin.countLeft),
             countLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             chevronImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Margin.right),
-            chevronImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            chevronImageView.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
-    
+
     func update(title: String, count: Int?) {
         titleLabel.text = title
-        countLabel.text = switch count {
-        case .some(let count): "(\(count))"
-        default: ""
-        }
+        countLabel.text = {
+            switch count {
+            case .some(let countValue): return "(\(countValue))"
+            default: return ""
+            }
+        }()
     }
-    
 }

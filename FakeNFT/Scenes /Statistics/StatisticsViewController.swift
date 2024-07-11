@@ -24,13 +24,13 @@ final class StatisticsViewController: UIViewController {
         tableView.register(StatisticsCell.self, forCellReuseIdentifier: StatisticsCell.reuseIdentifier)
         return tableView
     }()
-    
+
     private var sortField: StatisticsSortFields = .byRating
-    
+
     private var viewModel: StatisticsViewModelProtocol
-    
+
     // MARK: - Lifecycle
-    
+
     init(viewModel: StatisticsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -39,25 +39,25 @@ final class StatisticsViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIBlockingProgressHUD.show()
         viewModel.getData(sortField: sortField)
     }
-    
+
     private func setupViewController() {
         view.backgroundColor = .ypWhite
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: sortButton)
         addSubViews()
         applyConstraints()
     }
-    
+
     private func addSubViews() {
         [sortButton, tableView].forEach { subview in
             subview.translatesAutoresizingMaskIntoConstraints = false
@@ -73,7 +73,7 @@ final class StatisticsViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
+
     private func bind() {
         viewModel.updateData = { [weak self] update in
             UIBlockingProgressHUD.dismiss()
@@ -88,9 +88,9 @@ final class StatisticsViewController: UIViewController {
             }
         }
     }
-    
+
     // MARK: - Actions
-    
+
     @objc private func didTapSortButton() {
         AlertPresenter.statisticsSort(delegate: self) { [weak self] sortField in
             UIBlockingProgressHUD.show()
@@ -106,11 +106,11 @@ extension StatisticsViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSections
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRowsInSection(section)
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: StatisticsCell.reuseIdentifier, for: indexPath)
         guard let cell = cell as? StatisticsCell, let model = viewModel.model(at: indexPath) as? StatisticsUser else {
@@ -130,18 +130,18 @@ extension StatisticsViewController: UITableViewDelegate {
         statisticsUserViewController.dismissClosure = { [weak self] in
             self?.tabBarController?.tabBar.isHidden = false
         }
-        
+
         let statisticsUserNavigationController = UINavigationController(rootViewController: statisticsUserViewController)
         statisticsUserNavigationController.modalPresentationStyle = .overCurrentContext
-        
+
         self.present(statisticsUserNavigationController, animated: true)
         tabBarController?.tabBar.isHidden = true
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 88
     }
-    
+
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
     }

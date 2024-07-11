@@ -9,9 +9,8 @@ import Foundation
 
 struct StatisticsUserRequest: NetworkRequest {
     let id: String
-    
+
     var endpoint: URL? {
         return URL(string: "\(RequestConstants.baseURL)/api/v1/users/\(id)")
     }
 }
-

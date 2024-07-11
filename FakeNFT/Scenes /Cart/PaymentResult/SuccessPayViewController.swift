@@ -75,7 +75,8 @@ final class SuccessPayViewController: UIViewController {
     @objc private func returnToCatalogButtonTapped() {
         let servicesAssembly = ServicesAssembly(
             networkClient: DefaultNetworkClient(),
-            nftStorage: NftStorageImpl()
+            nftStorage: NftStorageImpl(),
+            profileStorage: ProfileStorageImpl()
         )
         let tabBarController = TabBarController(servicesAssembly: servicesAssembly)
         tabBarController.returnToCatalog()

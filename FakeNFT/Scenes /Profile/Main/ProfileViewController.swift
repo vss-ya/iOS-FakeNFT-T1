@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 
 final class ProfileViewController: UIViewController {
-    
+
     private enum Margin {
         static let left: CGFloat = 16
         static let right: CGFloat = 16
@@ -22,32 +22,32 @@ final class ProfileViewController: UIViewController {
         static let linkTop: CGFloat = 8
         static let tableTop: CGFloat = 40
     }
-    
+
     private enum Constants {
         static let tableCellHeight: CGFloat = 54
     }
-    
+
     private enum TableItem: CaseIterable {
         case myNft
         case favoritesNft
         case aboutDeveloper
     }
-    
+
     private let editButton: UIButton
     private let avatarImageView: UIImageView
     private let headerLabel: UILabel
     private let descriptionLabel: UILabel
     private let linkLabel: UILabel
     private let tableView: UITableView
-    
+
     private let tableItems = TableItem.allCases
     private let viewFactory = ProfileViewFactory.self
     private let viewModel: ProfileViewModelProtocol
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     init(_ viewModel: ProfileViewModelProtocol) {
         self.editButton = viewFactory.createEditButton()
         self.avatarImageView = viewFactory.createAvatarImageView()
@@ -55,38 +55,38 @@ final class ProfileViewController: UIViewController {
         self.descriptionLabel = viewFactory.createDescriptionLabel()
         self.linkLabel = viewFactory.createLinkLabel()
         self.tableView = viewFactory.createTableView()
-        
+
         self.viewModel = viewModel
-        
+
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setup()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         load()
     }
-    
+
 }
 
 // MARK: - Helpers
 private extension ProfileViewController {
-    
+
     func setup() {
         setupViews()
         setupConstraints()
         bind()
     }
-    
+
     func setupViews() {
         navigationItem.rightBarButtonItem = .init(customView: editButton)
         view.backgroundColor = .ypWhite
-        
+
         [
             editButton,
             avatarImageView,
@@ -98,13 +98,13 @@ private extension ProfileViewController {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        
+
         tableView.dataSource = self
         tableView.delegate = self
-        
+
         editButton.addTarget(self, action: #selector(editAction), for: .touchUpInside)
     }
-    
+
     func setupConstraints() {
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Margin.avatarTop),
@@ -123,30 +123,30 @@ private extension ProfileViewController {
             tableView.topAnchor.constraint(equalTo: linkLabel.bottomAnchor, constant: Margin.tableTop),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
         ])
     }
-    
+
     func bind() {
         viewModel.onDidLoad = { [weak self](profile) in
             guard let self = self else {
                 return
             }
-            updateProfile(profile)
+            self.updateProfile(profile)
         }
         viewModel.onDidLoadWithError = { [weak self](error) in
             guard let self = self else {
                 return
             }
-            showError(error)
+            self.showError(error)
         }
     }
-    
+
     func load() {
         showLoading()
         viewModel.load()
     }
-    
+
     func updateProfile(_ profile: Profile) {
         hideLoading()
         headerLabel.text = profile.name
@@ -163,7 +163,7 @@ private extension ProfileViewController {
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(with: url, placeholder: UIImage.profileAvatarMock, options: options)
     }
-    
+
     func showError(_ error: Error) {
         UIBlockingProgressHUD.showError(error)
     }
@@ -175,7 +175,7 @@ private extension ProfileViewController {
     func hideLoading() {
         UIBlockingProgressHUD.dismiss()
     }
-    
+
 }
 
 // MARK: - Actions
@@ -187,24 +187,24 @@ extension ProfileViewController {
             guard let self = self else {
                 return
             }
-            dismiss(animated: true)
-            load()
+            self.dismiss(animated: true)
+            self.load()
         }
         present(vc, animated: true, completion: nil)
     }
-    
+
     private func openMyNft() {
         let viewModel = MyNftViewModel(viewModel.servicesAssembly)
         let vc = MyNftViewController(viewModel)
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     private func openFavoritesNft() {
         let viewModel = FavoritesNftViewModel(viewModel.servicesAssembly)
         let vc = FavoritesNftViewController(viewModel)
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     private func openAboutDeveloper() {
         let vc = AboutDeveloperViewController()
         present(vc, animated: true)
@@ -214,11 +214,11 @@ extension ProfileViewController {
 
 // MARK: - UITableViewDelegate
 extension ProfileViewController: UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return Constants.tableCellHeight
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         switch indexPath.row {
@@ -232,16 +232,16 @@ extension ProfileViewController: UITableViewDelegate {
             break
         }
     }
-    
+
 }
 
 // MARK: - UITableViewDataSource
 extension ProfileViewController: UITableViewDataSource {
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableItems.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: ProfileTableViewCell.reuseIdentifier,
@@ -262,5 +262,5 @@ extension ProfileViewController: UITableViewDataSource {
         }
         return cell
     }
-    
+
 }
