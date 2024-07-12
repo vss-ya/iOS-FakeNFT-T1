@@ -1,3 +1,4 @@
+// swiftlint:disable file_length
 import Foundation
 #if canImport(AppKit)
 import AppKit
@@ -983,16 +984,16 @@ extension AppKit.NSColor {
 
 }
 
-protocol _ACResourceInitProtocol {}
-extension AppKit.NSImage: _ACResourceInitProtocol {}
+protocol ACResourceInitProtocol {}
+extension AppKit.NSImage: ACResourceInitProtocol {}
 
 @available(macOS 10.7, *)
 @available(macCatalyst, unavailable)
-extension _ACResourceInitProtocol {
+extension ACResourceInitProtocol {
 
     /// Initialize a `NSImage` with an image resource.
     init(resource: ImageResource) {
-        self = resource.bundle.image(forResource: NSImage.Name(resource.name))! as! Self
+        self = resource.bundle.image(forResource: NSImage.Name(resource.name))! as? Self
     }
 
 }
@@ -1051,3 +1052,4 @@ extension SwiftUI.Image {
 
 }
 #endif
+// swiftlint:enable file_length
