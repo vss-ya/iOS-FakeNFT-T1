@@ -64,6 +64,7 @@
 		57D66F672C24563000B73B18 /* AboutDeveloperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D66F662C24563000B73B18 /* AboutDeveloperViewController.swift */; };
 		57D66F692C2471FC00B73B18 /* MyNftTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D66F682C2471FC00B73B18 /* MyNftTableViewCell.swift */; };
 		57D66F6B2C24A1D800B73B18 /* FavoritesNftCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57D66F6A2C24A1D800B73B18 /* FavoritesNftCollectionViewCell.swift */; };
+		57E1CFF12C41732C00149396 /* GeneratedAssetSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E1CFF02C41732B00149396 /* GeneratedAssetSymbols.swift */; };
 		5D91B30A2C263A2600E08877 /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3092C263A2600E08877 /* CartViewModel.swift */; };
 		5D91B30C2C263B8800E08877 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B30B2C263B8800E08877 /* Binding.swift */; };
 		5D91B3112C30715F00E08877 /* ConfirmDeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3102C30715F00E08877 /* ConfirmDeleteViewController.swift */; };
@@ -72,7 +73,6 @@
 		5D91B3182C31DE7B00E08877 /* CurrencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */; };
 		5D91B31A2C31FCE500E08877 /* CurrencyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B3192C31FCE500E08877 /* CurrencyCell.swift */; };
 		5D91B3202C3366CC00E08877 /* CurrenciesParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D91B31F2C3366CC00E08877 /* CurrenciesParams.swift */; };
-		5D964FE92C408D7B009C79EC /* GeneratedAssetSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D964FE82C408D7B009C79EC /* GeneratedAssetSymbols.swift */; };
 		5D989E7E2C369D4B00DA484F /* CatalogCartRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D989E7D2C369D4B00DA484F /* CatalogCartRequest.swift */; };
 		5D989E802C369DC000DA484F /* CatalogCart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D989E7F2C369DBF00DA484F /* CatalogCart.swift */; };
 		5D989E822C36A52B00DA484F /* CatalogCartUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D989E812C36A52B00DA484F /* CatalogCartUpdate.swift */; };
@@ -213,6 +213,7 @@
 		57D66F662C24563000B73B18 /* AboutDeveloperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutDeveloperViewController.swift; sourceTree = "<group>"; };
 		57D66F682C2471FC00B73B18 /* MyNftTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNftTableViewCell.swift; sourceTree = "<group>"; };
 		57D66F6A2C24A1D800B73B18 /* FavoritesNftCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesNftCollectionViewCell.swift; sourceTree = "<group>"; };
+		57E1CFF02C41732B00149396 /* GeneratedAssetSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneratedAssetSymbols.swift; sourceTree = "<group>"; };
 		5D91B3092C263A2600E08877 /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
 		5D91B30B2C263B8800E08877 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		5D91B3102C30715F00E08877 /* ConfirmDeleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmDeleteViewController.swift; sourceTree = "<group>"; };
@@ -221,7 +222,6 @@
 		5D91B3172C31DE7B00E08877 /* CurrencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyViewModel.swift; sourceTree = "<group>"; };
 		5D91B3192C31FCE500E08877 /* CurrencyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyCell.swift; sourceTree = "<group>"; };
 		5D91B31F2C3366CC00E08877 /* CurrenciesParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrenciesParams.swift; sourceTree = "<group>"; };
-		5D964FE82C408D7B009C79EC /* GeneratedAssetSymbols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GeneratedAssetSymbols.swift; path = "../../../../../../iOS-FakeNFT-T1/FakeNFT/Enums/GeneratedAssetSymbols.swift"; sourceTree = "<group>"; };
 		5D989E7D2C369D4B00DA484F /* CatalogCartRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogCartRequest.swift; sourceTree = "<group>"; };
 		5D989E7F2C369DBF00DA484F /* CatalogCart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogCart.swift; sourceTree = "<group>"; };
 		5D989E812C36A52B00DA484F /* CatalogCartUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogCartUpdate.swift; sourceTree = "<group>"; };
@@ -579,8 +579,8 @@
 			children = (
 				57D66F4E2C1EB48800B73B18 /* Strings.swift */,
 				5DA7C18E2C352FC60046F7A1 /* CartSortOption.swift */,
+				57E1CFF02C41732B00149396 /* GeneratedAssetSymbols.swift */,
 				5DA654922C229BAD001FB8CC /* CatalogConstants.swift */,
-				5D964FE82C408D7B009C79EC /* GeneratedAssetSymbols.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -1090,7 +1090,7 @@
 				E7A4AC672C25B91800B421D5 /* StatisticsUserViewModelProtocol.swift in Sources */,
 				E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */,
 				E784D3702C218485002BEA2A /* StatisticsViewModel.swift in Sources */,
-				5D964FE92C408D7B009C79EC /* GeneratedAssetSymbols.swift in Sources */,
+				57E1CFF12C41732C00149396 /* GeneratedAssetSymbols.swift in Sources */,
 				E701BBD32C25E995008D7811 /* StatisticsCollectionCell.swift in Sources */,
 				0CF2C2E12A784C7000FDC837 /* LinePageControl.swift in Sources */,
 				5D91B30C2C263B8800E08877 /* Binding.swift in Sources */,
@@ -1289,7 +1289,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1317,7 +1318,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_ASSET_SYMBOLS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
