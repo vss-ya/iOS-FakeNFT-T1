@@ -9,7 +9,7 @@ import Foundation
 
 protocol StatisticsUserViewModelProtocol {
     var updateData: Binding<StatisticsUser>? { get set }
-    
+
     init(id: String)
     func getUser()
 }

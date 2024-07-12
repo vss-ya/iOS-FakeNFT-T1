@@ -9,7 +9,7 @@ import Foundation
 
 struct StatisticsUsersRequest: NetworkRequest {
     let sortField: StatisticsSortFields
-    
+
     var endpoint: URL? {
         guard var urlComponents = URLComponents(string: "\(RequestConstants.baseURL)/api/v1/users") else { return nil }
         switch sortField {

@@ -8,15 +8,15 @@
 import Foundation
 
 final class ProfileSettingsStorage {
-    
+
     enum Key: String {
         case nftFilter = "profile.nft.filter"
     }
-    
+
     static let shared = ProfileSettingsStorage()
-    
+
     private var userDefaults: UserDefaults = UserDefaults.standard
-    
+
     var nftFilter: ProfileNftFilter {
         set { userDefaults.set(newValue.rawValue, forKey: Key.nftFilter.rawValue) }
         get {
@@ -24,7 +24,7 @@ final class ProfileSettingsStorage {
             return ProfileNftFilter(rawValue: value) ?? .byRaiting
         }
     }
-    
+
     private init() {}
-    
+
 }

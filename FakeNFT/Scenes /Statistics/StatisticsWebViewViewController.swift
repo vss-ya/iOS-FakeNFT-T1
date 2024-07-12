@@ -21,22 +21,22 @@ final class StatisticsWebViewViewController: UIViewController {
         progressView.backgroundColor = .none
         return progressView
     }()
-    
+
     private var viewModel: StatisticsWebViewViewModelProtocol
     private var estimatedProgressObservation: NSKeyValueObservation?
-    
+
     // MARK: - Lifecycle
-    
+
     init(viewModel: StatisticsWebViewViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         bind()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
@@ -50,12 +50,12 @@ final class StatisticsWebViewViewController: UIViewController {
         )
         viewModel.getData()
     }
-    
+
     private func setupViewController() {
         addSubViews()
         applyConstraints()
     }
-    
+
     private func addSubViews() {
         [webView, progressView].forEach { subview in
             subview.translatesAutoresizingMaskIntoConstraints = false
@@ -76,19 +76,18 @@ final class StatisticsWebViewViewController: UIViewController {
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
+
     private func bind() {
         viewModel.updateData = { [weak self] request in
             self?.webView.load(request)
         }
-        
+
         viewModel.updateProgressValue = { [weak self] progress in
             self?.progressView.setProgress(progress, animated: true)
         }
-        
+
         viewModel.hideProgress = { [weak self] hiden in
             self?.progressView.isHidden = hiden
         }
     }
 }
-

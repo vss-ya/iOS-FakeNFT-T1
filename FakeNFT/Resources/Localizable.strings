@@ -30,7 +30,26 @@
 "Error.unknown" = "Произошла неизвестная ошибка";
 "Error.repeat" = "Повторить";
 "Error.title" = "Ошибка";
-
+"Cart.paymentButtonTitle" = "К оплате";
+"Cart.emptyCart" = "Корзина пуста";
+"Cart.sortTitle" = "Сортировка";
+"Cart.close" = "Закрыть";
+"CartCell.price" = "Цена";
+"Cart.errorMessage" = "Не удалось загрузить корзину";
+"NftRemoval.messageLabel" = "Вы уверены, что хотите удалить объект из корзины?";
+"NftRemoval.deleteButton" = "Удалить";
+"NftRemoval.cancelButton" = "Вернуться";
+"Currency.agreementLabel" = "Совершая покупку, вы соглашаетесь с условиями";
+"Currency.termsLabel" = "Пользовательского соглашения";
+"Currency.paymentButton" = "Оплатить";
+"Currency.navItemTitle" = "Выберите способ оплаты";
+"Currency.errorMessage" = "Не удалось произвести оплату";
+"Currency.actionText" = "Повторить";
+"SuccessPay.successLabel" = "Успех! Оплата прошла, поздравляем с покупкой!";
+"SuccessPay.goToCatalogButton" = "Вернуться в каталог";
+"byPrice" = "По цене";
+"byRating" = "По рейтингу";
+"byName" = "По названию";
 "Statistics.statisticsSort.title" = "Сортировка";
 "Statistics.statisticsSort.byName" = "По имени";
 "Statistics.statisticsSort.byRating" = "По рейтингу";

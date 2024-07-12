@@ -15,15 +15,15 @@ protocol CatalogDataStoreProtocol {
 }
 
 final class CatalogDataStore {
-    
+
     static let shared = CatalogDataStore()
     private init() {}
-    
+
     var catalog: [Catalog] = []
     var collection: [CatalogNft] = []
     var userProfile: UserProfile?
     var userCart: CatalogCart?
-    
+
     private var task: NetworkTask?
     private var likes: [String] = []
     private var cart: [String] = []
@@ -34,10 +34,10 @@ final class CatalogDataStore {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             if self.task != nil { return }
-            task?.cancel()
+            self.task?.cancel()
             let request = CatalogRequest()
             self.catalog = []
-            self.task = networkClient.send(
+            self.task = self.networkClient.send(
                 request: request,
                 type: [Catalog].self) { [weak self] result in
                     guard let self = self else { return }
@@ -54,13 +54,13 @@ final class CatalogDataStore {
                 }
         }
     }
-    
+
     func getCollection(with id: String) -> Catalog? {
         let selectedCatalog = catalog.first(where: { catalog in
             catalog.id == id })
         return selectedCatalog
     }
-    
+
     func getNft(with id: String, completion: @escaping (Bool) -> Void) {
         let selectedCatalog = catalog.first(where: { catalog in
             catalog.id == id })
@@ -68,7 +68,7 @@ final class CatalogDataStore {
         UIBlockingProgressHUD.show()
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            task?.cancel()
+            self.task?.cancel()
             nfts.forEach { nft in
                 let request = CatalogNftRequest(id: nft)
                 self.collection = []
@@ -83,21 +83,21 @@ final class CatalogDataStore {
                             print(error.localizedDescription)
                             completion(false)
                         }
-                        
+
                         if self.collection.count == nfts.count {
                             completion(true)
                         }
-                        
+
                         self.task = nil
                     }
             }
         }
     }
-    
+
     func getUserProfile() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            task?.cancel()
+            self.task?.cancel()
             let request = CatalogUserProfileRequest()
             self.task = self.networkClient.send(
                 request: request,
@@ -113,7 +113,7 @@ final class CatalogDataStore {
                 }
         }
     }
-    
+
     func updateLike(_ nft: String) {
         if let user = userProfile {
             likes = user.likes
@@ -123,18 +123,18 @@ final class CatalogDataStore {
             case false: likes.append(nft)
             }
         }
-        
+
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            task?.cancel()
-            let dataString = "likes=\(likes.joined(separator: ", "))"
+            self.task?.cancel()
+            let dataString = "likes=\(self.likes.joined(separator: ", "))"
             guard let data = dataString.data(using: .utf8) else { return }
             let request = CatalogProfileUpdateLikes(httpBody: data)
-            task = networkClient.send(request: request,
+            self.task = self.networkClient.send(request: request,
                                       type: UserProfile.self) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
-                case .success(_): getUserProfile()
+                case .success: self.getUserProfile()
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -142,11 +142,11 @@ final class CatalogDataStore {
             }
         }
     }
-    
+
     func getUserCart() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            task?.cancel()
+            self.task?.cancel()
             let request = CatalogCartRequest()
             self.task = self.networkClient.send(
                 request: request,
@@ -162,7 +162,7 @@ final class CatalogDataStore {
                 }
         }
     }
-    
+
     func updateCart(_ nft: String) {
         if let userCart = userCart?.nfts {
             cart = userCart
@@ -172,18 +172,18 @@ final class CatalogDataStore {
             case false: cart.append(nft)
             }
         }
-        
+
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            task?.cancel()
-            let dataString = "nfts=\(cart.joined(separator: ", "))"
+            self.task?.cancel()
+            let dataString = "nfts=\(self.cart.joined(separator: ", "))"
             guard let data = dataString.data(using: .utf8) else { return }
             let request = CatalogCartUpdate(httpBody: data)
-            task = networkClient.send(request: request,
+            self.task = self.networkClient.send(request: request,
                                       type: CatalogCart.self) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
-                case .success(_): getUserCart()
+                case .success: self.getUserCart()
                 case .failure(let error):
                     print(error.localizedDescription)
                 }
@@ -191,6 +191,5 @@ final class CatalogDataStore {
             }
         }
     }
-    
-}
 
+}

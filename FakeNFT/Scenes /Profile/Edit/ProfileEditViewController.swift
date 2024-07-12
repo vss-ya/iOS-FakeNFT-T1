@@ -9,7 +9,7 @@ import UIKit
 import Kingfisher
 
 final class ProfileEditViewController: UIViewController {
-    
+
     private enum Margin {
         static let top: CGFloat = 16
         static let left: CGFloat = 16
@@ -19,12 +19,12 @@ final class ProfileEditViewController: UIViewController {
         static let labelTop: CGFloat = 24
         static let textFieldTop: CGFloat = 8
     }
-    
+
     private enum Constants {
         static let textFieldHeight: CGFloat = 44
         static let textViewHeight: CGFloat = 132
     }
-    
+
     private let closeButton: UIButton
     private let scrollView: UIScrollView
     private let avatarImageView: UIImageView
@@ -35,16 +35,16 @@ final class ProfileEditViewController: UIViewController {
     private let descriptionTextView: UITextView
     private let linkLabel: UILabel
     private let linkTextField: UITextField
-    
+
     private let viewFactory = ProfileEditViewFactory.self
     private let viewModel: ProfileEditViewModelProtocol
-    
-    private var onCloseCallback: (()->(Void))?
-    
+
+    private var onCloseCallback: (() -> Void)?
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     init(_ viewModel: ProfileEditViewModelProtocol, onClose: (() -> Void)? = nil) {
         self.closeButton = viewFactory.createCloseButton()
         self.scrollView = UIScrollView()
@@ -56,35 +56,35 @@ final class ProfileEditViewController: UIViewController {
         self.descriptionTextView = viewFactory.createTextView()
         self.linkLabel = viewFactory.createLabel(L10n.Profile.link)
         self.linkTextField = viewFactory.createTextField()
-        
+
         self.viewModel = viewModel
         self.onCloseCallback = onClose
-        
+
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setup()
         load()
     }
-    
+
 }
 
 // MARK: - Helpers
 private extension ProfileEditViewController {
-    
+
     func setup() {
         setupViews()
         setupConstraints()
-        
+
         nameTextField.delegate = self
         linkTextField.delegate = self
-        
+
         let nameClearButton = nameTextField.rightView?.subviews.first as? UIButton
         let linkClearButton = linkTextField.rightView?.subviews.first as? UIButton
-        
+
         closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         avatarButton.addTarget(self, action: #selector(avatarAction), for: .touchUpInside)
         nameClearButton?.addTarget(self, action: #selector(clearAction), for: .touchUpInside)
@@ -92,21 +92,21 @@ private extension ProfileEditViewController {
         nameTextField.addTarget(self, action: #selector(tapAction), for: .primaryActionTriggered)
         linkTextField.addTarget(self, action: #selector(tapAction), for: .primaryActionTriggered)
         scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapAction)))
-        
+
         bind()
     }
-    
+
     func setupViews() {
         view.backgroundColor = .ypWhite
-        
+
         [
             scrollView,
-            closeButton,
+            closeButton
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        
+
         [
             avatarImageView,
             avatarButton,
@@ -121,7 +121,7 @@ private extension ProfileEditViewController {
             scrollView.addSubview($0)
         }
     }
-    
+
     func setupConstraints() {
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Margin.top),
@@ -130,9 +130,9 @@ private extension ProfileEditViewController {
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
-            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 0),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 0)
         ])
-        
+
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 80),
             avatarImageView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor, constant: 0),
@@ -165,37 +165,37 @@ private extension ProfileEditViewController {
             linkTextField.leadingAnchor.constraint(equalTo: linkLabel.leadingAnchor, constant: 0),
             linkTextField.trailingAnchor.constraint(equalTo: linkLabel.trailingAnchor, constant: 0),
             linkTextField.heightAnchor.constraint(equalToConstant: Constants.textFieldHeight),
-            linkTextField.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0),
+            linkTextField.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: 0)
         ])
     }
-    
+
     func bind() {
         viewModel.onDidLoad = { [weak self](profile) in
             guard let self = self else { return }
-            updateProfile(profile)
+            self.updateProfile(profile)
         }
         viewModel.onDidLoadWithError = { [weak self](error) in
             guard let self = self else { return }
-            showError(error)
-            
+            self.showError(error)
+
         }
-        viewModel.onDidUpdate = { [weak self](profile) in
+        viewModel.onDidUpdate = { [weak self](_) in
             guard let self = self else { return }
-            hideLoading()
-            onCloseCallback?()
+            self.hideLoading()
+            self.onCloseCallback?()
         }
         viewModel.onDidUpdateWithError = { [weak self](error) in
             guard let self = self else { return }
-            showError(error)
-            onCloseCallback?()
+            self.showError(error)
+            self.onCloseCallback?()
         }
     }
-    
+
     func load() {
         showLoading()
         viewModel.load()
     }
-    
+
     func updateProfile(_ profile: Profile) {
         hideLoading()
         nameTextField.text = profile.name
@@ -206,14 +206,14 @@ private extension ProfileEditViewController {
 
     func updateAvatar(url: URL?) {
         viewModel.updateAvatar(url)
-        
+
         let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
                                               .cacheOriginalImage]
         avatarImageView.kf.cancelDownloadTask()
         avatarImageView.kf.indicatorType = .activity
         avatarImageView.kf.setImage(with: url, placeholder: UIImage.profileAvatarMock, options: options)
     }
-    
+
     func showError(_ error: Error) {
         UIBlockingProgressHUD.showError(error)
     }
@@ -225,26 +225,26 @@ private extension ProfileEditViewController {
     func hideLoading() {
         UIBlockingProgressHUD.dismiss()
     }
-    
+
 }
 
 extension ProfileEditViewController: UITextFieldDelegate {
-    
+
     func textFieldDidChangeSelection(_ textField: UITextField) {
         let text = textField.text ?? ""
         let btn = textField.rightView?.subviews.first
         btn?.isHidden = text.isEmpty
     }
-    
+
 }
 
 // MARK: - Actions
 private extension ProfileEditViewController {
-    
+
     @objc func tapAction() {
         view.endEditing(true)
     }
-    
+
     @objc func closeAction() {
         guard let oldProfile = viewModel.profile else {
             return
@@ -262,12 +262,12 @@ private extension ProfileEditViewController {
         showLoading()
         viewModel.update(profile)
     }
-    
+
     @objc func clearAction() {
         let textField = [nameTextField, linkTextField].first(where: { $0.isFirstResponder })
         textField?.text = ""
     }
-    
+
     @objc func avatarAction() {
         let alert = UIAlertController(
             title: L10n.Profile.loadImage,
@@ -278,20 +278,19 @@ private extension ProfileEditViewController {
         alert.addTextField { [weak self] in
             $0.text = self?.viewModel.avatarUrl?.absoluteString
         }
-        
+
         let action = UIAlertAction(
             title: "ОK",
-            style: .default)
-        { [weak self] _ in
-            guard let self, let urlString = alert.textFields?[0].text else {
-                return
+            style: .default) { [weak self] _ in
+                guard let self, let urlString = alert.textFields?[0].text else {
+                    return
+                }
+                self.updateAvatar(url: URL(string: urlString))
+                alert.dismiss(animated: true)
             }
-            updateAvatar(url: URL(string: urlString))
-            alert.dismiss(animated: true)
-        }
-        
+
         alert.addAction(action)
         present(alert, animated: true)
     }
-    
+
 }

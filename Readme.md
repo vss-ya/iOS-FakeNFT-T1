@@ -212,6 +212,7 @@ https://github.com/vss-ya/iOS-FakeNFT-T1/assets/145442061/4785d209-0493-402b-94e
 ## Каталог
 https://github.com/vss-ya/iOS-FakeNFT-T1/assets/136880314/aae7ecd2-1b01-4f86-a305-413d71ebc945
 
-
+## Корзина
+https://github.com/vss-ya/iOS-FakeNFT-T1/assets/f25f8464-1f8e-4e6f-8d25-e607def41a21
 
 

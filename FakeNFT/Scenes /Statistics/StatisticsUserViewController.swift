@@ -82,44 +82,44 @@ final class StatisticsUserViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapNftsCollectionButton), for: .touchUpInside)
         return button
     }()
-    
+
     private var viewModel: StatisticsUserViewModelProtocol
-    
+
     private var website: String = ""
     private var nftsIds: [String] = []
-    
+
     var dismissClosure: (() -> Void)?
-    
+
     // MARK: - Lifecycle
-    
+
     init(viewModel: StatisticsUserViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         bind()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         userWebsiteButton.layer.borderColor = UIColor.ypBlack.cgColor
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViewController()
         UIBlockingProgressHUD.show()
         viewModel.getUser()
     }
-    
+
     private func setupViewController() {
         view.backgroundColor = .ypWhite
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
         addSubViews()
         applyConstraints()
     }
-    
+
     private func addSubViews() {
         [backButton, avatarStackView, descriptionLabel, userWebsiteButton, nftsStackView].forEach { subview in
             subview.translatesAutoresizingMaskIntoConstraints = false
@@ -182,7 +182,7 @@ final class StatisticsUserViewController: UIViewController {
             nftsCollectionButton.heightAnchor.constraint(equalToConstant: 16)
         ])
     }
-    
+
     private func bind() {
         viewModel.updateData = { [weak self] user in
             UIBlockingProgressHUD.dismiss()
@@ -190,43 +190,43 @@ final class StatisticsUserViewController: UIViewController {
             self.website = user.website ?? ""
             if let url = URL(string: user.avatar ?? "") {
                 let processor = RoundCornerImageProcessor(cornerRadius: 14)
-                avatarImageView.kf.setImage(
+                self.avatarImageView.kf.setImage(
                     with: url,
                     placeholder: UIImage(systemName: "person.crop.circle.fill"),
                     options: [.processor(processor)]
                 )
             } else {
-                avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
+                self.avatarImageView.image = UIImage(systemName: "person.crop.circle.fill")
             }
-            nameLabel.text = user.name
-            descriptionLabel.text = user.description
+            self.nameLabel.text = user.name
+            self.descriptionLabel.text = user.description
             let nftsCollectionTitle = NSLocalizedString("Statistics.statisticsProfile.nftsCollectionButton", comment: "")
-            nftsCollectionTextButton.setTitle(
+            self.nftsCollectionTextButton.setTitle(
                 nftsCollectionTitle + " (\(user.nfts.count))",
                 for: .normal
             )
-            nftsIds = user.nfts
+            self.nftsIds = user.nfts
         }
     }
-    
+
     // MARK: - Actions
-    
+
     @objc private func didTapBackButton() {
         dismiss(animated: false)
         dismissClosure?()
     }
-    
+
     @objc private func didTapUserWebsiteButton() {
         let statisticsWebViewViewController = StatisticsWebViewViewController(viewModel: StatisticsWebViewViewModel(website: website))
         self.present(statisticsWebViewViewController, animated: true)
     }
-    
+
     @objc private func didTapNftsCollectionButton() {
         let statisticsUserCollectionViewController = StatisticsUserCollectionViewController(viewModel: StatisticsUserCollectionViewModel(ids: nftsIds))
 
         let statisticsUserCollectionNavigationController = UINavigationController(rootViewController: statisticsUserCollectionViewController)
         statisticsUserCollectionNavigationController.modalPresentationStyle = .overCurrentContext
-        
+
         self.present(statisticsUserCollectionNavigationController, animated: true)
     }
 }

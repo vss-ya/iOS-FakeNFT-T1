@@ -8,10 +8,10 @@
 import Foundation
 
 struct ProfileRequest: NetworkRequest {
-    
+
     var endpoint: URL? {
         guard let urlComponents = URLComponents(string: "\(RequestConstants.baseURL)/api/v1/profile/1") else { return nil }
         return urlComponents.url
     }
-    
+
 }

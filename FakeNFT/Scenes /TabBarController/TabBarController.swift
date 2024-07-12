@@ -9,23 +9,23 @@ final class TabBarController: UITabBarController {
         image: UIImage(systemName: "person.crop.circle.fill"),
         tag: 0
     )
-    
+
     private let catalogTabBarItem = UITabBarItem(
         title: L10n.Tab.catalog,
         image: UIImage(systemName: "rectangle.stack.fill"),
-        tag: 0
+        tag: 1
     )
-    
+
     private let cartTabBarItem = UITabBarItem(
         title: L10n.Tab.cart,
         image: UIImage(systemName: "basket.fill"),
-        tag: 0
+        tag: 2
     )
-    
+
     private let statisticsTabBarItem = UITabBarItem(
         title: L10n.Tab.statistics,
         image: UIImage(systemName: "flag.2.crossed.fill"),
-        tag: 0
+        tag: 3
     )
 
     init(servicesAssembly: ServicesAssembly) {
@@ -36,19 +36,23 @@ final class TabBarController: UITabBarController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         let catalogController = UINavigationController(rootViewController: CatalogViewController(viewModel: CatalogViewModel()))
         let profileController = initProfileTabBarViewController(servicesAssembly)
-        
-        let cartController = TestCatalogViewController(servicesAssembly: servicesAssembly)
-        
+
+        let networkClient = DefaultNetworkClient()
+        let storage = NftStorageImpl()
+        let nftService = NftServiceImpl(networkClient: networkClient, storage: storage)
+        let viewModel = CartViewModel(networkClient: networkClient, nftService: nftService)
+        let cartController = CartViewController(servicesAssembly: servicesAssembly, viewModel: viewModel)
+
         let statisticsViewController = StatisticsViewController(viewModel: StatisticsViewModel())
         let statisticsNavigationController = UINavigationController(rootViewController: statisticsViewController)
         statisticsNavigationController.modalPresentationStyle = .overCurrentContext
-        
+
         profileController.tabBarItem = profileTabBarItem
         catalogController.tabBarItem = catalogTabBarItem
         cartController.tabBarItem = cartTabBarItem
@@ -58,12 +62,15 @@ final class TabBarController: UITabBarController {
 
         view.backgroundColor = .systemBackground
     }
-    
+
+    func returnToCatalog() {
+        self.selectedIndex = 1
+    }
+
     private func initProfileTabBarViewController(_ servicesAssembly: ServicesAssembly) -> UIViewController {
         let viewModel = ProfileViewModel(servicesAssembly)
         let vc = ProfileViewController(viewModel)
         let navVc = UINavigationController(rootViewController: vc)
         return navVc
     }
-    
 }

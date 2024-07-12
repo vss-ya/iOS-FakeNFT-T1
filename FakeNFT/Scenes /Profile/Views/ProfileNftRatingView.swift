@@ -8,16 +8,16 @@
 import UIKit
 
 final class ProfileNftRatingView: UIStackView {
-    
+
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
-    
+
     func updateRating(_ value: Int) {
         let value = value < 0 ? 0 : (value > 5 ? 5 : value)
         (0..<value).forEach {
@@ -29,13 +29,13 @@ final class ProfileNftRatingView: UIStackView {
             view?.image = .starNoActive
         }
     }
-    
+
     private func commonInit() {
         axis = .horizontal
         alignment = .fill
         distribution = .fill
         spacing = 2
-        
+
         (0..<5).forEach {
             let view = UIImageView()
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -44,5 +44,5 @@ final class ProfileNftRatingView: UIStackView {
             addArrangedSubview(view)
         }
     }
-    
+
 }

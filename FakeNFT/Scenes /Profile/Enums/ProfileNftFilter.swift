@@ -11,7 +11,7 @@ enum ProfileNftFilter: String, CaseIterable {
     case byPrice
     case byRaiting
     case byName
-    
+
     var description: String {
         switch self {
         case .byPrice:

@@ -83,29 +83,29 @@ final class StatisticsCollectionCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(didTapCartButton), for: .touchUpInside)
         return button
     }()
-    
+
     var inCart: Bool = false {
         didSet {
             cartButton.setImage(UIImage(named: inCart ? "cart_delete" : "cart_add"), for: .normal)
         }
     }
-    
+
     private var id: String = ""
     private var viewModel: StatisticsUserCollectionViewModelProtocol?
-    
+
     static let reuseIdentifier = "statisticsCollectionCell"
-    
+
     // MARK: - Lifecycle
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupCell()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func initialize(viewModel: StatisticsUserCollectionViewModelProtocol, at indexPath: IndexPath) {
         self.viewModel = viewModel
         guard let nft = viewModel.model(at: indexPath) as? StatisticsNft else { return }
@@ -135,12 +135,12 @@ final class StatisticsCollectionCell: UICollectionViewCell {
         }
         inCart = viewModel.inCart(id: nft.id)
     }
-    
+
     private func setupCell() {
         addSubViews()
         applyConstraints()
     }
-    
+
     private func addSubViews() {
         [nftImageView, likeButton, ratingStackView, descStackView].forEach { subview in
             subview.translatesAutoresizingMaskIntoConstraints = false
@@ -159,7 +159,7 @@ final class StatisticsCollectionCell: UICollectionViewCell {
             descVerticalStackView.addSubview(subview)
         }
     }
-    
+
     private func applyConstraints() {
         NSLayoutConstraint.activate([
             nftImageView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -238,9 +238,9 @@ final class StatisticsCollectionCell: UICollectionViewCell {
             priceLabel.trailingAnchor.constraint(equalTo: descVerticalStackView.trailingAnchor)
         ])
     }
-    
+
     // MARK: - Actions
-    
+
     @objc private func didTapCartButton() {
         if inCart {
             viewModel?.removeFromCart(id: id) {
